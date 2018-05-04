@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CircularImageView">
+        <attr name="strokeColor" format="color" />
+        <attr name="imgStrokeWidth" format="dimension" />
+        <attr name="highlightEnable" format="boolean" />
+        <attr name="highlightColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="AvatarImageView">
+        <attr name="avatar_backgroundColor" format="color" />
+        <attr name="avatar_textSize" format="dimension" />
+        <attr name="avatar_textColor" format="color" />
+        <attr name="avatar_text" format="string" />
+        <attr name="avatar_state" format="enum">
+            <enum name="INITIAL" value="1" />
+            <enum name="IMAGE" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="SwitchButton">
+        <attr name="strokeRadius" format="dimension" />
+        <attr name="strokeWidth" format="dimension" />
+        <attr name="textSize" format="dimension" />
+        <attr name="selectedTab" format="integer" />
+        <attr name="selectedColor" format="color|reference" />
+        <attr name="switchTabs" format="reference" />
+        <attr name="typeface" format="string" />
+    </declare-styleable>
+
+</resources>
