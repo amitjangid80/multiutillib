@@ -31,9 +31,9 @@ dependencies {
 ```
 #### Step 2. Add the dependency
 ```
-	<dependency>
-	    <groupId>com.github.amitjangid80</groupId>
-	    <artifactId>multiutillib</artifactId>
-	    <version>v1.0.0</version>
-	</dependency>
+<dependency>
+     <groupId>com.github.amitjangid80</groupId>
+     <artifactId>multiutillib</artifactId>
+     <version>v1.0.0</version>
+</dependency>
 ```
