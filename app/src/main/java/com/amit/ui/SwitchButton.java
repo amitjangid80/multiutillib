@@ -25,7 +25,7 @@ public class SwitchButton extends View
     private String[] mTabTexts = {"Male", "Female"};
     private int mNumOfTabs = mTabTexts.length;
 
-    private static final float TEXT_SIZE = 14;
+    private static final float TEXT_SIZE = 50; // changed text size to 30 from 14
     private static final float STROKE_WIDTH = 2;
     private static final float STROKE_RADIUS = 0;
 

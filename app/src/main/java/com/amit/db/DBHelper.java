@@ -11,6 +11,8 @@ import java.util.LinkedHashMap;
 
 /**
  * Created by AMIT JANGID
+ * 2018 Feb 01 - Thursday - 02:55 PM
+ *
  * this class has method for executing db queries
  * like: creating table, inserting into table, deleting table, dropping table
 */
@@ -128,8 +130,10 @@ public class DBHelper
      **/
 
     // endregion
-    public boolean executeDatabaseOperations(String tableName, String operations,
-                                             LinkedHashMap<String, String> values, boolean hasConditions,
+    public boolean executeDatabaseOperations(String tableName,
+                                             String operations,
+                                             LinkedHashMap<String, String> values,
+                                             boolean hasConditions,
                                              LinkedHashMap<String, String> conditionalValues)
     {
         try
@@ -324,6 +328,8 @@ public class DBHelper
         }
     }
 
+    // region COMMENTS FOR executeSelectQuery method
+
     /**
      * 2018 Feb 01 - Thursday - 03:52 PM
      * Execute Select Query
@@ -351,7 +357,11 @@ public class DBHelper
      *       when you want to select one or multiple columns from the table
      *       no matter condition is there or not
      **/
-    public Cursor executeSelectQuery(String tableName, String values, boolean hasConditions,
+
+    // endregion COMMENTS FOR executeSelectQuery method
+    public Cursor executeSelectQuery(String tableName,
+                                     String values,
+                                     boolean hasConditions,
                                      LinkedHashMap<String, String> conditionalValues)
     {
         try
@@ -422,6 +432,8 @@ public class DBHelper
         }
     }
 
+    // region COMMENTS FOR getRecordCount method
+
     /**
      * 2018 Feb 02 - Friday - 01:36 PM
      * Get Record Count
@@ -450,6 +462,8 @@ public class DBHelper
      *
      *** @return this method will return the count of the record in the table
      * */
+
+    // endregion COMMENTS FOR getRecordCount method
     public int getRecordCount(String tableName,
                               String values,
                               boolean hasConditions,
