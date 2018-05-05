@@ -448,8 +448,8 @@ public class DateTimeUtils
 
         long hours = TimeUnit.MILLISECONDS.toHours(millis);
 
-        return (hours == 0 ? "" : hours < 10 ? String.valueOf("0" + hours) + ":" :
-                String.valueOf(hours) + ":") +
+        return (hours == 0 ? "" : hours < 10 ? String.valueOf("0" + hours)+":" :
+                String.valueOf(hours)+":") +
                 (minutes == 0 ? "00" : minutes < 10 ? String.valueOf("0" + minutes) :
                         String.valueOf(minutes)) + ":"
                 + (seconds == 0 ? "00" : seconds < 10 ? String.valueOf("0" + seconds)
