@@ -251,7 +251,7 @@ public class DateTimeUtils
         }
         else if (style.equals(DateTimeStyle.SHORT))
         {
-            pattern = "MMM dd, yyyy";
+            pattern = "MM/dd/yy";
         }
         else
         {
@@ -315,7 +315,10 @@ public class DateTimeUtils
      * @see DateTimeFormat#TIME_PATTERN_1
      * @param date Date object
      * @return Time String
-     */
+     *
+     * @deprecated Use {@link #extractTimeFromDate(Date, boolean)} method instead
+    **/
+    @Deprecated
     public static String formatTime(Date date, boolean forceShowHours)
     {
         SimpleDateFormat iso8601Format = new SimpleDateFormat(DateTimeFormat.TIME_PATTERN_1, Locale.getDefault());
@@ -338,7 +341,10 @@ public class DateTimeUtils
      * Extract time from date without seconds
      * @param date Date object
      * @return Time string
-     */
+     *
+     * @deprecated use {@link #extractTimeFromDate(String, boolean)} method instead
+    **/
+    @Deprecated
     public static String formatTime(String date, boolean forceShowHours)
     {
         return formatTime(formatStringToDate(date),forceShowHours);
@@ -348,7 +354,10 @@ public class DateTimeUtils
      * Extract time from date without seconds
      * @param date Date object
      * @return Time string
-     */
+     *
+     * @deprecated use {@link #extractTimeFromDate(Date)} method instead
+    **/
+    @Deprecated
     public static String formatTime(Date date)
     {
         return formatTime(date,false);
@@ -358,10 +367,68 @@ public class DateTimeUtils
      * Extract time from date without seconds
      * @param date Date object
      * @return Time string
-     */
+     *
+     * @deprecated use {@link #extractTimeFromDate(String)} method instead
+    **/
+    @Deprecated
     public static String formatTime(String date)
     {
         return formatTime(date,false);
+    }
+
+    /**
+     * Extract time from date without seconds
+     * @see DateTimeFormat#TIME_PATTERN_1
+     * @param date Date object
+     * @return Time String
+     *
+    **/
+    public static String extractTimeFromDate(Date date, boolean forceShowHours)
+    {
+        SimpleDateFormat iso8601Format = new SimpleDateFormat(DateTimeFormat.TIME_PATTERN_1, Locale.getDefault());
+        iso8601Format.setTimeZone(TimeZone.getTimeZone(timeZone));
+        String time = iso8601Format.format(date);
+        String[] hhmmss = time.split(":");
+
+        int hours = Integer.parseInt(hhmmss[0]);
+        int minutes = Integer.parseInt(hhmmss[1]);
+        int seconds = Integer.parseInt(hhmmss[2]);
+
+        return (hours == 0 && !forceShowHours ? "" : hours < 10 ? String.valueOf("0" + hours)+":" :
+                String.valueOf(hours)+":") +
+                (minutes == 0 ? "00" : minutes < 10 ? String.valueOf("0" + minutes) :
+                        String.valueOf(minutes))+":"
+                + (seconds == 0 ? "00" : seconds < 10 ? String.valueOf("0" + seconds): String.valueOf(seconds));
+    }
+
+    /**
+     * Extract time from date without seconds
+     * @param date Date object
+     * @return Time string
+     */
+    public static String extractTimeFromDate(String date, boolean forceShowHours)
+    {
+        return extractTimeFromDate(formatStringToDate(date),forceShowHours);
+    }
+
+    /**
+     * Extract time from date without seconds
+     * @param date Date object
+     * @return Time string
+     */
+    public static String extractTimeFromDate(Date date)
+    {
+        return extractTimeFromDate(date,false);
+    }
+
+    /**
+     * Extract time from date without seconds
+     * @param date Date object
+     * @return Time string
+     */
+    public static String extractTimeFromDate(String date)
+    {
+        return extractTimeFromDate(date,false);
     }
 
     /**
@@ -381,8 +448,8 @@ public class DateTimeUtils
 
         long hours = TimeUnit.MILLISECONDS.toHours(millis);
 
-        return (hours == 0 ? "" : hours < 10 ? String.valueOf("0" + hours)+":" :
-                String.valueOf(hours)+":") +
+        return (hours == 0 ? "" : hours < 10 ? String.valueOf("0" + hours) + ":" :
+                String.valueOf(hours) + ":") +
                 (minutes == 0 ? "00" : minutes < 10 ? String.valueOf("0" + minutes) :
                         String.valueOf(minutes)) + ":"
                 + (seconds == 0 ? "00" : seconds < 10 ? String.valueOf("0" + seconds)
