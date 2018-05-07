@@ -301,10 +301,87 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
     app:typeface="QuattrocentoSans-Regular.ttf" />
 ```
 
-### ToastMsg
+### Location
 
->**If you want to use a custom toast message then you can use this class.**
+>**This class will  get the current location of the user.**
+```java
+// Declare this class globally inside your activity or class.
+private double latitude = 0.0, longitude = 0.0;
+private MyLocation myLocation = new MyLocation();
 
+// Use myLocation's class's Location listener which will return latitude and longitude of current location.
+private MyLocation.LocationResult locationResult = new Mylocation.LocationResult()
+{
+    @Override
+    public void gotLocation(Location location)
+    {
+        try
+        {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+                
+            Log.e(TAG, "gotLocation: Latitude of the location is: " + latitude);
+            Log.e(TAG, "gotLocation: Longitude of the location is: " + longitude);
+        }
+        catch(Exception e)
+        {
+            Log.e(TAG, "gotLocation: exception while getting location lat, long:\n");
+            e.printStackTrace();
+        }
+    }
+};
+
+// all the above code should be used globally.
+// now use the myLocation's class's object as below inside onCreate method.
+myLocation.getLocation(this, locationResult);
 ```
 
+### Location Address
+
+>**This class helps your to get the address of the current location or by using latitude and longitude.**
+```java
+// use the following code to get the address of the latitude and longitude.
+// declare this inside onCreate() method or anywhere you would like to use it.
+// on button click or anywhere.
+
+LocationAddress.getAddressFromLocation(
+        mLatitude, mLongitude, this,
+        new GeocoderHandler());
+
+
+// this is the GeocoderHandler class where you'll get the address
+private class GeocoderHandler extends Handler
+    {
+        @Override
+        public void handleMessage(Message msg)
+        {
+            switch (msg.what)
+            {
+                case 1:
+
+                    Bundle bundle = msg.getData();
+
+                    // note that subThoroughFare may return null sometimes.
+                    String address = bundle.getString("subThoroughFare") + ", " +
+                                     bundle.getString("thoroughFare");
+
+                    String subLocality = bundle.getString("subLocality");
+                    String subAdminArea = bundle.getString("subAdminArea");
+                    String postalCode = bundle.getString("postalCode");
+                    
+                    String city = bundle.getString("city");
+                    String state = bundle.getString("state");
+                    String country = bundle.getString("country");
+
+                    break;
+
+                default:
+                    
+                    // address not found.
+                    
+                    break;
+            }
+        }
+    }
 ```
+
