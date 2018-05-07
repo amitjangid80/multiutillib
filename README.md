@@ -64,7 +64,7 @@ public class ProjectApplication extends Application
 
 ### SharedPreferenceData 
 
-```
+```java
 // use it in the activity or class you want to.
 SharedPreferenceData sharedPreferenceData = new SharedPreferenceData(context);
 sharedPreferenceData.setValue("keyname", "value for that keyname");
@@ -74,7 +74,7 @@ sharedPreferenceData.setValue("keyname", "value for that keyname");
 
 >Before using this class first make sure to set up the apiPath into shared preference class. Shown above in **ProjectApplication** Section.
 
-```
+```java
 // apiName - this will the part of the api url
 //
 // requestMethod - this will GET, POST OR PUT
@@ -104,7 +104,7 @@ apiServices.makeApiCall(apiName, requestMethod, parameters, jsonObject, hasToken
 
 >Set the dbName in sharedPreferenceData with key name **'dbName'**. Shown above in **ProjectApplication** section.
 
-```
+```java
 // parameters to be passed are as follows:
 // 
 // tableName - table on which query should be performed.
@@ -146,7 +146,7 @@ apiServices.makeApiCall(apiName, requestMethod, parameters, jsonObject, hasToken
 DBHelper dbHelper = new DBHelper(context);
 dbHelper.executeDatabaseOperation(tableName, operation, values, hasConditions, conditionalValues);
 ```
-```
+```java
 // for select query use this method
 //
 // parameters to be passed are as follows:
@@ -234,7 +234,7 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 ```
 
 ### AvatarImageView
->**Use it the way you use ImageView in android**
+>**Use it the way you use ImageView in android. Attributes for this image view are as follows:**
 
 **1. imgStrokeWidth**
 
