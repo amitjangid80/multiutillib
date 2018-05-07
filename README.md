@@ -304,13 +304,15 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 ```java
 // the below code shows how to use the SwitchButton to get the selected values.
 SwitchButton switchButton = findViewById(R.id.switchButton);
+
+// this is the on switch listener for switchButton
 switchButton.setOnSwitchListener(new SwitchButton.OnSwitchListener() 
 {
-  @Override
-  public void onSwitch(int i, String tabText) 
-  {
-    Toast.makeText(MainActivity.this, "selected tab text is: " + tabText, Toast.LENGTH_SHORT).show();
-  }
+    @Override
+    public void onSwitch(int i, String tabText) 
+    {
+        Toast.makeText(MainActivity.this, "selected tab text is: " + tabText, Toast.LENGTH_SHORT).show();
+    }
 });
 ```
 
@@ -357,9 +359,7 @@ myLocation.getLocation(this, locationResult);
 // declare this inside onCreate() method or anywhere you would like to use it.
 // on button click or anywhere.
 
-LocationAddress.getAddressFromLocation(
-        mLatitude, mLongitude, this,
-        new GeocoderHandler());
+LocationAddress.getAddressFromLocation(mLatitude, mLongitude, this, new GeocoderHandler());
 
 // this is the GeocoderHandler class where you'll get the address
 private class GeocoderHandler extends Handler
@@ -472,5 +472,5 @@ Validator.noSpecialCharacters("abcd123");
 
 // atLeastOneSpecialCharacters validation, returns true or false.
 Validator.atLeastOneSpecialCharacters("abcd@123");
-
 ```
+
