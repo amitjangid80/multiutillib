@@ -301,6 +301,19 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
     app:typeface="QuattrocentoSans-Regular.ttf" />
 ```
 
+```java
+// the below code shows how to use the SwitchButton to get the selected values.
+SwitchButton switchButton = findViewById(R.id.switchButton);
+switchButton.setOnSwitchListener(new SwitchButton.OnSwitchListener() 
+{
+  @Override
+  public void onSwitch(int i, String tabText) 
+  {
+    Toast.makeText(MainActivity.this, "selected tab text is: " + tabText, Toast.LENGTH_SHORT).show();
+  }
+});
+```
+
 ### MyLocation class
 
 >**This class will  get the current location of the user.**
