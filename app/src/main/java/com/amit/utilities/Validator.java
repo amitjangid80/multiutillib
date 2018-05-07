@@ -1,5 +1,6 @@
 package com.amit.utilities;
 
+import android.provider.UserDictionary;
 import android.util.Log;
 
 import java.util.regex.Matcher;
@@ -15,6 +16,8 @@ import java.util.regex.Pattern;
 
 public class Validator
 {
+    private UserDictionary userDictionary;
+
     private static final String TAG = Validator.class.getSimpleName();
 
     /**
@@ -123,7 +126,7 @@ public class Validator
     {
         try
         {
-            return string.matches(".*\\d.*");
+            return string.matches("^[A-Za-z]+$");
         }
         catch (Exception e)
         {
@@ -146,7 +149,7 @@ public class Validator
     {
         try
         {
-            return string.matches("[a-z0-9]+");
+            return !string.equals(string.toUpperCase());
         }
         catch (Exception e)
         {
@@ -169,7 +172,7 @@ public class Validator
     {
         try
         {
-            return string.matches("[A-Z0-9]+");
+            return !string.equals(string.toLowerCase());
         }
         catch (Exception e)
         {
@@ -287,6 +290,83 @@ public class Validator
         catch (Exception e)
         {
             Log.e(TAG, "atLeastOneSpecialCharacters: exception while validating for at least one special characters.");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * is valid password
+     * this method will check if the password is valid for the following conditions:
+     *
+     * 1. It should of minimum 8 in length.
+     * 2. It should have at least one upper case.
+     * 3. It should have at least one lower case.
+     * 4. It should have at least one special character.
+     * 5. It should have at least one numeric value.
+     *
+     * @return true or false.
+    **/
+    private static boolean isValidPassword(String password)
+    {
+        final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{4,}$";
+        Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    /**
+     * password strength method
+     * this method determines the strength of the string entered.
+     *
+     * @return int value with strength of the password.
+    **/
+    private int passwordStrength(String password)
+    {
+        int strength = 0;
+
+        if (atLeastOneUpperCase(password))
+        {
+            strength += 15;
+        }
+
+        if (atLeastOneUpperCase(password))
+        {
+            strength += 15;
+        }
+
+        if (atLeastOneSpecialCharacters(password))
+        {
+            strength += 20;
+        }
+
+        if (atLeastOneNumber(password))
+        {
+            strength += 20;
+        }
+
+        if (password.length() >= 8)
+        {
+            strength += 10;
+        }
+
+        if (password.length() > 15)
+        {
+            strength += 20;
+        }
+
+        return strength;
+    }
+
+    private boolean spellCheck(String string)
+    {
+        try
+        {
+            return UserDictionary.Words.WORD.contains(string);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "spellCheck: exception while checking for spelling.");
             e.printStackTrace();
             return false;
         }
