@@ -95,7 +95,7 @@ sharedPreferenceData.setValue("keyname", "value for that keyname");
 //            with key as 'token' to get the token
 //
 // return - this method will return result from server in string format
-//
+
 ApiServices apiServices = new ApiServices(context);
 apiServices.makeApiCall(apiName, requestMethod, parameters, jsonObject, hasToken);
 ```
@@ -166,7 +166,7 @@ dbHelper.executeDatabaseOperation(tableName, operation, values, hasConditions, c
 //                     it is similar as in executeDatabaseOperation method's conditionalValues parameter.
 // 
 // return - this method wull return Cursor with values or will return null
-//
+
 dbHelper.executeSelectQuery(tableName, values, hasConditions, conditionalValues);
 ```
 ```
@@ -190,7 +190,7 @@ dbHelper.executeSelectQuery(tableName, values, hasConditions, conditionalValues)
 // 
 // return - this method wull return count of records in the table 
 //          either for entire table or for a single column
-//
+
 dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 ```
 
@@ -348,7 +348,6 @@ LocationAddress.getAddressFromLocation(
         mLatitude, mLongitude, this,
         new GeocoderHandler());
 
-
 // this is the GeocoderHandler class where you'll get the address
 private class GeocoderHandler extends Handler
     {
@@ -360,8 +359,9 @@ private class GeocoderHandler extends Handler
                 case 1:
 
                     Bundle bundle = msg.getData();
-
+                    
                     // note that subThoroughFare may return null sometimes.
+                    // so you should manage it accordling.
                     String address = bundle.getString("subThoroughFare") + ", " +
                                      bundle.getString("thoroughFare");
 
@@ -385,3 +385,79 @@ private class GeocoderHandler extends Handler
     }
 ```
 
+### FontHelper Class
+>**This class helps you to apply the font to the entire layout file. This file will apply the required font to every view of the layout file.**
+
+```java
+// Example usage
+FontHelper.applyFont(context, idOfYourParentLayout, "fonts/QuattrocentoSans-Regular.ttf");
+```
+
+### InternetConection class
+>**This class will help you check if internet connection is available or not.**
+
+```java
+InternetConnection ic = InternetConnection.getInstanceInternet(context);
+if (ic.isNetworkAvailable())
+{
+  // internet is available
+}
+else
+{
+  // internet is not available
+}
+```
+
+### TextUtitlities class
+
+>**This class helps you replaces values, like replacing 'null' with empty string, replacing true or false with 1 or 0, etc.**
+
+```java
+// example: for replacing null value from a string.
+TextUtilities.replaceNull(string); // this will return string value.
+
+// example: for replacing True or False from a string.
+TextUtilities.replaceTrueOrFalse(string); // this will return int value.
+```
+
+### Validator class
+>**This class helps you to validate some common fields like email, mobile number, numbers only, etc.**
+
+```java
+// validating an email id, returns true or false.
+Validator.validateEmail("example@gmail.com");
+
+// validating mobile no, returns true or false.
+Validator.validateMobile("9999955555");
+
+// validating Pan Card (For Indian Format), returns true or false.
+Validator.validatePanCard("AAAAA0000A");
+
+// only numbers validation, returns true or false.
+Validator.onlyNumbers("123456");
+
+// only characters validation, returns true or false.
+Validator.onlyCharacters("abcd");
+
+// atLeastOneLowerCase validation, returns true or false.
+Validator.atLeastOneLowerCase("ABcD");
+
+// atLeastOneUpperCase validation, returns true or false.
+Validator.atLeastOneUpperCase("abCd");
+
+// atLeastOneNumber validation, returns true or false.
+Validator.atLeastOneNumber("abcd1");
+
+// nonEmpty validation, returns true or false.
+Validator.nonEmpty("d");
+
+// startsWithNonNumber validation, returns true or false.
+Validator.startsWithNonNumber("a12");
+
+// noSpecialCharacters validation, returns true or false.
+Validator.noSpecialCharacters("abcd123");
+
+// atLeastOneSpecialCharacters validation, returns true or false.
+Validator.atLeastOneSpecialCharacters("abcd@123");
+
+```
