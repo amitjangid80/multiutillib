@@ -54,7 +54,7 @@ public class Validator
      * @param mobile - mobile number to be validated
      * @return this will return true or false
     **/
-    public boolean validateMobile(String mobile)
+    public static boolean validateMobile(String mobile)
     {
         try
         {
@@ -98,7 +98,7 @@ public class Validator
      * @param number - string to be validated for numeric values
      * @return this will return true or false
     **/
-    public boolean onlyNumbers(String number)
+    public static boolean onlyNumbers(String number)
     {
         try
         {
@@ -119,7 +119,7 @@ public class Validator
      * @param string - string to be validated
      * @return this will return true or false
     **/
-    public boolean onlyCharacters(String string)
+    public static boolean onlyCharacters(String string)
     {
         try
         {
@@ -142,7 +142,7 @@ public class Validator
      *         if true is returned then string has lower case value
      *         else if false is returned then string has no lower case value
     **/
-    public boolean atLeastOneLowerCase(String string)
+    public static boolean atLeastOneLowerCase(String string)
     {
         try
         {
@@ -165,7 +165,7 @@ public class Validator
      *         if true is returned then string has upper case value
      *         else if false is returned then string has no upper case value
      **/
-    public boolean atLeastOneUpperCase(String string)
+    public static boolean atLeastOneUpperCase(String string)
     {
         try
         {
@@ -186,7 +186,7 @@ public class Validator
      * @param string - string to be validated
      * @return this will return true or false
     **/
-    public boolean atLeastOneNumber(String string)
+    public static boolean atLeastOneNumber(String string)
     {
         try
         {
@@ -209,7 +209,7 @@ public class Validator
      *         if it returns true then the string is not empty
      *         else if it returns false then the string is empty
     **/
-    public boolean nonEmpty(String string)
+    public static boolean nonEmpty(String string)
     {
         try
         {
@@ -232,7 +232,7 @@ public class Validator
      *         if true then string starts with number
      *         else if false then string doesn't start with number
     **/
-    public boolean startsWithNonNumber(String string)
+    public static boolean startsWithNonNumber(String string)
     {
         try
         {
@@ -255,7 +255,7 @@ public class Validator
      *         if it returns true then there are no special characters in the string
      *         else if it returns false then the string has special characters in the string
     **/
-    public boolean noSpecialCharacters(String string)
+    public static boolean noSpecialCharacters(String string)
     {
         try
         {
@@ -278,7 +278,7 @@ public class Validator
      *         if it returns true then there are special characters in the string
      *         else if it returns false then the string has no special characters in the string
      **/
-    public boolean atLeastOneSpecialCharacters(String string)
+    public static boolean atLeastOneSpecialCharacters(String string)
     {
         try
         {
