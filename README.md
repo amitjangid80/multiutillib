@@ -301,7 +301,7 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
     app:typeface="QuattrocentoSans-Regular.ttf" />
 ```
 
-### Location
+### MyLocation class
 
 >**This class will  get the current location of the user.**
 ```java
@@ -336,7 +336,7 @@ private MyLocation.LocationResult locationResult = new Mylocation.LocationResult
 myLocation.getLocation(this, locationResult);
 ```
 
-### Location Address
+### LocationAddress class
 
 >**This class helps your to get the address of the current location or by using latitude and longitude.**
 ```java
