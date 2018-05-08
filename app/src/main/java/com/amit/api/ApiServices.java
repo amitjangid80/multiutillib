@@ -62,35 +62,35 @@ public class ApiServices
 
         if (model.startsWith(manufacturer))
         {
-            return capitalize(model);
+            return capitalizeString(model);
         }
         else
         {
-            return capitalize(manufacturer + " " + model);
+            return capitalizeString(manufacturer + " " + model);
         }
     }
 
     /**
-     * capitalize method
+     * capitalizeString method
      *
-     * this method will capitalize or set the string to upper case
+     * this method will capitalizeString or set the string to upper case
     **/
-    private String capitalize(String s)
+    private String capitalizeString(String string)
     {
-        if (s == null || s.length() == 0)
+        if (string == null || string.length() == 0)
         {
             return "";
         }
 
-        char first = s.charAt(0);
+        char first = string.charAt(0);
 
         if (Character.isUpperCase(first))
         {
-            return s;
+            return string;
         }
         else
         {
-            return Character.toUpperCase(first) + s.substring(1);
+            return Character.toUpperCase(first) + string.substring(1);
         }
     }
 
@@ -131,7 +131,7 @@ public class ApiServices
      * @return String which contains result from API.
      *
      ************************************************************************************************
-     * */
+    **/
     public String makeAPICall(final String apiName, final String requestMethod,
                               final boolean parameters, final JSONObject values,
                               final boolean hasToken)
@@ -224,7 +224,7 @@ public class ApiServices
      * @param requestType - request type will be GET OR POST
      * @param parameter - if any information has to be sent in body then set parameters
      *                    use json object for this parameter.
-     **/
+    **/
     public Pair<Integer, Bitmap> getBitmapData(String url, String requestType, String parameter)
     {
         Bitmap resultVal = null;
