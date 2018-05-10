@@ -65,19 +65,19 @@ public class Utils
      *           else if no permission granted then will return empty string.
     **/
     @CheckResult
-    public static String getIMEINumber(Context mContext)
+    public static String getIMEINumber(Context context)
     {
         try
         {
             String imeiNumber;
-            TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
             if (telephonyManager != null)
             {
                 // checking if read phone state permission given or not
                 // if yes the getting the imei number
                 // else asking for permission
-                if (ActivityCompat.checkSelfPermission(mContext,
+                if (ActivityCompat.checkSelfPermission(context,
                         Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED)
                 {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)

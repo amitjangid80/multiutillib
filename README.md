@@ -16,7 +16,7 @@ allprojects{
 ```
 dependencies {
     ...
-    implementation 'com.github.amitjangid80:multiutillib:v1.1.2'
+    implementation 'com.github.amitjangid80:multiutillib:v1.1.4'
 }
 ```
 
@@ -34,7 +34,7 @@ dependencies {
 <dependency>
    <groupId>com.github.amitjangid80</groupId>
    <artifactId>multiutillib</artifactId>
-   version>v1.1.2</version>
+   version>v1.1.4</version>
 dependency>
 ```
 
@@ -67,7 +67,54 @@ public class ProjectApplication extends Application
 ```java
 // use it in the activity or class you want to.
 SharedPreferenceData sharedPreferenceData = new SharedPreferenceData(context);
+
+// FOR SETTING DATA TO SHARED PREFERENCE.
+// generic method storing string values.
 sharedPreferenceData.setValue("keyname", "value for that keyname");
+
+// specific for string values.
+sharedPreferenceData.setStrValue("keyname", "value for that keyname");
+
+// specific for int values.
+sharedPreferenceData.setIntValue("keyname", 1);
+
+// specific for boolean values.
+sharedPreferenceData.setBooleanValue("keyname", true);
+
+// spefici for float values.
+sharedPreferenceData.setFloatValue("keyname", 1.0);
+
+// specific for long values.
+sharedPreferenceData.setLongValue("keyname", 123456789);
+
+// specific for String set values.
+sharedPreferenceData.setStrSetValue("keyname", Set<String> value);
+
+
+// FOR GETTING DATA FROM SHARED PREFERENCE.
+// all the below methods will return some defaults values.
+
+// generic method for getting values returns 0 by default as string type.
+sharedPreferenceData.getValue(key);
+
+// specific for getting string values returns 0 by default as string type.
+sharedPreferenceData.getStrValue(key);
+
+// specific for getting int values returns 0 by default as int type.
+sharedPreferenceData.getIntValue(key);
+
+// specific for getting boolean values returns false by default as int type.
+sharedPreferenceData.getBooleanValue(key);
+
+// specific for getting float values returns 0f by default as int type.
+sharedPreferenceData.getFloatValue(key);
+
+// specific for getting long values returns 0 by default as int type.
+sharedPreferenceData.getLongValue(key);
+
+// specific for getting set of string values returns null by default as int type.
+sharedPreferenceData.getStrSetValue(key);
+
 ```
 
 ### ApiServices
@@ -474,3 +521,161 @@ Validator.noSpecialCharacters("abcd123");
 Validator.atLeastOneSpecialCharacters("abcd@123");
 ```
 
+### UiUtils
+
+>**This class has utils for ui like setting max length to TextView, EditText, TextInputEditText.**
+
+**Usage: For setting char count on edittext or textinputedittext**
+
+```java
+/**
+ * set char counter
+ * Shows live character counter for the number of characters
+ * typed in the parameter {@link android.widget.EditText}
+ *
+ * @param editText          Characters to count from
+ * @param tvCounterView     {@link android.widget.TextView} to show live character count in
+ * @param maxCharCount      Max characters that can be typed in into the parameter edit text
+ * @param countDown         if true, only the remaining of the max character count will be displayed.
+ *                          if false, current character count as well as max character count will be displayed in the UI.
+**/
+UiUtils.setCharCounter(editText, tvCounterView, maxCharCount, countDown);
+
+
+/**
+ * set char counter
+ * Shows live character counter for the number of characters
+ *
+ * @param textInputEditText          Characters to count from
+ * @param tvCounterView     {@link android.widget.TextView} to show live character count in
+ * @param maxCharCount      Max characters that can be typed in into the parameter edit text
+ * @param countDown         if true, only the remaining of the max character count will be displayed.
+ *                          if false, current character count as well as max character count will be displayed in the UI.
+**/
+UiUtils.setCharCounter(textInputEditText, tvCounterView, maxCharCount, countDown);
+
+/**
+ * set max length
+ * this method sets max text length for text view
+ *
+ * @param textView - text view on which you want to set max length
+ * @param maxLength - length to set on text view
+**/
+UiUtils.setMaxLength(textView, maxLength);
+
+/**
+ * set max length
+ * this method sets max text length for text view
+ *
+ * @param editText - text view on which you want to set max length
+ * @param maxLength - length to set on text view
+**/
+UiUtils.setMaxLength(editText, maxLength);
+
+/**
+ * set max length
+ * this method sets max text length for text view
+ *
+ * @param textInputEditText - text view on which you want to set max length
+ * @param maxLength - length to set on text view
+**/
+UiUtils.setMaxLength(textInputEditText, maxLength);
+
+```
+
+### Utils
+
+>**This utils class helps for generic usages.**
+
+**Usage**
+
+```java
+/**
+ * is Sd Card Mounted
+ * this method will check if sd card is mounted or not
+ *
+ * @return - true or false
+ *           if sd card available then will return true
+ *           else will return false
+**/
+Utils.isSdCardMounted();
+
+
+/**
+ * this method gets IMEI number after getting the permission.
+ * To this method you must have asked user for READ_PHONE_STATE PERMISSION.
+ *
+ * @return - it will return IMEI number if permission granted
+ *           else if no permission granted then will return empty string.
+**/
+Util.sgetIMEINumber(context);
+
+
+/**
+ * is url valid
+ * this method will check if the url provided is valid or not
+ *
+ * @param url - url to check
+ * @return - will return true if the url is valid
+ *           else will return false
+**/
+Utils.isUrlValid(url);
+
+
+/**
+ * to Bold
+ * this method will convert the normal text to bold
+ *
+ * @param sourceText - text to convert to bold
+ *
+ * @return - {@link android.text.SpannableString} in BOLD TypeFace
+**/
+Utils.toBold(sourceText);
+
+
+/**
+ * to Bold
+ * this method will convert a string or a sub string to bold
+ *
+ * @param string - string in which the sub string has to be converted to bold
+ *                 or string to be converted to bold
+ *
+ * @param subString - The subString within the string to bold.
+ *                    Pass null to bold entire string.
+ *
+ * @return - {@link android.text.SpannableString} in Bold TypeFace
+**/
+Utils.toBold(string, subString);
+
+
+/**
+ * hide keyboard
+ * this method will hide the keyboard
+ *
+ * @param context - context of the application
+**/
+Utils.hideKeyboard(context);
+
+
+/**
+ * get sha 512 hash
+ * this method will convert a string to byte array.
+ *
+ * @param stringToHash - string to convert to hash.
+ *
+ * @return string converted to hash value.
+**/
+Utils.getSha512Hash(stringToHash);
+
+
+/**
+ * get sha 512 hash
+ * this method will convert the byte array to string
+ * which is converted to hash
+ *
+ * @param dataToHash - byte array to convert to hash value
+ *
+ * @return string converted into hash value.
+**/
+Utils.getSha512Hash(byte[] dataToHash);
+```
