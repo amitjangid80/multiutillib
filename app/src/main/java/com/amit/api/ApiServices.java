@@ -97,7 +97,7 @@ public class ApiServices
     /**
      * Make API Call method
      *
-     * this method will handle all the api operations like GET, POST & PUT
+     * this method will handle all the api operations like GET OR POST OR PUT
      * parameters for this method are as follows
      *
      ************************************************************************************************
