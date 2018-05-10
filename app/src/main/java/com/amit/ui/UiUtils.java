@@ -1,4 +1,4 @@
-package com.amit.utilities;
+package com.amit.ui;
 
 import android.support.design.widget.TextInputEditText;
 import android.text.Editable;
@@ -98,7 +98,6 @@ public class UiUtils
     /**
      * set char counter
      * Shows live character counter for the number of characters
-     * typed in the parameter {@link TextInputEditText}
      *
      * @param textInputEditText          Characters to count from
      * @param tvCounterView     {@link android.widget.TextView} to show live character count in

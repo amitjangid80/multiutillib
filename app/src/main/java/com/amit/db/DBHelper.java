@@ -56,9 +56,9 @@ public class DBHelper
      *
      * parameter #2:
      * @param values - This parameter is an object of LinkedHashMap
-     *               - this parameter will contain set of Key & Value
+     *               - this parameter will contain set of Key and Value
      *                 to create table or insert data or update we will have to pass this parameter with data
-     *               - FOR EXAMPLE: - values.put("Name", "'Amit'") - this for inserting data & updating data
+     *               - FOR EXAMPLE: - values.put("Name", "'Amit'") - this for inserting data and updating data
      *                           - values.put("Name", "TEXT") - this for creating table
      *
      * parameter #3
