@@ -403,6 +403,7 @@ myLocation.getLocation(this, locationResult);
 ### LocationAddress class
 
 >**This class helps your to get the address of the current location or by using latitude and longitude.**
+
 ```java
 // use the following code to get the address of the latitude and longitude.
 // declare this inside onCreate() method or anywhere you would like to use it.
