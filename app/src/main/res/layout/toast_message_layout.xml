@@ -15,14 +15,11 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginStart="5dp"
         android:contentDescription="@string/app_name" />
 
     <TextView
         android:id="@+id/tvToastMessage"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:textSize="16sp" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
