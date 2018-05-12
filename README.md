@@ -4,6 +4,7 @@
 
 #### Step 1. Add the JitPack repository to your build file 
 >**Add it in your root build.gradle at the end of repositories:**
+
 ```
 allprojects{
   repositories {
@@ -192,8 +193,8 @@ apiServices.makeApiCall(apiName, requestMethod, parameters, jsonObject, hasToken
  
 DBHelper dbHelper = new DBHelper(context);
 dbHelper.executeDatabaseOperation(tableName, operation, values, hasConditions, conditionalValues);
-```
-```java
+
+
 // for select query use this method
 //
 // parameters to be passed are as follows:
@@ -215,8 +216,8 @@ dbHelper.executeDatabaseOperation(tableName, operation, values, hasConditions, c
 // return - this method wull return Cursor with values or will return null
 
 dbHelper.executeSelectQuery(tableName, values, hasConditions, conditionalValues);
-```
-```
+
+
 // for select query use this method
 //
 // parameters to be passed are as follows:
@@ -366,6 +367,7 @@ switchButton.setOnSwitchListener(new SwitchButton.OnSwitchListener()
 ### MyLocation class
 
 >**This class will  get the current location of the user.**
+
 ```java
 // Declare this class globally inside your activity or class.
 private double latitude = 0.0, longitude = 0.0;
@@ -401,6 +403,7 @@ myLocation.getLocation(this, locationResult);
 ### LocationAddress class
 
 >**This class helps your to get the address of the current location or by using latitude and longitude.**
+
 ```java
 // use the following code to get the address of the latitude and longitude.
 // declare this inside onCreate() method or anywhere you would like to use it.
