@@ -76,6 +76,7 @@ public class MyLocation
                     ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED)
             {
+                Log.e(TAG, "onLocationChanged: permission to access location is not granted.");
                 return;
             }
 
@@ -142,6 +143,7 @@ public class MyLocation
                 ActivityCompat.checkSelfPermission(this.mContext, Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED)
         {
+            Log.e(TAG, "onLocationChanged: permission to access location is not granted.");
             return false;
         }
 
@@ -177,6 +179,7 @@ public class MyLocation
                     ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION)
                             != PackageManager.PERMISSION_GRANTED)
             {
+                Log.e(TAG, "onLocationChanged: permission to access location is not granted.");
                 return;
             }
 
