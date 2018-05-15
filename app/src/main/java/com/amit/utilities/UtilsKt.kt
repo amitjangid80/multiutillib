@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 
-public class UtilsKt
+class UtilsKt
 {
     @Suppress("deprecation")
     companion object

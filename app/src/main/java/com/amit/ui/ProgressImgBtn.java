@@ -114,11 +114,11 @@ public class ProgressImgBtn extends AppCompatImageButton implements AnimButton, 
     {
         mParams = new Params();
         mParams.progressBarPadding = 0f;
-        ProgressBtn.BackgroundAndMorphingDrawables drawables;
+        CircularProgressButton.BackgroundAndMorphingDrawables drawables;
 
         if (attrs == null)
         {
-            drawables = ProgressBtn.loadGradientDrawable(Utils.getDrawable(getContext(), R.drawable.default_btn_shape));
+            drawables = CircularProgressButton.loadGradientDrawable(Utils.getDrawable(getContext(), R.drawable.default_btn_shape));
         }
         else
         {
@@ -128,7 +128,7 @@ public class ProgressImgBtn extends AppCompatImageButton implements AnimButton, 
 
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ProgressBtn, defStyleAttr, defStyleRes);
             TypedArray taBg = context.obtainStyledAttributes(attrs, attrsArray, defStyleAttr, defStyleRes);
-            drawables = ProgressBtn.loadGradientDrawable(taBg.getDrawable(0));
+            drawables = CircularProgressButton.loadGradientDrawable(taBg.getDrawable(0));
 
             mParams.initialCornerRadius = ta.getDimension(R.styleable.ProgressBtn_initialCornerRadius, 0);
             mParams.finalCornerRadius = ta.getDimension(R.styleable.ProgressBtn_finalCornerRadius, 100);
