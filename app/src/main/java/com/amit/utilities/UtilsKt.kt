@@ -6,7 +6,7 @@ import android.os.Build
 
 public class UtilsKt
 {
-    @SuppressWarnings("deprecation")
+    @Suppress("deprecation")
     companion object
     {
         fun getColorWrapper(context: Context, id: Int) : Int
@@ -22,7 +22,7 @@ public class UtilsKt
         }
     }
 
-    @SuppressWarnings("deprecation")
+    @Suppress("deprecation")
     fun getDrawable(context: Context, id: Int) : Drawable
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
