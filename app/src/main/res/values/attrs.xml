@@ -29,4 +29,12 @@
         <attr name="typeface" format="string" />
     </declare-styleable>
 
+    <declare-styleable name="ProgressBtn">
+        <attr name="progressBarWidth" format="dimension" />
+        <attr name="progressBarColor" format="color" />
+        <attr name="progressBarPadding" format="dimension" />
+        <attr name="initialCornerRadius" format="dimension" />
+        <attr name="finalCornerRadius" format="dimension" />
+    </declare-styleable>
+
 </resources>

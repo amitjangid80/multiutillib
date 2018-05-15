@@ -9,7 +9,6 @@ import android.support.v4.util.Pair;
 import android.util.Log;
 
 import com.amit.utilities.SharedPreferenceData;
-
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -74,6 +73,9 @@ public class ApiServices
      * capitalizeString method
      *
      * this method will capitalizeString or set the string to upper case
+     *
+     * @param string - string to capitalize
+     * return - will return the string which was passed in capitalize form
     **/
     private String capitalizeString(String string)
     {
@@ -220,12 +222,18 @@ public class ApiServices
      * this method gets bitmap image from the server
      * this can be used to download the image from server or api
      *
-     * @param url - this parameter will contain the url where the image has to be downloaded
+     * @param apiPath - this parameter will contain the apiPath where the image has to be downloaded
+     *              this apiPath parameter will contain the entire path for the image to be downloaded.
      * @param requestType - request type will be GET OR POST
      * @param parameter - if any information has to be sent in body then set parameters
      *                    use json object for this parameter.
+     *
+     * return           - pair of integer and bitmap value
+     *                    where integer will be the response code
+     *                    and bitmap will be the file uploaded.
+     *
     **/
-    public Pair<Integer, Bitmap> getBitmapData(String url, String requestType, String parameter)
+    public Pair<Integer, Bitmap> getBitmapData(String apiPath, String requestType, String parameter)
     {
         Bitmap resultVal = null;
         InputStream iStream ;
@@ -233,13 +241,13 @@ public class ApiServices
 
         try
         {
-            URL urlConnect = new URL(apiPath + url);
+            URL urlConnect = new URL(apiPath);
             HttpURLConnection urlConnection = (HttpURLConnection) urlConnect.openConnection();
 
             urlConnection.setRequestMethod(requestType);
             urlConnection.addRequestProperty("Content-Type", "application/json; charset=utf-8");
 
-            Log.e(TAG, "getBitmapData: url for downloading image is: " + urlConnect);
+            Log.e(TAG, "getBitmapData: apiPath for downloading image is: " + urlConnect);
             urlConnection.addRequestProperty("x-access-token", sharedPreferenceData.getValue("token"));
 
             Log.e(TAG, "getBitmapData: x-access-token is: " + sharedPreferenceData.getValue("token"));
@@ -263,7 +271,7 @@ public class ApiServices
                 {
                     iStream = urlConnection.getInputStream();
 
-                    /*Creating a bitmap from the stream returned from the url */
+                    /*Creating a bitmap from the stream returned from the apiPath */
                     resultVal = BitmapFactory.decodeStream(iStream);
                     Log.e(TAG, "getBitmapData: result from server is: " + resultVal);
                 }
@@ -281,7 +289,7 @@ public class ApiServices
             finally
             {
                 urlConnection.disconnect();
-                Log.e(TAG, "URL in finally is >" + url + "<-->" + resultVal);
+                Log.e(TAG, "URL in finally is >" + apiPath + "<-->" + resultVal);
             }
         }
         catch (Exception e)

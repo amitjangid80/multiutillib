@@ -4,10 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.CheckResult;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.Spannable;
@@ -326,5 +329,49 @@ public class Utils
         }
 
         return "";
+    }
+
+    /**
+     * 2018 May 14 - Monday - 05:50 PM
+     * get drawable
+     * this method will get you the drawables
+     *
+     * @param context - context of the application
+     * @param id - drawable id
+     *
+     * @return returns drawable
+    **/
+    public static Drawable getDrawable(@NonNull Context context, int id)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
+            return context.getDrawable(id);
+        }
+        else
+        {
+            return context.getResources().getDrawable(id, null);
+        }
+    }
+
+    /**
+     * 2018 May 15 - Tuesday - 11:57 AM
+     * get color wrapper
+     * this method will get the color
+     *
+     * @param context - context of the application
+     * @param id - color id
+     *
+     * @return returns color
+    **/
+    public static int getColorWrapper(@NonNull Context context, int id)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            return context.getColor(id);
+        }
+        else
+        {
+            return context.getResources().getColor(id, null);
+        }
     }
 }
