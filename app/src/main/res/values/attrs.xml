@@ -37,4 +37,12 @@
         <attr name="finalCornerRadius" format="dimension" />
     </declare-styleable>
 
+    <declare-styleable name="CircularProgressButton">
+        <attr name="spinning_bar_width" format="dimension" />
+        <attr name="spinning_bar_color" format="color" />
+        <attr name="spinning_bar_padding" format="dimension" />
+        <attr name="initialCornerAngle" format="dimension" />
+        <attr name="finalCornerAngle" format="dimension" />
+    </declare-styleable>
+
 </resources>
