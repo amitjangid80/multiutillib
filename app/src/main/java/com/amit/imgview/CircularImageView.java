@@ -22,7 +22,7 @@ import com.amit.R;
 
 public class CircularImageView extends AppCompatImageView
 {
-    private static final int DEF_PRESS_HIGHTLIGHT_COLOR = 0x32000000;
+    private static final int DEF_PRESS_HIGHLIGHT_COLOR = 0x32000000;
 
     private Shader mBitmapShader;
     private Matrix mSharedMatrix;
@@ -49,17 +49,17 @@ public class CircularImageView extends AppCompatImageView
         super(context, attrs);
 
         float strokeWidth = 0;
-        boolean highlighEnable = true;
+        boolean highlightEnable = true;
         int strokeColor = Color.TRANSPARENT;
-        int highlightColor = DEF_PRESS_HIGHTLIGHT_COLOR;
+        int highlightColor = DEF_PRESS_HIGHLIGHT_COLOR;
 
         if (attrs != null)
         {
             TypedArray a = context.obtainStyledAttributes(attrs,  R.styleable.CircularImageView, 0,0);
             strokeColor = a.getColor(R.styleable.CircularImageView_strokeColor, Color.TRANSPARENT);
             strokeWidth = a.getDimension(R.styleable.CircularImageView_imgStrokeWidth, 0);
-            highlighEnable = a.getBoolean(R.styleable.CircularImageView_highlightEnable, true);
-            highlightColor = a.getColor(R.styleable.CircularImageView_highlightColor, DEF_PRESS_HIGHTLIGHT_COLOR);
+            highlightEnable = a.getBoolean(R.styleable.CircularImageView_highlightEnable, true);
+            highlightColor = a.getColor(R.styleable.CircularImageView_highlightColor, DEF_PRESS_HIGHLIGHT_COLOR);
             a.recycle();
         }
 
@@ -77,7 +77,7 @@ public class CircularImageView extends AppCompatImageView
         mPressedPaint.setColor(highlightColor);
         mPressedPaint.setStyle(Paint.Style.FILL);
 
-        mHighlightEnable = highlighEnable;
+        mHighlightEnable = highlightEnable;
         mInitialized = true;
         setupBitmap();
     }

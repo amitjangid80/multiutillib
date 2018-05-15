@@ -139,8 +139,18 @@ public class ProgressBtn extends AppCompatButton implements AnimButton, Customiz
             mParams.progressBarWidth = ta.getDimension(R.styleable.ProgressBtn_progressBarWidth, 10);
             mParams.progressBarPadding = ta.getDimension(R.styleable.ProgressBtn_progressBarPadding, 0);
 
-            mParams.progressBarColor = ta.getColor(R.styleable.ProgressBtn_progressBarColor,
-                    Utils.getColorWrapper(context, R.color.colorPrimary));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                mParams.progressBarColor = ta.getColor(
+                        R.styleable.ProgressBtn_progressBarColor,
+                        context.getColor(android.R.color.black));
+            }
+            else
+            {
+                mParams.progressBarColor = ta.getColor(
+                        R.styleable.ProgressBtn_progressBarColor,
+                        context.getResources().getColor(android.R.color.black));
+            }
 
             ta.recycle();
             taBg.recycle();
