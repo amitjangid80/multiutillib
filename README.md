@@ -4,7 +4,8 @@
 
 ## Setup
 
-#### Step 1. Add the JitPack repository to your build file 
+#### Step 1. Add the JitPack repository to your build file
+ 
 >**Add it in your root build.gradle at the end of repositories:**
 
 ```
@@ -15,7 +16,9 @@ allprojects{
   }
 }
 ```
+
 #### Step 2. Add the dependency
+
 ```
 dependencies {
     ...
@@ -24,6 +27,7 @@ dependencies {
 ```
 
 #### Using maven:
+
 ```
 <repositories>
   <repository>
@@ -32,8 +36,10 @@ dependencies {
   </repository>
 </repositories>
 ```
+
 #### Step 2. Add the dependency
-```
+
+```markdown
 <dependency>
    <groupId>com.github.amitjangid80</groupId>
    <artifactId>multiutillib</artifactId>
@@ -42,7 +48,9 @@ dependency>
 ```
 
 ## Usage
+
 ### ProjectApplication Class
+
 >**You can create an Application class for your project if you want and set up some utils there.**
 
 ```java
@@ -245,6 +253,7 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 ```
 
 ### SquareImageView
+
 >**Use it the way you use ImageView in android. This makes your image in a perfect square shape.**
 
 ```xml
@@ -258,6 +267,7 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 
 
 ### CircularImageView
+
 >**Use it the way you use ImageView in android. Attributes for this image view are as follows:**
 
 **1. highlightEnable - true/false**
@@ -284,6 +294,7 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 ```
 
 ### AvatarImageView
+
 >**Use it the way you use ImageView in android. Attributes for this image view are as follows:**
 
 **1. imgStrokeWidth**
@@ -319,6 +330,7 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 ```
 
 ### TouchImageView
+
 >**Use it the way you use ImageView in android. This is helpful when you have to add zoom in or zoom out functionality to the imageView with additional code.**
 
 
@@ -331,10 +343,12 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 ```
 
 ### SwitchButton
+
 >**Use it in the xml file like this.**
 
 **If you are using typeface then add the font file into assets folder, inside assets folder create another folder named 'fonts'. And then just use the name of your font file like the one in below example.** 
 
+**UI Part**
 ```xml
 <com.amit.ui.SwitchButton
     android:id="@+id/switchButton"
@@ -350,6 +364,8 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
     app:textSize="20sp"
     app:typeface="QuattrocentoSans-Regular.ttf" />
 ```
+
+**Java code**
 
 ```java
 // the below code shows how to use the SwitchButton to get the selected values.
@@ -451,6 +467,7 @@ private class GeocoderHandler extends Handler
 ```
 
 ### FontHelper Class
+
 >**This class helps you to apply the font to the entire layout file. This file will apply the required font to every view of the layout file.**
 
 ```java
@@ -459,6 +476,7 @@ FontHelper.applyFont(context, idOfYourParentLayout, "fonts/QuattrocentoSans-Regu
 ```
 
 ### InternetConection class
+
 >**This class will help you check if internet connection is available or not.**
 
 ```java
@@ -486,6 +504,7 @@ TextUtilities.replaceTrueOrFalse(string); // this will return int value.
 ```
 
 ### Validator class
+
 >**This class helps you to validate some common fields like email, mobile number, numbers only, etc.**
 
 ```java
