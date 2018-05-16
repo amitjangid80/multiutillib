@@ -44,7 +44,7 @@ dependencies {
    <groupId>com.github.amitjangid80</groupId>
    <artifactId>multiutillib</artifactId>
    <version>v1.2.5</version>
-dependency>
+<dependency>
 ```
 
 ## Usage
