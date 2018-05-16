@@ -29,20 +29,12 @@
         <attr name="typeface" format="string" />
     </declare-styleable>
 
-    <declare-styleable name="ProgressBtn">
-        <attr name="progressBarWidth" format="dimension" />
-        <attr name="progressBarColor" format="color" />
-        <attr name="progressBarPadding" format="dimension" />
-        <attr name="initialCornerRadius" format="dimension" />
-        <attr name="finalCornerRadius" format="dimension" />
-    </declare-styleable>
-
-    <declare-styleable name="CircularProgressButton">
-        <attr name="spinning_bar_width" format="dimension" />
-        <attr name="spinning_bar_color" format="color" />
-        <attr name="spinning_bar_padding" format="dimension" />
-        <attr name="initialCornerAngle" format="dimension" />
-        <attr name="finalCornerAngle" format="dimension" />
+    <declare-styleable name="ProgressButton">
+        <attr name="progress_bar_width" format="dimension" />
+        <attr name="progress_bar_color" format="color" />
+        <attr name="progress_bar_padding" format="dimension" />
+        <attr name="initial_corner_radius" format="dimension" />
+        <attr name="final_corner_radius" format="dimension" />
     </declare-styleable>
 
 </resources>

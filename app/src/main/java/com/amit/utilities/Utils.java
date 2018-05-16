@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.CheckResult;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
@@ -350,6 +351,27 @@ public class Utils
         else
         {
             return context.getResources().getDrawable(id, null);
+        }
+    }
+
+    /**
+     * get Color wrapper
+     * this method will get the color resource based on android version
+     *
+     * @param context - context of the application
+     * @param id - id of the color resource
+     *
+     * @return int - color in integer.
+    **/
+    public static int getColorWrapper(@NonNull Context context, @ColorRes int id)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        {
+            return context.getColor(id);
+        }
+        else
+        {
+            return context.getResources().getColor(id, null);
         }
     }
 }
