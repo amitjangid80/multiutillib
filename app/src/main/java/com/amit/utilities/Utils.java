@@ -352,26 +352,4 @@ public class Utils
             return context.getResources().getDrawable(id, null);
         }
     }
-
-    /**
-     * 2018 May 15 - Tuesday - 11:57 AM
-     * get color wrapper
-     * this method will get the color
-     *
-     * @param context - context of the application
-     * @param id - color id
-     *
-     * @return returns color
-    **/
-    public static int getColorWrapper(@NonNull Context context, int id)
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        {
-            return context.getColor(id);
-        }
-        else
-        {
-            return context.getResources().getColor(id, null);
-        }
-    }
 }
