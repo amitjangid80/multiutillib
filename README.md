@@ -1,5 +1,7 @@
 # multiutillib
 
+[![](https://jitpack.io/v/amitjangid80/multiutillib.svg)](https://jitpack.io/#amitjangid80/multiutillib)
+
 ## Setup
 
 #### Step 1. Add the JitPack repository to your build file 
