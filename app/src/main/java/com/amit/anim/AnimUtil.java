@@ -161,7 +161,7 @@ public class AnimUtil
      *
      * @param context - context of the activity
      **/
-    public static void slideFromBottomToUpAnim(@NonNull Context context)
+    public static void slideActivityFromBottomToUp(@NonNull Context context)
     {
         try
         {
@@ -169,7 +169,7 @@ public class AnimUtil
         }
         catch (Exception e)
         {
-            Log.e(TAG, "slideFromBottomToUpAnim: exception while animating.");
+            Log.e(TAG, "slideActivityFromBottomToUp: exception while animating.");
             e.printStackTrace();
         }
     }
@@ -180,7 +180,7 @@ public class AnimUtil
      *
      * @param context - context of the activity
      **/
-    public static void slideFromUpToBottomAnim(@NonNull Context context)
+    public static void slideActivityFromUpToBottom(@NonNull Context context)
     {
         try
         {
@@ -188,7 +188,7 @@ public class AnimUtil
         }
         catch (Exception e)
         {
-            Log.e(TAG, "slideFromUpToBottomAnim: exception while animating.");
+            Log.e(TAG, "slideActivityFromUpToBottom: exception while animating.");
             e.printStackTrace();
         }
     }
@@ -308,6 +308,29 @@ public class AnimUtil
         catch (Exception e)
         {
             Log.e(TAG, "slideAnim: exception while making animation.");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Bounce anim method
+     * this method will make a view bounce
+     *
+     * @param context - context of the application
+     * @param view - view to animate
+     **/
+    public static void bounceAnim(Context context, View view)
+    {
+        try
+        {
+            final Animation animation = AnimationUtils.loadAnimation(context, R.anim.bounce);
+            MyBounceInterpolator interpolator = new MyBounceInterpolator(0.2, 20);
+            animation.setInterpolator(interpolator);
+            view.startAnimation(animation);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "bounceAnim: exception while making bounce animation.");
             e.printStackTrace();
         }
     }

@@ -8,7 +8,7 @@
  
 >**Add it in your root build.gradle at the end of repositories:**
 
-```markdown
+```
 allprojects{
   repositories {
     ...
@@ -19,16 +19,16 @@ allprojects{
 
 #### Step 2. Add the dependency
 
-```markdown
+```
 dependencies {
     ...
-    implementation 'com.github.amitjangid80:multiutillib:v1.2.6'
+    implementation 'com.github.amitjangid80:multiutillib:v1.2.7'
 }
 ```
 
 #### Using maven:
 
-```markdown
+```
 <repositories>
   <repository>
     <id>jitpack.io</id>
@@ -39,11 +39,11 @@ dependencies {
 
 #### Step 2. Add the dependency
 
-```markdown
+```
 <dependency>
    <groupId>com.github.amitjangid80</groupId>
    <artifactId>multiutillib</artifactId>
-   <version>v1.2.6</version>
+   <version>v1.2.7</version>
 <dependency>
 ```
 
@@ -75,7 +75,7 @@ public class ProjectApplication extends Application
 
 ### SharedPreferenceData 
 
-```markdown
+```java
 // use it in the activity or class you want to.
 SharedPreferenceData sharedPreferenceData = new SharedPreferenceData(context);
 
@@ -613,7 +613,7 @@ UiUtils.setMaxLength(textInputEditText, maxLength);
 
 **Usage**
 
-```aidl
+```java
 /**
  * is Sd Card Mounted
  * this method will check if sd card is mounted or not
@@ -710,6 +710,143 @@ Utils.getSha512Hash(byte[] dataToHash);
 
 **Usage**
 
-```aidl
+```java
 
+// for making an activity slide from right to left
+AnimUtil.slideActivityFromRightToLeft(context);
+
+// for making an activity slide from left to right
+AnimUtil.slideActivityFromLeftToRight(context);
+
+// for making an activity slide from right to left
+AnimUtil.slideActivityFromRightToLeft(context);
+
+// for making an activity fade in fade out
+AnimUtil.activityFadeInFadeOut(context);
+
+// for making an activity from left with stay
+AnimUtil.slideActivityFromLeftWithStay(context);
+
+// for making an activity from right with stay
+AnimUtil.slideActivityFromRightWithStay(context);
+
+// for making an activity bottom with stay
+AnimUtil.slideActivityFromBottomWithStay(context);
+
+// for making an activity from top with stay
+AnimUtil.slideActivityFromUpWithStay(context);
+
+// for making an activity from bottom to up
+AnimUtil.slideActivityFromBottomToUp(context);
+
+// for making an activity from up to bottom
+AnimUtil.slideActivityFromUpToBottom(context);
+
+// for making an activity from up to bottom
+AnimUtil.slideActivityFromUpToBottom(context);
+
+// this method will make an view group to explode or rise 
+AnimUtil.explodeTransition(Context context, ViewGroup viewGroup, int duration);
+
+// this method will make and view to slide from right
+AnimUtil.slideAnimFromRight(@NonNull Context context, View view, int duration);
+
+// this method will make and view to slide from left
+AnimUtil.slideAnimFromLeft(@NonNull Context context, View view, int duration);
+
+// Use your own animation in this method the way you want.
+AnimUtil.slideAnim(@NonNull Context context, View view, int duration, @AnimRes int animResId);
+
+// Use this method to make a button or a view bounce
+AnimUtil.bounceAnim(Context context, View view);
 ```
+
+###Social Buttons
+
+>**Use Social buttons like you use normal button.**
+
+**Usage**
+
+```xml
+<!-- Currently Facebook, Google, Twitter, LinkedIn buttons are available. -->
+
+<!-- Square button with icon and color background and normal usage -->
+<com.amit.ui.GoogleButton
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Sign in with Google"
+    android:textAlignment="center"
+    android:textColor="@color/black"
+    app:iconSize="30dp"
+    app:iconPadding="30dp"
+    tools:ignore="HardcodedText" />
+
+<!-- Round Button with icon only and color background -->
+<com.amit.ui.GoogleButton
+    android:layout_width="75dp"
+    android:layout_height="75dp"
+    app:iconSize="30dp"
+    app:roundedCorner="true"
+    app:roundedCornerRadius="75dp" />
+
+<!-- With Rounded corners and text -->
+<com.amit.ui.GoogleButton
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Sign in with Google"
+    android:textAlignment="center"
+    android:textColor="@color/black"
+    app:iconCenterAligned="false"
+    app:iconSize="30dp"
+    app:roundedCorner="true" />
+
+<!-- Square button with only icon -->
+<com.amit.ui.GoogleButton
+    android:layout_width="75dp"
+    android:layout_height="75dp"
+    app:iconSize="30dp" />
+
+<!-- Square button with transparent background -->
+<com.amit.ui.GoogleButton
+    android:layout_width="75dp"
+    android:layout_height="75dp"
+    app:iconSize="30dp"
+    app:transparentBackground="true" />
+
+<!-- Round button with transparent background -->
+<com.amit.ui.GoogleButton
+    android:layout_width="75dp"
+    android:layout_height="75dp"
+    app:iconSize="30dp"
+    app:roundedCorner="true"
+    app:roundedCornerRadius="75dp"
+    app:transparentBackground="true" />
+```
+
+###Shine Button
+
+>**Type of like button with some color explosion.**
+
+**Usage**
+
+```xml
+<com.amit.shinebtn.ShineButton
+    android:id="@+id/shine_button"
+    android:layout_width="50dp"
+    android:layout_height="50dp"
+    android:layout_marginBottom="10dp"
+    android:src="@android:color/darker_gray"
+    app:allow_random_color="false"
+    app:big_shine_color="#FF6666"
+    app:btn_color="@android:color/darker_gray"
+    app:btn_fill_color="#FF6666"
+    app:click_animation_duration="200"
+    app:enable_flashing="false"
+    app:shine_animation_duration="1500"
+    app:shine_count="8"
+    app:shine_turn_angle="10"
+    app:siShape="@raw/heart"
+    app:small_shine_color="#CC9999"
+    app:small_shine_offset_angle="20" />
+```
+
