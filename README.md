@@ -257,7 +257,7 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 >**Use it the way you use ImageView in android. This makes your image in a perfect square shape.**
 
 ```xml
-<com.amit.imgview.SquareImageView
+<com.amit.iv.SquareImageView
     android:id="@+id/squareImageView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -281,7 +281,7 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 >**example code:**
 
 ```xml
-<com.amit.imgview.CircularImageView
+<com.amit.iv.CircularImageView
     android:id="@+id/circularImageView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -314,7 +314,7 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 >**example code:**
 
 ```xml
-<com.amit.imgview.AvatarImageView
+<com.amit.iv.AvatarImageView
     android:id="@+id/avatarImageView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -335,7 +335,7 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 
 
 ```xml
-<com.amit.imgview.TouchImageView
+<com.amit.iv.TouchImageView
     android:id="@+id/imageView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
