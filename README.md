@@ -704,7 +704,7 @@ Utils.getSha512Hash(stringToHash);
 Utils.getSha512Hash(byte[] dataToHash);
 ```
 
-###AnimUtil
+### AnimUtil
 
 >**This class can be used for animating activity or a view.**
 
@@ -761,7 +761,7 @@ AnimUtil.slideAnim(@NonNull Context context, View view, int duration, @AnimRes i
 AnimUtil.bounceAnim(Context context, View view);
 ```
 
-###Social Buttons
+### Social Buttons
 
 >**Use Social buttons like you use normal button.**
 
@@ -823,7 +823,7 @@ AnimUtil.bounceAnim(Context context, View view);
     app:transparentBackground="true" />
 ```
 
-###Shine Button
+### Shine Button
 
 >**Type of like button with some color explosion.**
 
