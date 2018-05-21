@@ -1,4 +1,4 @@
-package com.amit.imgview;
+package com.amit.iv;
 
 import android.content.Context;
 import android.graphics.Matrix;

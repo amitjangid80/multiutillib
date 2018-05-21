@@ -4,14 +4,21 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.AttrRes;
 import android.support.annotation.CheckResult;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.Spannable;
@@ -19,6 +26,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
@@ -373,5 +381,68 @@ public class Utils
         {
             return context.getResources().getColor(id, null);
         }
+    }
+
+    private static float xdpi = Float.MIN_VALUE;
+
+    public static int dpToPx(Context context, int dp)
+    {
+        if (xdpi == Float.MIN_VALUE)
+        {
+            xdpi = context.getResources().getDisplayMetrics().xdpi;
+        }
+
+        return Math.round(dp * (xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
+    @Nullable
+    public static Drawable getThemeAttrDrawable(@NonNull Context context, @AttrRes int attributeDrawable)
+    {
+        int[] attrs = new int[]{attributeDrawable};
+        TypedArray ta = context.obtainStyledAttributes(attrs);
+        Drawable drawableFromTheme = ta.getDrawable(0);
+        ta.recycle();
+        return drawableFromTheme;
+    }
+
+    public static int getThemeAttrColor(@NonNull Context context, @AttrRes int attributeColor)
+    {
+        int[] attrs = new int[]{attributeColor};
+        TypedArray ta = context.obtainStyledAttributes(attrs);
+        int color = ta.getColor(0, Color.TRANSPARENT);
+        ta.recycle();
+        return color;
+    }
+
+    public static float convertDpToPixel(float dp, Context context)
+    {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    public static float convertPixelsToDp(float px, Context context)
+    {
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        return px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable)
+    {
+        if (drawable instanceof BitmapDrawable)
+        {
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(
+                drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(),
+                Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 }

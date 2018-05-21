@@ -4,7 +4,46 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="green">#8BC34A</color>
-    <color name="black">#FF000000</color>
+    <!-- white color -->
+    <color name="white">#ffffffff</color>
+
+    <!-- green color -->
+    <color name="green">#ff99cc00</color>
+    <color name="dark_green">#ff6d9b00</color>
+
+    <!-- orange color -->
+    <color name="orange">@android:color/holo_orange_dark</color>
+
+    <!-- yellow color -->
     <color name="btnColor">#FFA000</color>
+
+    <!-- blue color -->
+    <color name="blue">#ff0099cc</color>
+    <color name="denim_blue">#2861b0</color>
+    <color name="dark_blue">#ff00719b</color>
+
+    <!-- red color -->
+    <color name="red">#ffff4444</color>
+    <color name="dark_red">#ffcd3a3a</color>
+
+    <!-- black color -->
+    <color name="black">#FF000000</color>
+    <color name="black_shade">#222222</color>
+
+    <!-- transparent color -->
+    <color name="transparent">#00000000</color>
+    <color name="translucent">#09000000</color>
+
+    <!-- gray color -->
+    <color name="gray">#FFDEDEDE</color>
+    <color name="darker_grey">#999999</color>
+    <color name="white_background_txt">#777777</color>
+
+    <!-- social button colors -->
+    <color name="google_plus">#DB4437</color>
+    <color name="facebook">#3b579d</color>
+    <color name="twitter">#1B98E5</color>
+    <color name="linkedin">#0077b5</color>
+    <color name="google">#FFFFFF</color>
+
 </resources>

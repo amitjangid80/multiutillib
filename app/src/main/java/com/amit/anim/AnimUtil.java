@@ -1,4 +1,4 @@
-package com.amit.animation;
+package com.amit.anim;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -18,7 +18,6 @@ import com.amit.R;
  * 2018 May 14 - Monday - 03:05 PM
  * This AnimUtil class will help with animation
 **/
-
 public class AnimUtil
 {
     private static final String TAG = AnimUtil.class.getSimpleName();
@@ -29,7 +28,7 @@ public class AnimUtil
      *
      * @param context - context of the activity
     **/
-    public static void slideFromRightToLeftAnim(@NonNull Context context)
+    public static void slideActivityFromRightToLeft(@NonNull Context context)
     {
         try
         {
@@ -37,7 +36,7 @@ public class AnimUtil
         }
         catch (Exception e)
         {
-            Log.e(TAG, "slideActivityLeftToRight: exception while animating activity:\n");
+            Log.e(TAG, "slideActivityFromRightToLeft: exception while animating activity:\n");
             e.printStackTrace();
         }
     }
@@ -48,7 +47,7 @@ public class AnimUtil
      *
      * @param context - context of the activity
      **/
-    public static void slideFromLeftToRightAnim(@NonNull Context context)
+    public static void slideActivityFromLeftToRight(@NonNull Context context)
     {
         try
         {
@@ -67,7 +66,7 @@ public class AnimUtil
      *
      * @param context - context of the activity
     **/
-    public static void fadeInFadeOutAnim(@NonNull Context context)
+    public static void activityFadeInFadeOut(@NonNull Context context)
     {
         try
         {
@@ -75,7 +74,7 @@ public class AnimUtil
         }
         catch (Exception e)
         {
-            Log.e(TAG, "fadeInFadeOutActivity: exception while animating acivity.");
+            Log.e(TAG, "activityFadeInFadeOut: exception while animating acivity.");
             e.printStackTrace();
         }
     }
@@ -86,7 +85,7 @@ public class AnimUtil
      *
      * @param context - context of the activity
     **/
-    public static void slideFromLeftWithStayAnim(@NonNull Context context)
+    public static void slideActivityFromLeftWithStay(@NonNull Context context)
     {
         try
         {
@@ -105,7 +104,7 @@ public class AnimUtil
      *
      * @param context - context of the activity
     **/
-    public static void slideFromRightWithStayAnim(@NonNull Context context)
+    public static void slideActivityFromRightWithStay(@NonNull Context context)
     {
         try
         {
@@ -113,7 +112,7 @@ public class AnimUtil
         }
         catch (Exception e)
         {
-            Log.e(TAG, "slideActivityFromLeftWithStay: exception while animating activity.");
+            Log.e(TAG, "slideActivityFromRightWithStay: exception while animating activity.");
             e.printStackTrace();
         }
     }
@@ -124,7 +123,7 @@ public class AnimUtil
      *
      * @param context - context of the activity
     **/
-    public static void slideFromBottomWithStayAnim(@NonNull Context context)
+    public static void slideActivityFromBottomWithStay(@NonNull Context context)
     {
         try
         {
@@ -132,7 +131,7 @@ public class AnimUtil
         }
         catch (Exception e)
         {
-            Log.e(TAG, "slideFromBottomWithStayAnim: exception while animating.");
+            Log.e(TAG, "slideActivityFromBottomWithStay: exception while animating.");
             e.printStackTrace();
         }
     }
@@ -143,7 +142,7 @@ public class AnimUtil
      *
      * @param context - context of the activity
     **/
-    public static void slideFromUpWithStayAnim(@NonNull Context context)
+    public static void slideActivityFromUpWithStay(@NonNull Context context)
     {
         try
         {
