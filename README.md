@@ -850,3 +850,9 @@ AnimUtil.bounceAnim(Context context, View view);
     app:small_shine_offset_angle="20" />
 ```
 
+**Java Code for Shine Button**
+
+```java
+ShineButton shineButton = findViewById(R.id.shine_button);
+shineButton.init(MainActivity.this);
+```
