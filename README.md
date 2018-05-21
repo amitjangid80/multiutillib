@@ -8,7 +8,7 @@
  
 >**Add it in your root build.gradle at the end of repositories:**
 
-```
+```markdown
 allprojects{
   repositories {
     ...
@@ -19,7 +19,7 @@ allprojects{
 
 #### Step 2. Add the dependency
 
-```
+```markdown
 dependencies {
     ...
     implementation 'com.github.amitjangid80:multiutillib:v1.2.6'
@@ -28,7 +28,7 @@ dependencies {
 
 #### Using maven:
 
-```
+```markdown
 <repositories>
   <repository>
     <id>jitpack.io</id>
@@ -75,7 +75,7 @@ public class ProjectApplication extends Application
 
 ### SharedPreferenceData 
 
-```java
+```markdown
 // use it in the activity or class you want to.
 SharedPreferenceData sharedPreferenceData = new SharedPreferenceData(context);
 
@@ -613,7 +613,7 @@ UiUtils.setMaxLength(textInputEditText, maxLength);
 
 **Usage**
 
-```java
+```aidl
 /**
  * is Sd Card Mounted
  * this method will check if sd card is mounted or not
@@ -632,7 +632,7 @@ Utils.isSdCardMounted();
  * @return - it will return IMEI number if permission granted
  *           else if no permission granted then will return empty string.
 **/
-Util.sgetIMEINumber(context);
+Utils.sgetIMEINumber(context);
 
 
 /**
@@ -702,4 +702,14 @@ Utils.getSha512Hash(stringToHash);
  * @return string converted into hash value.
 **/
 Utils.getSha512Hash(byte[] dataToHash);
+```
+
+###AnimUtil
+
+>**This class can be used for animating activity or a view.**
+
+**Usage**
+
+```aidl
+
 ```
