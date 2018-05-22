@@ -9,6 +9,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -28,6 +29,7 @@ import android.text.style.StyleSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import java.net.MalformedURLException;
@@ -35,6 +37,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 /**
  * https://github.com/jaydeepw/android-utils/tree/master/Utils
@@ -42,6 +45,7 @@ import java.security.NoSuchAlgorithmException;
 public class Utils
 {
     private static final String TAG = Utils.class.getSimpleName();
+    private static float xdpi = Float.MIN_VALUE;
 
     /**
      * is Sd Card Mounted
@@ -75,7 +79,7 @@ public class Utils
      *
      * @return - it will return IMEI number if permission granted
      *           else if no permission granted then will return empty string.
-    **/
+     **/
     @CheckResult
     public static String getIMEINumber(Context context)
     {
@@ -132,7 +136,7 @@ public class Utils
      * @param url - url to check
      * @return - will return true if the url is valid
      *           else will return false
-    **/
+     **/
     @CheckResult
     public static boolean isUrlValid(String url)
     {
@@ -170,7 +174,7 @@ public class Utils
      * @param sourceText - text to convert to bold
      *
      * @return - {@link android.text.SpannableString} in BOLD TypeFace
-    **/
+     **/
     public static SpannableStringBuilder toBold(String sourceText)
     {
         try
@@ -210,7 +214,7 @@ public class Utils
      *                    Pass null to bold entire string.
      *
      * @return - {@link android.text.SpannableString} in Bold TypeFace
-    **/
+     **/
     public static SpannableStringBuilder toBold(String string, String subString)
     {
         try
@@ -231,7 +235,7 @@ public class Utils
                 {
                     spannableBuilder.setSpan(
                             bss, subStringNameStart,
-                           subStringNameStart + subString.length(),
+                            subStringNameStart + subString.length(),
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
@@ -259,7 +263,7 @@ public class Utils
      * this method will hide the keyboard
      *
      * @param context - context of the application
-    **/
+     **/
     public static void hideKeyboard(Context context)
     {
         try
@@ -287,7 +291,7 @@ public class Utils
      * @param stringToHash - string to convert to hash.
      *
      * @return string converted to hash value.
-    **/
+     **/
     public static String getSha512Hash(String stringToHash)
     {
         try
@@ -315,7 +319,7 @@ public class Utils
      * @param dataToHash - byte array to convert to hash value
      *
      * @return string converted into hash value.
-    **/
+     **/
     public static String getSha512Hash(byte[] dataToHash)
     {
         MessageDigest md = null;
@@ -349,7 +353,7 @@ public class Utils
      * @param id - drawable id
      *
      * @return returns drawable
-    **/
+     **/
     public static Drawable getDrawable(@NonNull Context context, int id)
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -370,7 +374,7 @@ public class Utils
      * @param id - id of the color resource
      *
      * @return int - color in integer.
-    **/
+     **/
     public static int getColorWrapper(@NonNull Context context, @ColorRes int id)
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -383,8 +387,61 @@ public class Utils
         }
     }
 
-    private static float xdpi = Float.MIN_VALUE;
+    /**
+     * get Time with AM/PM Method
+     *
+     * This method will show the time in two digits and also am pm
+     * if the time selected is afternoon 02:00 then it will show 02:00 PM
+     * else of the time selected is night 02:00 then it will show 02:00 AM
+     *
+     * @param hours - hours to convert
+     * @param minutes - minutes to convert
+     *
+     * @return String with time appended with AM/PM
+     **/
+    public static String getTimeWithAMPM(int hours, int minutes)
+    {
+        try
+        {
+            String timeStamp = "AM", time;
 
+            if (hours > 12)
+            {
+                timeStamp = "PM";
+                hours -= 12;
+            }
+            else if (hours == 0)
+            {
+                timeStamp = "AM";
+                hours += 12;
+            }
+            else if (hours == 12)
+            {
+                timeStamp = "PM";
+            }
+
+            time = String.format(Locale.getDefault(), "%02d", hours) + ":" +
+                    String.format(Locale.getDefault(), "%02d", minutes) + " " + timeStamp;
+
+            return time;
+        }
+        catch (Exception e)
+        {
+            Log.e("Exception", "in show time with am pm method in generate qr code activity:\n");
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    /**
+     * dp to px
+     * this method will convert dp to pixles
+     *
+     * @param context - context of the application
+     * @param dp - dp to convert into pixels
+     *
+     * @return - pixels in integer form
+     **/
     public static int dpToPx(Context context, int dp)
     {
         if (xdpi == Float.MIN_VALUE)
@@ -414,20 +471,45 @@ public class Utils
         return color;
     }
 
+    /**
+     * convert dp to pixel
+     * this method will convert dp to pixels
+     *
+     * @param context - context of the application
+     * @param dp - dp to convert into pixels
+     *
+     * @return - pixels in integer form
+     **/
     public static float convertDpToPixel(float dp, Context context)
     {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
+    /**
+     * convert pixels to dp
+     * this method will converts pixels to dp
+     *
+     * @param context - context of the application
+     * @param px - pixels to be convert into dp
+     *
+     * @return - dp in float form
+     **/
     public static float convertPixelsToDp(float px, Context context)
     {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        return px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
+    /**
+     * drawable to bitmap
+     * this method will convert a drawable to bitmap
+     *
+     * @param drawable - drawable to be converted into bitmap
+     * @return bitmap
+     **/
     public static Bitmap drawableToBitmap (Drawable drawable)
     {
         if (drawable instanceof BitmapDrawable)
@@ -444,5 +526,50 @@ public class Utils
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    /**
+     * dp 2 px
+     * this method will convert dp to pixels
+     *
+     * @param context - context of the application
+     * @param dpValue - dpValue to be convert into pixels
+     *
+     * @return - pixels in integer form
+     **/
+    public static int dp2px(Context context, float dpValue)
+    {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    /**
+     * convert pixels to dp
+     * this method will converts pixels to dp
+     *
+     * @param context - context of the application
+     * @param pxValue - pxValue to be convert into dp
+     *
+     * @return - dp in float form
+     **/
+    public static int px2dp(Context context, float pxValue)
+    {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pxValue / scale + 0.5f);
+    }
+
+    /**
+     * get screen size
+     * this method will get the size of the screen
+     *
+     * @param context - context of the application
+     * @return size of the screen as Point
+     **/
+    public static Point getScreenSize(Context context)
+    {
+        Point point = new Point();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        wm.getDefaultDisplay().getSize(point);
+        return point;
     }
 }
