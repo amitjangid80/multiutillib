@@ -51,7 +51,7 @@
             android:padding="5dp"
             android:singleLine="true"
             android:textColor="@color/color_dialog_title"
-            android:textSize="18sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
@@ -64,6 +64,7 @@
             android:paddingRight="10dp"
             android:paddingTop="5dp"
             android:textColor="@color/color_dialog_content_prompt"
+            android:textSize="16sp"
             android:visibility="visible" />
 
     </LinearLayout>
@@ -87,31 +88,8 @@
             android:gravity="center"
             android:minHeight="40dp"
             android:text="@string/ok"
-            android:textColor="#676767" />
-
-        <!--<LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <View
-                android:id="@+id/divider"
-                android:layout_width="1px"
-                android:layout_height="20dp"
-                android:layout_gravity="center_vertical"
-                android:background="#929292" />
-        </LinearLayout>
-        <TextView
-            android:id="@+id/btnNegative"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/sel_def_gray_right"
-            android:clickable="true"
-            android:gravity="center"
-            android:minHeight="40dp"
-            android:textColor="#676767" /> -->
+            android:textColor="#676767"
+            android:textSize="18sp" />
 
     </LinearLayout>
 </LinearLayout>
