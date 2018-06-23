@@ -702,6 +702,34 @@ Utils.getSha512Hash(stringToHash);
  * @return string converted into hash value.
 **/
 Utils.getSha512Hash(byte[] dataToHash);
+
+/**
+ * 2018 June 23 - Saturday - 10:30 AM
+ * right padding method
+ *
+ * this method will append empty or blank or spaces
+ * after the string for specified length.
+ *
+ * @param strText - String text to append spaces to the right
+ * @param length - length of the string text including spaces and text.
+ *
+ * @return - returns the string with spaces appended to the right of the string
+**/
+Utils.rightPadding(String strText, int length);
+
+/**
+ * 2018 June 23 - Saturday - 10:30 AM
+ * left padding method
+ *
+ * this method will append empty or blank or spaces
+ * after the string for specified length.
+ *
+ * @param strText - String text to append spaces to the left
+ * @param length - length of the string text including spaces and text.
+ *
+ * @return - returns the string with spaces appended to the left of the string.
+**/
+Utils.leftPadding(String strText, int length);
 ```
 
 ### AnimUtil

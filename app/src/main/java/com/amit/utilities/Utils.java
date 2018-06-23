@@ -572,4 +572,38 @@ public class Utils
         wm.getDefaultDisplay().getSize(point);
         return point;
     }
+
+    /**
+     * 2018 June 23 - Saturday - 10:30 AM
+     * right padding method
+     *
+     * this method will append empty or blank or spaces
+     * after the string for specified length.
+     *
+     * @param strText - String text to append spaces to the right
+     * @param length - length of the string text including spaces and text.
+     *
+     * @return - returns the string with spaces appended to the right of the string
+    **/
+    public static String rightPadding(String strText, int length)
+    {
+        return String.format("%-" + length + "." + length + "s", strText);
+    }
+
+    /**
+     * 2018 June 23 - Saturday - 10:30 AM
+     * left padding method
+     *
+     * this method will append empty or blank or spaces
+     * after the string for specified length.
+     *
+     * @param strText - String text to append spaces to the left
+     * @param length - length of the string text including spaces and text.
+     *
+     * @return - returns the string with spaces appended to the left of the string.
+    **/
+    public static String leftPadding(String strText, int length)
+    {
+        return String.format("%" + length + "." + length + "s", strText);
+    }
 }
