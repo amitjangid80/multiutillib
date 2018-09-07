@@ -512,4 +512,56 @@ public class DBHelper
             return 0;
         }
     }
+
+    /**
+     * 2018 September 07 - Friday - 05:39 PM
+     * is table exists method
+     *
+     * this method will check if a table exists in database
+     * if yes is will not execute create table query
+     * else it will execute
+     *
+     * @param tableName - name of the table to check if that table exists or not
+     *
+     * @return true - if table exists in database
+     *         false - if table not exists in database
+    **/
+    public boolean isTableExists(String tableName)
+    {
+        try
+        {
+            // query for checking if table exists in database
+            String query = "SELECT DISTINCT tbl_name FROM sqlite_master WHERE tbl_name = '" + tableName + "'";
+
+            // executing the query using cursor
+            Cursor cursor = db.getReadableDatabase().rawQuery(query, null);
+
+            // checking if cursor is not null
+            if (cursor != null)
+            {
+                // cursor is not null, moving the cursor position to first
+                cursor.moveToFirst();
+
+                // getting the count from cursor
+                int count = cursor.getCount();
+
+                // closing the cursor
+                cursor.close();
+
+                // returning true if table exists in database
+                // else false if table does not exists in database
+                return count > 0;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "isTableExists: exception in is table exists method:\n");
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
