@@ -571,4 +571,92 @@ public class DBHelper
             return false;
         }
     }
+
+    /**
+     * 2018 August 13 - Monday - 12:34 PM
+     * get max field method
+     *
+     * this method will get max value of the field in the table
+     *
+     * @param field - primary key of the table to get the max value or
+     *             an integer field of the table to get the max value
+     *
+     * @param tableName - table name from where you need to get max value
+     *
+     * @return - max value of the field passed
+    **/
+    public int getMaxId(String field, String tableName)
+    {
+        try
+        {
+            if (field != null && field.length() != 0)
+            {
+                if (tableName.length() == 0)
+                {
+                    Log.e(TAG, "getMaxId: table name is required which was not passed");
+                    return 0;
+                }
+
+                String query = "SELECT MAX(" + field + ") AS ID FROM " + tableName;
+                Cursor cursor = db.getReadableDatabase().rawQuery(query, null);
+
+                if (cursor != null)
+                {
+                    cursor.moveToFirst();
+                    int id = cursor.getInt(cursor.getColumnIndex("ID"));
+
+                    cursor.close();
+                    return id;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "getMaxId: exception while getting max field from table:\n");
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * 2018 August 20 - Monday - 04:01 PM
+     * execute query method
+     *
+     * this method is used to execute a query
+     * this method will return true if the query is executed successfully
+     *
+     * @param query - query that you want to execute without getting any particular result.
+     *
+     * @return - true if query was successful
+     *           false if query was not successful.
+    **/
+    public boolean executeQuery(String query)
+    {
+        try
+        {
+            if (query != null && !query.equalsIgnoreCase(""))
+            {
+                db.getWritableDatabase().execSQL(query);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.e(TAG, "executeQuery: exception while executing query:\n");
+            ex.printStackTrace();
+            return false;
+        }
+    }
 }
