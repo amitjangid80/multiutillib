@@ -16,13 +16,12 @@ import java.util.LinkedHashMap;
  * this class has method for executing db queries
  * like: creating table, inserting into table, deleting table, dropping table
 */
-
+@SuppressWarnings("unused")
 public class DBHelper
 {
     private static final String TAG = DBHelper.class.getSimpleName();
 
     private Database db;
-    private Cursor cursor;
 
     /**
      * Constructor of the class
@@ -30,6 +29,7 @@ public class DBHelper
      *
      * @param context - context
     **/
+    @SuppressWarnings("unused")
     public DBHelper(Context context)
     {
         SharedPreferenceData sharedPreferenceData = new SharedPreferenceData(context);
@@ -127,9 +127,10 @@ public class DBHelper
      *                            then conditionalValues can be null
      *
      * @return true or false
-     **/
+    **/
 
     // endregion
+    @SuppressWarnings("unused")
     public boolean executeDatabaseOperations(String tableName,
                                              String operations,
                                              LinkedHashMap<String, String> values,
@@ -328,7 +329,7 @@ public class DBHelper
         }
     }
 
-    // region COMMENTS FOR executeSelectQuery method
+    // region COMMENTS FOR executeQuery method
 
     /**
      * 2018 Feb 01 - Thursday - 03:52 PM
@@ -348,7 +349,7 @@ public class DBHelper
      *                            then the user has to pass conditionalValues
      *                            else it can be null
      *
-     * the below lines are not in use to ignore it
+     * the below lines are not in use so ignore it
      *** s - for selecting values from table
      *     - pass * in values parameter when doing select operations
      *       when you want to select every thing from the table
@@ -356,40 +357,37 @@ public class DBHelper
      *     - pass values parameters with the name of the columns in the table
      *       when you want to select one or multiple columns from the table
      *       no matter condition is there or not
-     **/
+    **/
 
-    // endregion COMMENTS FOR executeSelectQuery method
+    // endregion COMMENTS FOR executeQuery method
+    @SuppressWarnings("unused")
     public Cursor executeSelectQuery(String tableName,
                                      String values,
                                      boolean hasConditions,
-                                     LinkedHashMap<String, String> conditionalValues)
+                                     StringBuilder conditionalValues)
     {
         try
         {
-            if (cursor != null)
-            {
-                cursor.close();
-            }
+            Cursor cursor;
 
             if (values != null)
             {
                 String query;
 
+                // check if has condition is tru
+                // if yes the conditional values should not be null
                 if (hasConditions)
                 {
+                    // check ig conditional values is passed
+                    // it should be of string builder type
+                    // where user has to pass values to be passed in where clause
+                    //
+                    // FOR EX: firstName = 'FirstNameValue' OR
+                    //         firstName LIKE %Term to be searched%
                     if (conditionalValues != null)
                     {
-                        String strConditionalValues = conditionalValues.toString();
-                        strConditionalValues = strConditionalValues.replace("{", "");
-                        strConditionalValues = strConditionalValues.replace("}", "");
-                        strConditionalValues = strConditionalValues.replace(",", " AND");
-
-                        if (strConditionalValues.contains("LIKE ="))
-                        {
-                            strConditionalValues = strConditionalValues.replace("=", "");
-                        }
-
-                        query = "SELECT " + values + " FROM " + tableName + " WHERE " + strConditionalValues;
+                        // building conditional query
+                        query = "SELECT " + values + " FROM " + tableName + " WHERE " + conditionalValues.toString() + "";
                         Log.e(TAG, "executeSelectQuery: Select query with conditions is: " + query);
                     }
                     else
@@ -400,12 +398,16 @@ public class DBHelper
                 }
                 else
                 {
+                    // building non conditional values
                     query = "SELECT " + values + " FROM " + tableName;
                     Log.e(TAG, "executeSelectQuery: Select query without conditions is: " + query);
                 }
 
+                // executing query
                 cursor = db.getWritableDatabase().rawQuery(query, null);
 
+                // if cursor is not null then moving the position to first
+                // and returning the cursor
                 if (cursor != null)
                 {
                     cursor.moveToFirst();
@@ -461,38 +463,42 @@ public class DBHelper
      * *********************************************************************************************
      *
      *** @return this method will return the count of the record in the table
-     * */
+    **/
 
     // endregion COMMENTS FOR getRecordCount method
+    @SuppressWarnings("unused")
     public int getRecordCount(String tableName,
                               String values,
                               boolean hasConditions,
-                              LinkedHashMap<String, String> conditionalValues)
+                              StringBuilder conditionalValues)
     {
         try
         {
-            values = values.replace("[", "");
-            values = values.replace("]", "");
+            String query;
 
-            String query = "";
-
-            if (!hasConditions)
+            // check if has condition is true
+            // if yes then conditional values should be passed
+            if (hasConditions)
             {
-                query = "SELECT " + values + " FROM " + tableName;
-            }
-            else if (conditionalValues != null)
-            {
-                String strConditionalValues = conditionalValues.toString();
-                strConditionalValues = strConditionalValues.replace("[", "");
-                strConditionalValues = strConditionalValues.replace("]", "");
-                strConditionalValues = strConditionalValues.replace(",", " AND");
-
-                if (strConditionalValues.contains("LIKE ="))
+                // checking if conditional values is not null
+                // if yes then then building query with conditions
+                if (conditionalValues != null)
                 {
-                    strConditionalValues = strConditionalValues.replace("=", "");
+                    // building conditional query
+                    query = "SELECT " + values + " FROM " + tableName + " WHERE " + conditionalValues.toString() + "";
+                    Log.e(TAG, "getRecordCount: query with condition is: " + query);
                 }
-
-                query = "SELECT " + values + " FROM " + tableName + " WHERE " + strConditionalValues + "";
+                else
+                {
+                    // building non conditional query
+                    Log.e(TAG, "getRecordCount: conditional value was null.");
+                    return 0;
+                }
+            }
+            else
+            {
+                query = "SELECT " + values + " FROM " + tableName + "";
+                Log.e(TAG, "getRecordCount: query without condition is: " + query);
             }
 
             if (!query.equalsIgnoreCase(""))
@@ -526,6 +532,7 @@ public class DBHelper
      * @return true - if table exists in database
      *         false - if table not exists in database
     **/
+    @SuppressWarnings("unused")
     public boolean isTableExists(String tableName)
     {
         try
