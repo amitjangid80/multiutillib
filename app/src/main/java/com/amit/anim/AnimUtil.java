@@ -18,6 +18,7 @@ import com.amit.R;
  * 2018 May 14 - Monday - 03:05 PM
  * This AnimUtil class will help with animation
 **/
+@SuppressWarnings("unused")
 public class AnimUtil
 {
     private static final String TAG = AnimUtil.class.getSimpleName();

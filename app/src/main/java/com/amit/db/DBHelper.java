@@ -337,6 +337,50 @@ public class DBHelper
      *
      * parameters for this method are
      *
+     * @param query - query that you want to execute
+     *
+     * @return cursor with records from the table
+    **/
+
+    // endregion COMMENTS FOR executeQuery method
+    @SuppressWarnings("unused")
+    public Cursor executeSelectQuery(String query)
+    {
+        try
+        {
+            // query execution
+            Cursor cursor = db.getWritableDatabase().rawQuery(query, null);
+
+            // if cursor is not null then moving the position to first
+            // and returning the cursor
+            if (cursor != null)
+            {
+                cursor.moveToFirst();
+            }
+            else
+            {
+                Log.e(TAG, "executeSelectQuery: cursor was null. No data found.");
+                return null;
+            }
+
+            return cursor;
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "executeSelectQuery: in database helper class:\n");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // region COMMENTS FOR executeQuery method
+
+    /**
+     * 2018 Feb 01 - Thursday - 03:52 PM
+     * Execute Select Query
+     *
+     * parameters for this method are
+     *
      * @param tableName - name of the table to perform select operation
      *
      * @param values - values to perform select query on
