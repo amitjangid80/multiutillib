@@ -1,5 +1,6 @@
 package com.amit.api;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,16 +19,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/*
-* Created By AMIT JANGID
-* 2018 April 17 - Tuesday - 12:56 PM
+/**
+ * Created By AMIT JANGID
+ * 2018 April 17 - Tuesday - 12:56 PM
 **/
-
+@SuppressWarnings("unused")
+@SuppressLint("HardwareIds")
 public class ApiServices
 {
     private static final String TAG = ApiServices.class.getSimpleName();
 
-    public int mResponseCode = 0;
     private String apiPath, mDeviceID;
     private SharedPreferenceData sharedPreferenceData;
 
@@ -130,13 +131,13 @@ public class ApiServices
      *                   - if the api requires token then this has to be true
      *                   - if the api doesn't require token then this has to be false
      *
-     * @return String which contains result from API.
+     * @return Pair of integer and string which contains response value and response code from the server
      *
      ************************************************************************************************
     **/
-    public String makeAPICall(final String apiName, final String requestMethod,
-                              final boolean parameters, final JSONObject values,
-                              final boolean hasToken)
+    public Pair<Integer, String> makeAPICall(final String apiName, final String requestMethod,
+                                             final boolean parameters, final JSONObject values,
+                                             final boolean hasToken)
     {
         try
         {
@@ -155,7 +156,7 @@ public class ApiServices
                 Log.e(TAG, "makeAPICall: x-access-token is: " + sharedPreferenceData.getValue("token"));
             }
 
-            httpURLConnection.setConnectTimeout(10000);
+            // httpURLConnection.setConnectTimeout(10000);
             httpURLConnection.setRequestProperty("Connection", "close");
             Log.e(TAG, "makeAPICall: api = " + url + "   values = " + values);
 
@@ -169,8 +170,6 @@ public class ApiServices
             }
 
             int responseCode = httpURLConnection.getResponseCode();
-            mResponseCode = responseCode;
-            Log.e(TAG, "makeAPICall: response code from api is: " + mResponseCode);
 
             if (responseCode == 200)
             {
@@ -185,6 +184,7 @@ public class ApiServices
 
                 bufferedReader.close();
                 result = stringBuilder.toString();
+                httpURLConnection.disconnect();
                 Log.e(TAG, "makeAPICall: result from server is: " + result);
             }
             else
@@ -206,7 +206,7 @@ public class ApiServices
                 httpURLConnection.disconnect();
             }
 
-            return result;
+            return new Pair<>(responseCode, result);
         }
         catch (Exception e)
         {
@@ -217,7 +217,7 @@ public class ApiServices
     }
 
     /**
-     * Get Bitmap Data
+     * Get Bitmap Image from Server method
      *
      * this method gets bitmap image from the server
      * this can be used to download the image from server or api
@@ -233,7 +233,7 @@ public class ApiServices
      *                    and bitmap will be the file uploaded.
      *
     **/
-    public Pair<Integer, Bitmap> getBitmapData(String apiPath, String requestType, String parameter)
+    public Pair<Integer, Bitmap> getBitmapImageFromServer(String apiPath, String requestType, String parameter)
     {
         Bitmap resultVal = null;
         InputStream iStream ;
