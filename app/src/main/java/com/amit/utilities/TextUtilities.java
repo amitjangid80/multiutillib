@@ -4,7 +4,7 @@ package com.amit.utilities;
 * Created By AMIT JANGID
 * 2018 April 17 - Tuesday - 12:52 PM
 **/
-
+@SuppressWarnings("unused")
 public class TextUtilities
 {
     /**
@@ -14,19 +14,21 @@ public class TextUtilities
      * @param string - string where you want to replace null
      * @return it will return empty string
     **/
-    public static String replaceNull(String string)
+    public static String replaceNullWithEmpty(String string)
     {
         if (string == null)
         {
             return "";
         }
-
-        if (string.equalsIgnoreCase("null"))
+        else if (string.equalsIgnoreCase("null"))
         {
             return "";
         }
-
-        if (string.equalsIgnoreCase(" "))
+        else if (string.equalsIgnoreCase(" "))
+        {
+            return "";
+        }
+        else if (string.equalsIgnoreCase(""))
         {
             return "";
         }
@@ -43,16 +45,58 @@ public class TextUtilities
     **/
     public static int replaceTrueOrFalse(String string)
     {
-        if (string.equalsIgnoreCase("True"))
-        {
-            return 1;
-        }
+        return string.equalsIgnoreCase("True") ? 1 : 0;
+    }
 
-        if (string.equalsIgnoreCase("False"))
+    /**
+     * 2018 September 14 - Friday - 12:34 PM
+     * replace null with zero method
+     *
+     * this method will replace null or empty values of string with zero
+     *
+     * @param stringToReplace - string to replace null with
+     * @return it will return 1 or 0
+    **/
+    public static int replaceNullWithZero(String stringToReplace)
+    {
+        if (stringToReplace == null)
         {
             return 0;
         }
+        else if (stringToReplace.equalsIgnoreCase("null"))
+        {
+            return 0;
+        }
+        else if (stringToReplace.equalsIgnoreCase(" "))
+        {
+            return 0;
+        }
+        else if (stringToReplace.equalsIgnoreCase(""))
+        {
+            return 0;
+        }
+        else
+        {
+            return Integer.parseInt(stringToReplace);
+        }
+    }
 
-        return 0;
+    /**
+     * 2018 September 14 - Friday - 12:34 PM
+     * remove last char method
+     *
+     * this method will remove the last character of the string
+     *
+     * @param stringToRemovedLastCharFrom - string to remove the last character from
+     * @return it will return string with last character removed
+     **/
+    public static String removeLastChar(String stringToRemovedLastCharFrom)
+    {
+        if (stringToRemovedLastCharFrom != null && stringToRemovedLastCharFrom.length() > 0)
+        {
+            stringToRemovedLastCharFrom = stringToRemovedLastCharFrom.substring(0, stringToRemovedLastCharFrom.length() - 1);
+        }
+
+        return stringToRemovedLastCharFrom;
     }
 }
