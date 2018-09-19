@@ -1,8 +1,11 @@
 package com.amit.utilities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -13,6 +16,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.AttrRes;
@@ -42,6 +46,8 @@ import java.util.Locale;
 /**
  * https://github.com/jaydeepw/android-utils/tree/master/Utils
 **/
+@SuppressLint("HardwareIds")
+@SuppressWarnings("unused")
 public class Utils
 {
     private static final String TAG = Utils.class.getSimpleName();
@@ -54,7 +60,7 @@ public class Utils
      * @return - true or false
      *           if sd card available then will return true
      *           else will return false
-     **/
+    **/
     @CheckResult
     public static boolean isSdCardMounted()
     {
@@ -79,7 +85,7 @@ public class Utils
      *
      * @return - it will return IMEI number if permission granted
      *           else if no permission granted then will return empty string.
-     **/
+    **/
     @CheckResult
     public static String getIMEINumber(Context context)
     {
@@ -214,7 +220,7 @@ public class Utils
      *                    Pass null to bold entire string.
      *
      * @return - {@link android.text.SpannableString} in Bold TypeFace
-     **/
+    **/
     public static SpannableStringBuilder toBold(String string, String subString)
     {
         try
@@ -263,7 +269,7 @@ public class Utils
      * this method will hide the keyboard
      *
      * @param context - context of the application
-     **/
+    **/
     public static void hideKeyboard(Context context)
     {
         try
@@ -291,7 +297,7 @@ public class Utils
      * @param stringToHash - string to convert to hash.
      *
      * @return string converted to hash value.
-     **/
+    **/
     public static String getSha512Hash(String stringToHash)
     {
         try
@@ -319,7 +325,7 @@ public class Utils
      * @param dataToHash - byte array to convert to hash value
      *
      * @return string converted into hash value.
-     **/
+    **/
     public static String getSha512Hash(byte[] dataToHash)
     {
         MessageDigest md = null;
@@ -353,7 +359,7 @@ public class Utils
      * @param id - drawable id
      *
      * @return returns drawable
-     **/
+    **/
     public static Drawable getDrawable(@NonNull Context context, int id)
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -374,7 +380,7 @@ public class Utils
      * @param id - id of the color resource
      *
      * @return int - color in integer.
-     **/
+    **/
     public static int getColorWrapper(@NonNull Context context, @ColorRes int id)
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
@@ -398,7 +404,7 @@ public class Utils
      * @param minutes - minutes to convert
      *
      * @return String with time appended with AM/PM
-     **/
+    **/
     public static String getTimeWithAMPM(int hours, int minutes)
     {
         try
@@ -441,7 +447,7 @@ public class Utils
      * @param dp - dp to convert into pixels
      *
      * @return - pixels in integer form
-     **/
+    **/
     public static int dpToPx(Context context, int dp)
     {
         if (xdpi == Float.MIN_VALUE)
@@ -479,7 +485,7 @@ public class Utils
      * @param dp - dp to convert into pixels
      *
      * @return - pixels in integer form
-     **/
+    **/
     public static float convertDpToPixel(float dp, Context context)
     {
         Resources resources = context.getResources();
@@ -495,7 +501,7 @@ public class Utils
      * @param px - pixels to be convert into dp
      *
      * @return - dp in float form
-     **/
+    **/
     public static float convertPixelsToDp(float px, Context context)
     {
         Resources resources = context.getResources();
@@ -509,7 +515,7 @@ public class Utils
      *
      * @param drawable - drawable to be converted into bitmap
      * @return bitmap
-     **/
+    **/
     public static Bitmap drawableToBitmap (Drawable drawable)
     {
         if (drawable instanceof BitmapDrawable)
@@ -536,7 +542,7 @@ public class Utils
      * @param dpValue - dpValue to be convert into pixels
      *
      * @return - pixels in integer form
-     **/
+    **/
     public static int dp2px(Context context, float dpValue)
     {
         final float scale = context.getResources().getDisplayMetrics().density;
@@ -551,7 +557,7 @@ public class Utils
      * @param pxValue - pxValue to be convert into dp
      *
      * @return - dp in float form
-     **/
+    **/
     public static int px2dp(Context context, float pxValue)
     {
         final float scale = context.getResources().getDisplayMetrics().density;
@@ -564,12 +570,17 @@ public class Utils
      *
      * @param context - context of the application
      * @return size of the screen as Point
-     **/
+    **/
     public static Point getScreenSize(Context context)
     {
         Point point = new Point();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        wm.getDefaultDisplay().getSize(point);
+
+        if (wm != null)
+        {
+            wm.getDefaultDisplay().getSize(point);
+        }
+
         return point;
     }
 
@@ -605,5 +616,39 @@ public class Utils
     public static String leftPadding(String strText, int length)
     {
         return String.format("%" + length + "." + length + "s", strText);
+    }
+
+    /**
+     * 2018 September 18 - Tuesday - 04:54 PM
+     * get battery percentage method
+     *
+     * this method will get the percentage of battery remaining
+     *
+     * @param context - context of the application
+     * @return battery percentage in int or 0
+    **/
+    private static int getBatteryPercentage(Context context)
+    {
+        try
+        {
+            IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+            Intent batteryStatus = context.registerReceiver(null, intentFilter);
+
+            int level = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) : -1;
+            int scale = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1) : -1;
+
+            float batteryPercentage = level / (float) scale;
+            int batteryLevel = (int) (batteryPercentage * 100);
+
+            Log.e(TAG, "getBatteryPercentage: current battery level is: " + batteryLevel);
+            return batteryLevel;
+
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "getBatteryPercentage: exception while getting battery percentage:\n");
+            e.printStackTrace();
+            return 0;
+        }
     }
 }
