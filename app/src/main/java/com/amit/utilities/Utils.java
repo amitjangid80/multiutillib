@@ -302,51 +302,6 @@ public class Utils
     }
 
     /**
-     * get Time with AM/PM Method
-     *
-     * This method will show the time in two digits and also am pm
-     * if the time selected is afternoon 02:00 then it will show 02:00 PM
-     * else of the time selected is night 02:00 then it will show 02:00 AM
-     *
-     * @param hours - hours to convert
-     * @param minutes - minutes to convert
-     *
-     * @return String with time appended with AM/PM
-    **/
-    public static String getTimeWithAMPM(int hours, int minutes)
-    {
-        try
-        {
-            String timeStamp = "AM", time;
-
-            if (hours > 12)
-            {
-                timeStamp = "PM";
-                hours -= 12;
-            }
-            else if (hours == 0)
-            {
-                hours += 12;
-            }
-            else if (hours == 12)
-            {
-                timeStamp = "PM";
-            }
-
-            time = String.format(Locale.getDefault(), "%02d", hours) + ":" +
-                    String.format(Locale.getDefault(), "%02d", minutes) + " " + timeStamp;
-
-            return time;
-        }
-        catch (Exception e)
-        {
-            Log.e("Exception", "in show time with am pm method in generate qr code activity:\n");
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    /**
      * dp to px
      * this method will convert dp to pixles
      *
@@ -469,26 +424,6 @@ public class Utils
     {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
-    }
-
-    /**
-     * get screen size
-     * this method will get the size of the screen
-     *
-     * @param context - context of the application
-     * @return size of the screen as Point
-    **/
-    public static Point getScreenSize(Context context)
-    {
-        Point point = new Point();
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-
-        if (wm != null)
-        {
-            wm.getDefaultDisplay().getSize(point);
-        }
-
-        return point;
     }
 
     /**

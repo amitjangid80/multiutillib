@@ -101,7 +101,6 @@ sharedPreferenceData.setLongValue("keyname", 123456789);
 // specific for String set values.
 sharedPreferenceData.setStrSetValue("keyname", Set<String> value);
 
-
 // FOR GETTING DATA FROM SHARED PREFERENCE.
 // all the below methods will return some defaults values.
 
@@ -491,16 +490,64 @@ else
 }
 ```
 
-### TextUtitlities class
+### TextUtils class
 
 >**This class helps you replaces values, like replacing 'null' with empty string, replacing true or false with 1 or 0, etc.**
 
 ```java
-// example: for replacing null value from a string.
-TextUtilities.replaceNull(string); // this will return string value.
 
+/**
+ * replace null method
+ * this method will replace null with empty space
+ *
+ * @param string - string where you want to replace null
+ * @return it will return empty string
+**/
+// example: for replacing null value from a string.
+TextUtils.replaceNullWithEmpty(string); // this will return string value.
+
+/**
+ * replace true or false
+ * this method will replace true or false with 1 or 0
+ *
+ * @param string - string to replace true or false with
+ * @return it will return 1 or 0
+**/
 // example: for replacing True or False from a string.
-TextUtilities.replaceTrueOrFalse(string); // this will return int value.
+TextUtils.replaceTrueOrFalse(string); // this will return int value.
+
+/**
+ * 2018 September 14 - Friday - 12:34 PM
+ * replace null with zero method
+ *
+ * this method will replace null or empty values of string with zero
+ *
+ * @param stringToReplace - string to replace null with
+ * @return it will return 1 or 0
+**/
+TextUtils.replaceNullWithZero(String stringToReplace)
+
+/**
+ * 2018 September 14 - Friday - 12:34 PM
+ * remove last char method
+ *
+ * this method will remove the last character of the string
+ *
+ * @param stringToRemovedLastCharFrom - string to remove the last character from
+ * @return it will return string with last character removed
+**/
+TextUtils.removeLastChar(String stringToRemovedLastCharFrom)
+
+/**
+ * capitalizeString method
+ *
+ * this method will capitalizeString or set the string to upper case
+ *
+ * @param string - string to capitalize
+ * return - will return the string which was passed in capitalize form
+**/
+TextUtils.capitalizeString(String string)
+
 ```
 
 ### Validator class
@@ -614,26 +661,6 @@ UiUtils.setMaxLength(textInputEditText, maxLength);
 **Usage**
 
 ```java
-/**
- * is Sd Card Mounted
- * this method will check if sd card is mounted or not
- *
- * @return - true or false
- *           if sd card available then will return true
- *           else will return false
-**/
-Utils.isSdCardMounted();
-
-
-/**
- * this method gets IMEI number after getting the permission.
- * To this method you must have asked user for READ_PHONE_STATE PERMISSION.
- *
- * @return - it will return IMEI number if permission granted
- *           else if no permission granted then will return empty string.
-**/
-Utils.sgetIMEINumber(context);
-
 
 /**
  * is url valid
@@ -883,4 +910,173 @@ AnimUtil.bounceAnim(Context context, View view);
 ```java
 ShineButton shineButton = findViewById(R.id.shine_button);
 shineButton.init(MainActivity.this);
+```
+
+### DateTimeUtils
+
+**Usage**
+
+```java
+/**
+ * format date time method
+ * <p>
+ * this method will format date time in to formats user provides
+ *
+ * @param dateToFormat - date time which you need to format
+ *                       EX: 2018-10-09
+ *
+ * @param inDateTimeFormat - format of the date time in which you want to format given date
+ *                           EX: dd-MM-yyyy OR dd-MM-yyyy hh:mm:ss
+ *
+ * @return date time in format provided
+**/
+DateTimeUtils.formatDateTime(String dateToFormat, String inDateTimeFormat)
+
+/**
+ * format date time method
+ * <p>
+ * this method will format date time in to formats user provides
+ *
+ * @param dateToFormat - date time which you need to format
+ *                       EX: 2018-10-09
+ *
+ * @param inDateTimeFormat - format of the date time in which you want to format given date
+ *                           EX: dd-MM-yyyy OR dd-MM-yyyy hh:mm:ss
+ *
+ * @param fromDateTimFormat - format of date time from which you want to format
+ *                            EX: yyyy-MM-dd OR dd-MM-yyyy hh:mm:ss
+ *
+ * @return date time in format provided
+**/
+DateTimeUtils.formatDateTime(String dateToFormat, String inDateTimeFormat, String fromDateTimFormat)
+
+/**
+ * 2018 April 27 - Friday - 04:00 PM
+ * format milli seconds to time method
+ *
+ * this method formats the string in hh:mm:ss format
+**/
+DateTimeUtils.formatMilliSecondsToTime(long milliseconds)
+
+/**
+ * two digit string method
+ *
+ * this string formats the given parameter in two digits
+ *
+ * @param number - number to be formatted in two digits
+ *
+ * @return returns number in two digits in string format
+**/
+DateTimeUtils.twoDigitString(long number)
+
+/**
+ * 2018 September 22 - Saturday - 04:38 PM
+ * convert days in millis method
+ *
+ * this method will convert days in milliseconds
+ *
+ * @param days - days value in integer to be converted
+ *
+ * @return returns milli seconds value of given number of days
+**/
+DateTimeUtils.convertDaysInMillis(int days)
+
+```
+
+### DeviceUtils
+
+**Usage**
+
+```java
+
+/**
+ * is Sd Card Mounted
+ * this method will check if sd card is mounted or not
+ *
+ * @return - true or false
+ *           if sd card available then will return true
+ *           else will return false
+**/
+DeviceUtils.isSdCardMounted()
+
+/**
+ * Get IMEI Number method
+ *
+ * this method gets IMEI number after getting the permission.
+ *
+ * @return - it will return IMEI number if permission granted
+ *           else if no permission granted then will return empty string.
+ **/
+DeviceUtils.getIMEINumber(@NonNull Context context)
+
+/**
+ * 2018 September 18 - Tuesday - 04:54 PM
+ * get battery percentage method
+ *
+ * this method will get the percentage of battery remaining
+ *
+ * @param context - context of the application
+ * @return battery percentage in int or 0
+**/
+DeviceUtils.getBatteryPercentage(@NonNull Context context)
+
+/**
+ * get device id method
+ *
+ * this method will get the device id
+ *
+ * @param context - application context
+ * @return device id in string
+**/
+DeviceUtils.getDeviceID(@NonNull Context context)
+
+/**
+ * get device name method
+ *
+ * this method will get the name of the device
+ * @return name of the device with manufacturer
+**/
+DeviceUtils.getDeviceName()
+
+/**
+ * 2018 October 04 - Thursday - 02:50 PM
+ * get mac address method
+ *
+ * this method will get mac address of the device
+**/
+DeviceUtils.getMacAddress(Context context)
+
+```
+
+### ExpandableGridView
+
+>**This expandable grid view will help you to use this inside a scrollview.**
+
+**Usage**
+
+```xml
+
+<com.amit.views.ExpandableGridView
+    android:id="@+id/gridView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/five_dp"
+    android:layout_marginTop="@dimen/five_dp"
+    android:layout_marginEnd="@dimen/ten_dp"
+    android:numColumns="3" />
+
+```
+
+### ExpandableListView
+
+>**This expandable list view will help you to use this inside a scrollview.**
+
+```xml
+
+<com.amit.views.ExpandableListView
+    android:id="@+id/listView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/five_dp" />
+
 ```

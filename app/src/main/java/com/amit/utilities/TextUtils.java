@@ -5,7 +5,7 @@ package com.amit.utilities;
 * 2018 April 17 - Tuesday - 12:52 PM
 **/
 @SuppressWarnings("unused")
-public class TextUtilities
+public class TextUtils
 {
     /**
      * replace null method

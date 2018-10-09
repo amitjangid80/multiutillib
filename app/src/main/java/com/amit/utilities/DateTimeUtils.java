@@ -24,8 +24,10 @@ public class DateTimeUtils
      * this method will format date time in to formats user provides
      *
      * @param dateToFormat - date time which you need to format
+     *                       EX: 2018-10-09
      *
      * @param inDateTimeFormat - format of the date time in which you want to format given date
+     *                           EX: dd-MM-yyyy OR dd-MM-yyyy hh:mm:ss
      *
      * @return date time in format provided
     **/
@@ -46,8 +48,13 @@ public class DateTimeUtils
      * this method will format date time in to formats user provides
      *
      * @param dateToFormat - date time which you need to format
+     *                       EX: 2018-10-09
      *
      * @param inDateTimeFormat - format of the date time in which you want to format given date
+     *                           EX: dd-MM-yyyy OR dd-MM-yyyy hh:mm:ss
+     *
+     * @param fromDateTimFormat - format of date time from which you want to format
+     *                            EX: yyyy-MM-dd OR dd-MM-yyyy hh:mm:ss
      *
      * @return date time in format provided
     **/
@@ -82,10 +89,13 @@ public class DateTimeUtils
     }
 
     /**
-     * 2018 April 27 - Friday - 04:00 PM
      * two digit string method
      *
      * this string formats the given parameter in two digits
+     *
+     * @param number - number to be formatted in two digits
+     *
+     * @return returns number in two digits in string format
     **/
     public static String twoDigitString(long number)
     {
@@ -107,6 +117,10 @@ public class DateTimeUtils
      * convert days in millis method
      *
      * this method will convert days in milliseconds
+     *
+     * @param days - days value in integer to be converted
+     *
+     * @return returns milli seconds value of given number of days
     **/
     public static long convertDaysInMillis(int days)
     {

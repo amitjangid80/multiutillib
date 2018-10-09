@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
@@ -16,10 +17,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.WindowManager;
 
 import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static android.Manifest.permission.ACCESS_WIFI_STATE;
 
@@ -41,7 +44,7 @@ public class DeviceUtils
      * @return - true or false
      *           if sd card available then will return true
      *           else will return false
-     **/
+    **/
     @CheckResult
     public static boolean isSdCardMounted()
     {
@@ -178,11 +181,11 @@ public class DeviceUtils
 
         if (model.startsWith(manufacturer))
         {
-            return TextUtilities.capitalizeString(model);
+            return TextUtils.capitalizeString(model);
         }
         else
         {
-            return TextUtilities.capitalizeString(manufacturer + " " + model);
+            return TextUtils.capitalizeString(manufacturer + " " + model);
         }
     }
 
@@ -246,5 +249,70 @@ public class DeviceUtils
             e.printStackTrace();
             return "";
         }
+    }
+
+    /**
+     * get Time with AM/PM Method
+     *
+     * This method will show the time in two digits and also am pm
+     * if the time selected is afternoon 02:00 then it will show 02:00 PM
+     * else of the time selected is night 02:00 then it will show 02:00 AM
+     *
+     * @param hours - hours to convert
+     * @param minutes - minutes to convert
+     *
+     * @return String with time appended with AM/PM
+    **/
+    public static String getTimeWithAMPM(int hours, int minutes)
+    {
+        try
+        {
+            String timeStamp = "AM", time;
+
+            if (hours > 12)
+            {
+                timeStamp = "PM";
+                hours -= 12;
+            }
+            else if (hours == 0)
+            {
+                hours += 12;
+            }
+            else if (hours == 12)
+            {
+                timeStamp = "PM";
+            }
+
+            time = String.format(Locale.getDefault(), "%02d", hours) + ":" +
+                    String.format(Locale.getDefault(), "%02d", minutes) + " " + timeStamp;
+
+            return time;
+        }
+        catch (Exception e)
+        {
+            Log.e("Exception", "in show time with am pm method in generate qr code activity:\n");
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    /**
+     * get screen size
+     * this method will get the size of the screen
+     *
+     * @param context - context of the application
+     * @return size of the screen as Point
+    **/
+    public static Point getScreenSize(Context context)
+    {
+        Point point = new Point();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+
+        if (wm != null)
+        {
+            wm.getDefaultDisplay().getSize(point);
+        }
+
+        return point;
     }
 }
