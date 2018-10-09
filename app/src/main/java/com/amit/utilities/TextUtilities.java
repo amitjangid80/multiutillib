@@ -1,6 +1,6 @@
 package com.amit.utilities;
 
-/*
+/**
 * Created By AMIT JANGID
 * 2018 April 17 - Tuesday - 12:52 PM
 **/
@@ -89,7 +89,7 @@ public class TextUtilities
      *
      * @param stringToRemovedLastCharFrom - string to remove the last character from
      * @return it will return string with last character removed
-     **/
+    **/
     public static String removeLastChar(String stringToRemovedLastCharFrom)
     {
         if (stringToRemovedLastCharFrom != null && stringToRemovedLastCharFrom.length() > 0)
@@ -98,5 +98,32 @@ public class TextUtilities
         }
 
         return stringToRemovedLastCharFrom;
+    }
+
+    /**
+     * capitalizeString method
+     *
+     * this method will capitalizeString or set the string to upper case
+     *
+     * @param string - string to capitalize
+     * return - will return the string which was passed in capitalize form
+    **/
+    public static String capitalizeString(String string)
+    {
+        if (string == null || string.length() == 0)
+        {
+            return "";
+        }
+
+        char first = string.charAt(0);
+
+        if (Character.isUpperCase(first))
+        {
+            return string;
+        }
+        else
+        {
+            return Character.toUpperCase(first) + string.substring(1);
+        }
     }
 }

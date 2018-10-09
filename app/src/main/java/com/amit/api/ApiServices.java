@@ -1,11 +1,9 @@
 package com.amit.api;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
-import android.provider.Settings.Secure;
+import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 import android.util.Log;
 
@@ -24,15 +22,14 @@ import java.net.URL;
  * 2018 April 17 - Tuesday - 12:56 PM
 **/
 @SuppressWarnings("unused")
-@SuppressLint("HardwareIds")
 public class ApiServices
 {
     private static final String TAG = ApiServices.class.getSimpleName();
 
-    private String apiPath, mDeviceID;
+    private String apiPath;
     private SharedPreferenceData sharedPreferenceData;
 
-    public ApiServices(Context context)
+    public ApiServices(@NonNull Context context)
     {
         this.sharedPreferenceData = new SharedPreferenceData(context);
 
@@ -40,61 +37,6 @@ public class ApiServices
         // this path will consist of the url which is repeated in every api
         // Ex: http://www.example.com/api/
         this.apiPath = sharedPreferenceData.getValue("apiPath");
-
-        // this will get the device id of the device
-        this.mDeviceID = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
-    }
-
-    public String getDeviceID()
-    {
-        return mDeviceID;
-    }
-
-    /**
-     * get device name method
-     *
-     * this method will get the name of the device
-    **/
-    public String getDeviceName()
-    {
-        String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
-
-        if (model.startsWith(manufacturer))
-        {
-            return capitalizeString(model);
-        }
-        else
-        {
-            return capitalizeString(manufacturer + " " + model);
-        }
-    }
-
-    /**
-     * capitalizeString method
-     *
-     * this method will capitalizeString or set the string to upper case
-     *
-     * @param string - string to capitalize
-     * return - will return the string which was passed in capitalize form
-    **/
-    private String capitalizeString(String string)
-    {
-        if (string == null || string.length() == 0)
-        {
-            return "";
-        }
-
-        char first = string.charAt(0);
-
-        if (Character.isUpperCase(first))
-        {
-            return string;
-        }
-        else
-        {
-            return Character.toUpperCase(first) + string.substring(1);
-        }
     }
 
     /**
@@ -224,7 +166,9 @@ public class ApiServices
      *
      * @param apiPath - this parameter will contain the apiPath where the image has to be downloaded
      *              this apiPath parameter will contain the entire path for the image to be downloaded.
+     *
      * @param requestType - request type will be GET OR POST
+     *
      * @param parameter - if any information has to be sent in body then set parameters
      *                    use json object for this parameter.
      *
@@ -232,7 +176,9 @@ public class ApiServices
      *                    where integer will be the response code
      *                    and bitmap will be the file uploaded.
      *
+     * will be removed in next release
     **/
+    @Deprecated
     public Pair<Integer, Bitmap> getBitmapImageFromServer(String apiPath, String requestType, String parameter)
     {
         Bitmap resultVal = null;

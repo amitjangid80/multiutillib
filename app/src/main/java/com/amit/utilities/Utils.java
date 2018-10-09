@@ -1,12 +1,7 @@
 package com.amit.utilities;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -16,16 +11,12 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.BatteryManager;
 import android.os.Build;
-import android.os.Environment;
 import android.support.annotation.AttrRes;
 import android.support.annotation.CheckResult;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.telephony.TelephonyManager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -46,94 +37,11 @@ import java.util.Locale;
 /**
  * https://github.com/jaydeepw/android-utils/tree/master/Utils
 **/
-@SuppressLint("HardwareIds")
 @SuppressWarnings("unused")
 public class Utils
 {
     private static final String TAG = Utils.class.getSimpleName();
     private static float xdpi = Float.MIN_VALUE;
-
-    /**
-     * is Sd Card Mounted
-     * this method will check if sd card is mounted or not
-     *
-     * @return - true or false
-     *           if sd card available then will return true
-     *           else will return false
-    **/
-    @CheckResult
-    public static boolean isSdCardMounted()
-    {
-        try
-        {
-            String status = Environment.getExternalStorageState();
-            return status.equals(Environment.MEDIA_MOUNTED);
-        }
-        catch (Exception e)
-        {
-            Log.e(TAG, "isSdCardMounted: exception while checking for sd card mounted.");
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * 2018 April 02 - Monday - 06:21 PM
-     * Get IMEI Number method
-     *
-     * this method gets IMEI number after getting the permission.
-     *
-     * @return - it will return IMEI number if permission granted
-     *           else if no permission granted then will return empty string.
-    **/
-    @CheckResult
-    public static String getIMEINumber(Context context)
-    {
-        try
-        {
-            String imeiNumber;
-            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-            if (telephonyManager != null)
-            {
-                // checking if read phone state permission given or not
-                // if yes the getting the imei number
-                // else asking for permission
-                if (ActivityCompat.checkSelfPermission(context,
-                        Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED)
-                {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                    {
-                        imeiNumber = telephonyManager.getImei();
-                        Log.e(TAG, "getIMEINumber: IMEI Number is: " + imeiNumber);
-                    }
-                    else
-                    {
-                        imeiNumber = telephonyManager.getDeviceId();
-                        Log.e(TAG, "getIMEINumber: Device Id is: " + imeiNumber);
-                    }
-
-                    return imeiNumber;
-                }
-                else
-                {
-                    Log.e(TAG, "getIMEINumber: READ_PHONE_STATE permission not granted.");
-                    return "";
-                }
-            }
-            else
-            {
-                Log.e(TAG, "getIMEINumber: telephony manager was null.");
-                return "";
-            }
-        }
-        catch (Exception e)
-        {
-            Log.e(TAG, "getIMEINumber: expection while getting imei number:\n");
-            e.printStackTrace();
-            return "";
-        }
-    }
 
     /**
      * is url valid
@@ -418,7 +326,6 @@ public class Utils
             }
             else if (hours == 0)
             {
-                timeStamp = "AM";
                 hours += 12;
             }
             else if (hours == 12)
@@ -616,39 +523,5 @@ public class Utils
     public static String leftPadding(String strText, int length)
     {
         return String.format("%" + length + "." + length + "s", strText);
-    }
-
-    /**
-     * 2018 September 18 - Tuesday - 04:54 PM
-     * get battery percentage method
-     *
-     * this method will get the percentage of battery remaining
-     *
-     * @param context - context of the application
-     * @return battery percentage in int or 0
-    **/
-    private static int getBatteryPercentage(Context context)
-    {
-        try
-        {
-            IntentFilter intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-            Intent batteryStatus = context.registerReceiver(null, intentFilter);
-
-            int level = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) : -1;
-            int scale = batteryStatus != null ? batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1) : -1;
-
-            float batteryPercentage = level / (float) scale;
-            int batteryLevel = (int) (batteryPercentage * 100);
-
-            Log.e(TAG, "getBatteryPercentage: current battery level is: " + batteryLevel);
-            return batteryLevel;
-
-        }
-        catch (Exception e)
-        {
-            Log.e(TAG, "getBatteryPercentage: exception while getting battery percentage:\n");
-            e.printStackTrace();
-            return 0;
-        }
     }
 }
