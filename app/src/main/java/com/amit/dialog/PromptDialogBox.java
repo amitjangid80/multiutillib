@@ -22,11 +22,14 @@ import android.widget.TextView;
 
 import com.amit.R;
 import com.amit.anim.AnimLoader;
+import com.amit.utilities.DeviceUtils;
+import com.amit.utilities.TextUtils;
 import com.amit.utilities.Utils;
 
 /**
  * Created by Amit Jangid on 22,May,2018
- **/
+**/
+@SuppressWarnings("unused")
 public class PromptDialogBox extends Dialog
 {
     public static final int DIALOG_TYPE_INFO = 0;
@@ -97,7 +100,7 @@ public class PromptDialogBox extends Dialog
                 ViewGroup.LayoutParams.MATCH_PARENT, Utils.dp2px(getContext(), 10)));
 
         triangleIv.setImageBitmap(createTriangle(
-                (int) (Utils.getScreenSize(getContext()).x * 0.9),
+                (int) (DeviceUtils.getScreenSize(getContext()).x * 0.9),
                 Utils.dp2px(getContext(), 10)));
 
         topLayout.addView(triangleIv);
@@ -124,7 +127,7 @@ public class PromptDialogBox extends Dialog
     private void resizeDialog()
     {
         WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.width = (int) (Utils.getScreenSize(getContext()).x * 0.9);
+        params.width = (int) (DeviceUtils.getScreenSize(getContext()).x * 0.9);
         getWindow().setAttributes(params);
     }
 
