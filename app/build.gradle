@@ -5,11 +5,13 @@ group = 'com.github.amitjangid80'
 
 android {
     compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 25 // this indicates the number of releases of library
-        versionName "1.2.18" // this indicates the current version of library
+        versionCode 26 // this indicates the number of releases of library
+        versionName "1.2.19" // this indicates the current version of library
     }
     buildTypes {
         release {
