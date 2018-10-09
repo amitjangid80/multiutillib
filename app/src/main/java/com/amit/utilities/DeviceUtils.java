@@ -126,7 +126,7 @@ public class DeviceUtils
      * @return battery percentage in int or 0
     **/
     @CheckResult
-    private static int getBatteryPercentage(@NonNull Context context)
+    public static int getBatteryPercentage(@NonNull Context context)
     {
         try
         {
@@ -159,7 +159,7 @@ public class DeviceUtils
      * @param context - application context
      * @return device id in string
     **/
-    public String getDeviceID(@NonNull Context context)
+    public static String getDeviceID(@NonNull Context context)
     {
         // this will get the device id of the device
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -171,7 +171,7 @@ public class DeviceUtils
      * this method will get the name of the device
      * @return name of the device with manufacturer
     **/
-    public String getDeviceName()
+    public static String getDeviceName()
     {
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
