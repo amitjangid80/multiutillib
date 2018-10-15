@@ -474,7 +474,7 @@ private class GeocoderHandler extends Handler
 FontHelper.applyFont(context, idOfYourParentLayout, "fonts/QuattrocentoSans-Regular.ttf");
 ```
 
-### InternetConection class
+### InternetConnection class
 
 >**This class will help you check if internet connection is available or not.**
 
