@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * this class will help the validate the strings like
  * email, password, pan number, etc.
 **/
-
+@SuppressWarnings("unused")
 public class Validator
 {
     private UserDictionary userDictionary;
@@ -167,7 +167,7 @@ public class Validator
      * @return this will return true or false
      *         if true is returned then string has upper case value
      *         else if false is returned then string has no upper case value
-     **/
+    **/
     public static boolean atLeastOneUpperCase(String string)
     {
         try
