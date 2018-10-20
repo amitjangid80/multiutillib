@@ -12,7 +12,6 @@ import java.util.Set;
  *
  * this class is useful for saving data in shared preferences
 */
-
 public class SharedPreferenceData
 {
     private SharedPreferences mSharedPreference;
