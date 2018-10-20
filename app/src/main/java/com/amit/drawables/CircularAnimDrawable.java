@@ -128,7 +128,7 @@ public class CircularAnimDrawable extends Drawable implements Animatable
     /**
      * Method the inform if the animation is in process
      *
-     * @return
+     * @return true or false
      */
     @Override
     public boolean isRunning()
@@ -138,7 +138,7 @@ public class CircularAnimDrawable extends Drawable implements Animatable
 
     /**
      * Method called when the drawable is going to draw itself.
-     * @param canvas
+     * @param canvas - canvas object
      */
     @Override
     public void draw(Canvas canvas)

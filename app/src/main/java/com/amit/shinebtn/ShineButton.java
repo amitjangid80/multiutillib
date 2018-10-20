@@ -19,6 +19,7 @@ import android.view.animation.LinearInterpolator;
 
 import com.amit.R;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class ShineButton extends PorterShapeImageView
 {
     private static final String TAG = "ShineButton";
@@ -27,10 +28,7 @@ public class ShineButton extends PorterShapeImageView
     private int btnColor;
     private int btnFillColor;
 
-    int DEFAULT_WIDTH = 50;
-    int DEFAULT_HEIGHT = 50;
-
-    DisplayMetrics metrics = new DisplayMetrics();
+    private DisplayMetrics metrics = new DisplayMetrics();
 
     Activity activity;
     ShineView shineView;
@@ -284,7 +282,7 @@ public class ShineButton extends PorterShapeImageView
     {
         if (activity != null)
         {
-            final ViewGroup rootView = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
+            final ViewGroup rootView = activity.findViewById(Window.ID_ANDROID_CONTENT);
             shineView = new ShineView(activity, this, shineParams);
             rootView.addView(shineView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             doShareAnim();
@@ -299,7 +297,7 @@ public class ShineButton extends PorterShapeImageView
     {
         if (activity != null)
         {
-            final ViewGroup rootView = (ViewGroup) activity.findViewById(Window.ID_ANDROID_CONTENT);
+            final ViewGroup rootView = activity.findViewById(Window.ID_ANDROID_CONTENT);
             rootView.removeView(view);
         }
         else

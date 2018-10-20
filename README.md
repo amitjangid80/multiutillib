@@ -132,29 +132,46 @@ sharedPreferenceData.getStrSetValue(key);
 >Before using this class first make sure to set up the apiPath into shared preference class. Shown above in **ProjectApplication** Section.
 
 ```java
-// apiName - this will the part of the api url
-//
-// requestMethod - this will GET, POST OR PUT
-//
-// parameters - this is a boolean value
-//              if you want to send parameters in body then this should be set to true.
-//              else it should be false.
-//              if you don't want to pass data in body 
-//              then it should be set to false 
-//              and send data as parameters by appending it to the api name
-//
-// jsonObject - this will be the data which you want to send by body to the api.
-//
-// hasToken - this will take boolean vaule true or false.
-//            if you have verification in your api where you are using token then
-//            you should set it to true otherwise to false.
-//            but set the token into sharedPreferenceData
-//            with key as 'token' to get the token
-//
-// return - this method will return result from server in string format
-
+/**
+ * Make API Call method
+ *
+ * this method will handle all the api operations like GET OR POST OR PUT
+ * parameters for this method are as follows
+ *
+ ************************************************************************************************
+ *
+ *** parameter #1
+ *** @param apiName - this parameter will contain the name of the api with some path or without any path
+ *                  - FOR EXAMPLE: with path - MobileAPI/RegisterMobile
+ *                            without path - RegisterMobile
+ *
+ *** parameter #2
+ *** @param requestMethod - this parameter will be passed with 3 values
+ *                          #1 - POST OR
+ *                          #2 - PUT OR
+ *                          #3 - GET
+ *
+ *** parameter #3
+ *** @param parameters - this parameter will contain parameters which will be passed to the api
+ *                       and required by the api to work properly
+ *
+ *** parameter #4
+ *** @param values - this parameter will hold the parameters in JSON format
+ *                   this will be the data which we need to pass along with the api
+ *                 - FOR EXAMPLE: MobileNumber = 9999999999, OTP = 9999, etc.
+ *
+ *** parameter #5
+ *** @param hasToken - this parameter should be passed with true or false
+ *                   - this parameter will be used if the api requires some token to work with
+ *                   - if the api requires token then this has to be true
+ *                   - if the api doesn't require token then this has to be false
+ *
+ * @return Pair of integer and string which contains response value and response code from the server
+ *
+ ************************************************************************************************
+**/
 ApiServices apiServices = new ApiServices(context);
-apiServices.makeApiCall(apiName, requestMethod, parameters, jsonObject, hasToken);
+apiServices.makeApiCall(apiName, requestMethod, parameters, jsonObject, hasToken).second;
 ```
 
 ### DBHelper
@@ -386,6 +403,11 @@ switchButton.setOnSwitchListener(new SwitchButton.OnSwitchListener()
 >**This class will  get the current location of the user.**
 
 ```java
+
+// this will check whether gps is enabled or not
+MyLocation.isGPSEnabled(Context context); // returns true or false
+
+// following code is for getting latitude and longitude
 // Declare this class globally inside your activity or class.
 private double latitude = 0.0, longitude = 0.0;
 private MyLocation myLocation = new MyLocation();

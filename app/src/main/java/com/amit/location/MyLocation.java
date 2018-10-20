@@ -6,8 +6,11 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.Timer;
@@ -15,18 +18,18 @@ import java.util.TimerTask;
 
 /**
  * Created by RAMCHANDRA SINGH on 10-03-2017.
- */
+**/
+@SuppressWarnings("unused")
 public class MyLocation
 {
+    private static final String TAG = MyLocation.class.getSimpleName();
+
     private Timer timer1;
     private LocationManager locationManager;
     private LocationResult locationResult;
     private boolean gps_enabled = false;
     private boolean network_enabled = false;
     private Context mContext;
-
-    private String TAG = "MyLocation";
-    private int REQUEST_CHECK_SETTINGS = 1;
 
     private LocationListener locationListenerNetwork = new LocationListener()
     {
@@ -162,6 +165,7 @@ public class MyLocation
         return true;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static abstract class LocationResult
     {
         public abstract void gotLocation(Location location);
@@ -221,6 +225,43 @@ public class MyLocation
             }
 
             locationResult.gotLocation(null);
+        }
+    }
+
+    /**
+     * 2018 October 17 - Wednesday - 02:50 PM
+     * is gps enabled method
+     *
+     * this method will check if gps is enabled or not
+     *
+     * @param context - context of the application
+     *
+     * @return true if enabled, false if not enabled.
+    **/
+    @SuppressWarnings("deprecation")
+    public static boolean isGPSEnabled(Context context)
+    {
+        int locationMode;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        {
+            try
+            {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+            }
+            catch (Settings.SettingNotFoundException e)
+            {
+                e.printStackTrace();
+                return false;
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+        }
+        else
+        {
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
         }
     }
 }
