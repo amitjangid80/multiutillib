@@ -30,7 +30,7 @@ public class DateTimeUtils
      *
      * @return - date or date time returned
     **/
-    private static String getCurrentDateTime(String inDateTimeFormat)
+    public static String getCurrentDateTime(String inDateTimeFormat)
     {
         if (inDateTimeFormat != null && inDateTimeFormat.length() != 0)
         {
