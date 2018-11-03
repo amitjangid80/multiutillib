@@ -22,7 +22,7 @@ allprojects{
 ```
 dependencies {
     ...
-    implementation 'com.github.amitjangid80:multiutillib:v1.3.4'
+    implementation 'com.github.amitjangid80:multiutillib:v1.3.61'
 }
 ```
 
@@ -43,7 +43,7 @@ dependencies {
 <dependency>
    <groupId>com.github.amitjangid80</groupId>
    <artifactId>multiutillib</artifactId>
-   <version>v1.3.4</version>
+   <version>v1.3.61</version>
 <dependency>
 ```
 
@@ -1005,6 +1005,21 @@ shineButton.init(MainActivity.this);
 **Usage**
 
 ```java
+
+/**
+ * 2018 November 03 - Saturday - 12:00 PM
+ * get current date time method
+ *
+ * this method will current date time in string type
+ *
+ * @param inDateTimeFormat - Pass the date or date time format you
+ *                           want to get date or date time in format
+ *                           Ex: dd-MM-yyyy or dd-MM-yyyy hh:mm
+ *
+ * @return - date or date time returned
+**/
+ DateTimeUtils.getCurrentDateTime(String inDateTimeFormat)
+
 /**
  * format date time method
  * <p>
