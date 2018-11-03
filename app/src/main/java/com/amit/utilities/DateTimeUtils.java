@@ -13,10 +13,34 @@ import java.util.Locale;
  * <p>
  * this class will help in formatting date and time
 **/
-@SuppressWarnings("unused, deprecation")
+@SuppressWarnings({"unused, deprecation", "WeakerAccess"})
 public class DateTimeUtils
 {
     private static final String TAG = DateTimeUtils.class.getSimpleName();
+
+    /**
+     * 2018 November 03 - Saturday - 12:00 PM
+     * get current date time method
+     *
+     * this method will current date time in string type
+     *
+     * @param inDateTimeFormat - Pass the date or date time format you
+     *                           want to get date or date time in format
+     *                           Ex: dd-MM-yyyy or dd-MM-yyyy hh:mm
+     *
+     * @return - date or date time returned
+    **/
+    private static String getCurrentDateTime(String inDateTimeFormat)
+    {
+        if (inDateTimeFormat != null && inDateTimeFormat.length() != 0)
+        {
+            String dateTime = java.text.DateFormat.getDateTimeInstance().format(new Date());
+            return DateTimeUtils.formatDateTime(dateTime, inDateTimeFormat);
+        }
+
+        Log.e(TAG, "getCurrentDateTime: given date format is not valid");
+        return "";
+    }
 
     /**
      * format date time method
