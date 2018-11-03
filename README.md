@@ -22,7 +22,7 @@ allprojects{
 ```
 dependencies {
     ...
-    implementation 'com.github.amitjangid80:multiutillib:v1.3.2'
+    implementation 'com.github.amitjangid80:multiutillib:v1.3.4'
 }
 ```
 
@@ -43,7 +43,7 @@ dependencies {
 <dependency>
    <groupId>com.github.amitjangid80</groupId>
    <artifactId>multiutillib</artifactId>
-   <version>v1.3.2</version>
+   <version>v1.3.4</version>
 <dependency>
 ```
 
@@ -266,6 +266,31 @@ dbHelper.executeSelectQuery(tableName, values, hasConditions, conditionalValues)
 //          either for entire table or for a single column
 
 dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
+```
+
+### DatePickerFragment
+
+>**Use this date picker fragment for selecting date.**
+
+```java
+
+DatePickerFragment datePickerFragment = new DatePickerFragment();
+
+/**
+ * 2018 October 24 - Wednesday - 03:34 PM
+ * show date picker dialog method
+ *
+ * this method will show the date picker dialog fragment
+ *
+ * @param context - context of the application
+ * @param selectedDate - interface of date picker fragment for getting the selected date value
+ * @param selectedDateFormat - format in which you want the date.
+ *                             Example: yyyy-MM-dd hh:mm:ss
+ *
+ * @param isCurrentDateMin - pass true to set current date as minimum date else pass false.
+**/
+datePickerFragment.showDatePickerDialog(this, this, "yyyy/MM/dd HH:mm:ss", false);
+
 ```
 
 ### SquareImageView
