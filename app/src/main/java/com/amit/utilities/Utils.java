@@ -16,6 +16,7 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -267,14 +268,7 @@ public class Utils
     **/
     public static Drawable getDrawable(@NonNull Context context, int id)
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            return context.getDrawable(id);
-        }
-        else
-        {
-            return context.getResources().getDrawable(id, null);
-        }
+        return ContextCompat.getDrawable(context, id);
     }
 
     /**
@@ -288,14 +282,7 @@ public class Utils
     **/
     public static int getColorWrapper(@NonNull Context context, @ColorRes int id)
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        {
-            return context.getColor(id);
-        }
-        else
-        {
-            return context.getResources().getColor(id, null);
-        }
+        return ContextCompat.getColor(context, id);
     }
 
     /**
