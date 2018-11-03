@@ -274,8 +274,6 @@ dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 
 ```java
 
-DatePickerFragment datePickerFragment = new DatePickerFragment();
-
 /**
  * 2018 October 24 - Wednesday - 03:34 PM
  * show date picker dialog method
@@ -288,8 +286,51 @@ DatePickerFragment datePickerFragment = new DatePickerFragment();
  *                             Example: yyyy-MM-dd hh:mm:ss
  *
  * @param isCurrentDateMin - pass true to set current date as minimum date else pass false.
+ * you will also have to implement it's interface for getting the selected date.
+ * Example: public class YourActivity extends AppCompatActivity implements DatePickerFragment.SelectedDate
 **/
+DatePickerFragment datePickerFragment = new DatePickerFragment();
 datePickerFragment.showDatePickerDialog(this, this, "yyyy/MM/dd HH:mm:ss", false);
+
+// the interface method of date picker is below
+@Override
+public void selectedDate(String selectedDate)
+{
+    Log.e(TAG, "selectedDate: selected date is: " + selectedDate);
+}
+
+```
+
+### TimePickerFragment
+
+>**Use this time picker fragment for selecting time.**
+
+```java
+
+/**
+ * 2018 October 24 - Wednesday - 03:34 PM
+ * show time picker dialog method
+ *
+ * this method will show the time picker dialog fragment
+ *
+ * @param context               - context of the application
+ * @param timeSelected          - interface of time picker fragment for getting the selected time value
+ * @param selectedTimeFormat    - format in which you want the time.
+ *                                Example: hh:mm
+ *
+ *
+ * you will also have to implement it's interface for getting the selected time.
+ * Example: public class YourActivity extends AppCompatActivity implements TimePickerFragment.OnTimeSelected
+**/
+TimePickerFragment timePickerFragment = new TimePickerFragment();
+timePickerFragment.showTimePickerDialog(this, this, "hh:mm");
+
+// the interface method of time picker is below
+@Override
+public void selectedTime(String selectedTime)
+{
+    Log.e(TAG, "selectedTime: selected time is: " + selectedTime);
+}
 
 ```
 
