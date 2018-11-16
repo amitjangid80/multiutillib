@@ -529,7 +529,7 @@ public class DBHelper
                 if (conditionalValues != null)
                 {
                     // building conditional query
-                    query = "SELECT " + values + " FROM " + tableName + " WHERE " + conditionalValues.toString() + "";
+                    query = "SELECT COUNT(" + values + ") FROM " + tableName + " WHERE " + conditionalValues.toString() + "";
                     Log.e(TAG, "getRecordCount: query with condition is: " + query);
                 }
                 else
@@ -541,7 +541,7 @@ public class DBHelper
             }
             else
             {
-                query = "SELECT " + values + " FROM " + tableName + "";
+                query = "SELECT COUNT(" + values + ") FROM " + tableName + "";
                 Log.e(TAG, "getRecordCount: query without condition is: " + query);
             }
 

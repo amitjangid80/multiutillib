@@ -57,7 +57,7 @@ public class Database extends SQLiteOpenHelper
      *                          OR
      *                    SELECT * FROM TABLE_NAME WHERE ID = 1
     **/
-    public int getRecordCount(String query)
+    int getRecordCount(String query)
     {
         try
         {
@@ -67,7 +67,7 @@ public class Database extends SQLiteOpenHelper
             if (cursor != null)
             {
                 cursor.moveToFirst();
-                count = cursor.getCount();
+                count = cursor.getInt(0);
                 cursor.close();
                 return count;
             }
