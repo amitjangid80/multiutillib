@@ -19,7 +19,7 @@ import java.util.TimerTask;
 /**
  * Created by RAMCHANDRA SINGH on 10-03-2017.
 **/
-@SuppressWarnings("unused")
+@Deprecated
 public class MyLocation
 {
     private static final String TAG = MyLocation.class.getSimpleName();

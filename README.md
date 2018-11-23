@@ -244,6 +244,37 @@ dbHelper.executeDatabaseOperation(tableName, operation, values, hasConditions, c
 dbHelper.executeSelectQuery(tableName, values, hasConditions, conditionalValues);
 
 
+/**
+ * execute Select Query method
+ * this method is used for selecting data from database
+ *
+ * parameters for this method are
+ *
+ * @param tableName - name of the table to perform select operation
+ *
+ * @param values - values to perform select query on
+ *                 Ex: "*" or "id, firstName"
+ *
+ * @param hasConditions - if you want to use the where clause in select query
+ *                        then this parameter should be set to true
+ *                        else this parameter can be false
+ *
+ * @param conditionalValues - if the hasConditions is set to true
+ *                            then the user has to pass conditionalValues
+ *                            else it can be null
+ *                            Ex: ID = 1 OR firstName LIKE '%Your String%'
+ *
+ * @param tClass - Pass your Model class like this
+ *                 Ex: ModelClass.class
+ *                 this is required for setting the values
+ *
+ * @return ArrayList of Type pass as class
+ *
+**/
+//#endregion COMMENTS FOR executeSelectQuery method
+dbHelper.executeSelectQuery(tableName, values, hasConditions, conditionalValues, class);
+
+
 // for select query use this method
 //
 // parameters to be passed are as follows:
@@ -464,93 +495,50 @@ switchButton.setOnSwitchListener(new SwitchButton.OnSwitchListener()
 });
 ```
 
-### MyLocation class
+### GeoLocation class
 
->**This class will  get the current location of the user.**
+>**This class will  get the current location and address of the user. This class will check and ask for locations permission if not granted**
 
 ```java
 
 // this will check whether gps is enabled or not
-MyLocation.isGPSEnabled(Context context); // returns true or false
+GeoLocation.isGPSEnabled(Context context); // returns true or false
 
 // following code is for getting latitude and longitude
-// Declare this class globally inside your activity or class.
-private double latitude = 0.0, longitude = 0.0;
-private MyLocation myLocation = new MyLocation();
+double latitude = geoLocation.getLatitude();
+double longitude = geoLocation.getLongitude();
 
-// Use myLocation's class's Location listener which will return latitude and longitude of current location.
-private MyLocation.LocationResult locationResult = new Mylocation.LocationResult()
-{
-    @Override
-    public void gotLocation(Location location)
-    {
-        try
-        {
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-                
-            Log.e(TAG, "gotLocation: Latitude of the location is: " + latitude);
-            Log.e(TAG, "gotLocation: Longitude of the location is: " + longitude);
-        }
-        catch(Exception e)
-        {
-            Log.e(TAG, "gotLocation: exception while getting location lat, long:\n");
-            e.printStackTrace();
-        }
-    }
-};
+// this method will get address of current location
+// you can also get city, state, country, etc.
+String address = geoLocation.getAddress;
 
-// all the above code should be used globally.
-// now use the myLocation's class's object as below inside onCreate method.
-myLocation.getLocation(this, locationResult);
-```
+String city = geoLocation.getCity();
 
-### LocationAddress class
+String state = geoLocation.getState();
 
->**This class helps your to get the address of the current location or by using latitude and longitude.**
+String country = geoLocation.getCountry();
 
-```java
-// use the following code to get the address of the latitude and longitude.
-// declare this inside onCreate() method or anywhere you would like to use it.
-// on button click or anywhere.
+String premises = geoLocation.getPremises();
 
-LocationAddress.getAddressFromLocation(mLatitude, mLongitude, this, new GeocoderHandler());
+String knownName = geoLocation.getKnownName();
 
-// this is the GeocoderHandler class where you'll get the address
-private class GeocoderHandler extends Handler
-    {
-        @Override
-        public void handleMessage(Message msg)
-        {
-            switch (msg.what)
-            {
-                case 1:
+String postalCode = geoLocation.getPostalCode();
 
-                    Bundle bundle = msg.getData();
-                    
-                    // note that subThoroughFare may return null sometimes.
-                    // so you should manage it accordling.
-                    String address = bundle.getString("subThoroughFare") + ", " +
-                                     bundle.getString("thoroughFare");
+String subLocality = geoLocation.getSubLocality();
 
-                    String subLocality = bundle.getString("subLocality");
-                    String subAdminArea = bundle.getString("subAdminArea");
-                    String postalCode = bundle.getString("postalCode");
-                    
-                    String city = bundle.getString("city");
-                    String state = bundle.getString("state");
-                    String country = bundle.getString("country");
+String subAdminArea = geoLocation.getSubAdminArea();
 
-                    break;
+String thoroughFare = geoLocation.getThoroughFare();
 
-                default:
-                    
-                    // address not found.
-                    
-                    break;
-            }
-        }
-    }
+String subThoroughFare = geoLocation.getSubThoroughFare();
+
+// if you want to capture the address and latitude and longitude
+// after getting access to locations permission
+// then use *onRequestPermissionsResult* of the activity
+// and re-call this class as follows.
+// considering *geoLocation* is declared globally
+geoLocation = new GeoLocation(YourActivity.this);
+
 ```
 
 ### FontHelper Class

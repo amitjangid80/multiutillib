@@ -18,6 +18,7 @@ import java.util.Locale;
  * this class helps to get the address of the current location
  * using the latitude and longitude provided
 **/
+@Deprecated
 public class LocationAddress
 {
     private static final String TAG = LocationAddress.class.getSimpleName();

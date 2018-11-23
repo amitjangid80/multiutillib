@@ -7,11 +7,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
-* Created By AMIT JANGID
-* 2018 April 17 - Tuesday - 12:10 PM
-* Database class for creating database for the application111
-* */
-
+ * Created By AMIT JANGID
+ * 2018 April 17 - Tuesday - 12:10 PM
+ *
+ * Database class for creating database for the application111
+**/
 public class Database extends SQLiteOpenHelper
 {
     private static final String TAG = Database.class.getSimpleName();
