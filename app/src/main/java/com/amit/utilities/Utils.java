@@ -17,14 +17,20 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -35,7 +41,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * https://github.com/jaydeepw/android-utils/tree/master/Utils
 **/
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class Utils
 {
     private static final String TAG = Utils.class.getSimpleName();
@@ -48,7 +54,7 @@ public class Utils
      * @param url - url to check
      * @return - will return true if the url is valid
      *           else will return false
-     **/
+    **/
     @CheckResult
     public static boolean isUrlValid(String url)
     {
@@ -86,7 +92,7 @@ public class Utils
      * @param sourceText - text to convert to bold
      *
      * @return - {@link android.text.SpannableString} in BOLD TypeFace
-     **/
+    **/
     public static SpannableStringBuilder toBold(String sourceText)
     {
         try
@@ -442,5 +448,161 @@ public class Utils
     public static String leftPadding(String strText, int length)
     {
         return String.format("%" + length + "." + length + "s", strText);
+    }
+
+    /**
+     * Schedules the shared element transition to be started immediately
+     * after the shared element has been measured and laid out within the
+     * activity's view hierarchy. Some common places where it might make
+     * sense to call this method are:
+     *
+     * (1) Inside a Fragment's onCreateView() method (if the shared element
+     *     lives inside a Fragment hosted by the called Activity).
+     *
+     * (2) Inside a Picasso Callback object (if you need to wait for Picasso to
+     *     asynchronously load/scale a bitmap before the transition can begin).
+     *
+     * @param activity - Activity on which shared transition is to be performed
+     *
+     * @param sharedElement - The view on which the actual animation will be done
+    **/
+    public static void scheduleStartPostponedTransition(final Activity activity, final View sharedElement)
+    {
+        sharedElement.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener()
+        {
+            @Override
+            public boolean onPreDraw()
+            {
+                sharedElement.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                {
+                    activity.startPostponedEnterTransition();
+                }
+
+                return true;
+            }
+        });
+    }
+
+    /**
+     * make text view resizable method
+     *
+     * this method will make the text view resizeable
+     * when you have a large description and don't want to show entire
+     * details completely then you can use this to show a link like text "See More"
+     *
+     * @param tv - text view to make it resizeable
+     *
+     * @param maxLine - number of lines to be shown before see more button
+     *
+     * @param expandText - text you want to show for the user to click
+     *                     Example: Read more (THIS IS USED BY DEFAULT)
+     *
+     * @param viewMore - pass true for this parameter
+    **/
+    public static void makeTextViewResizable(final TextView tv,
+                                             final int maxLine,
+                                             final String expandText,
+                                             final boolean viewMore)
+    {
+        try
+        {
+            if (tv.getTag() == null)
+            {
+                tv.setTag(tv.getText());
+            }
+
+            ViewTreeObserver treeObserver = tv.getViewTreeObserver();
+
+            treeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener()
+            {
+                @Override
+                public void onGlobalLayout()
+                {
+                    ViewTreeObserver observer = tv.getViewTreeObserver();
+                    observer.removeOnGlobalLayoutListener(this);
+
+                    if (maxLine == 0)
+                    {
+                        int lineEndIndex = tv.getLayout().getLineEnd(0);
+                        String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+
+                        tv.setText(text);
+                        tv.setMovementMethod(LinkMovementMethod.getInstance());
+
+                        tv.setText(addClickablePartTextViewResizable(
+                                Html.fromHtml(tv.getText().toString()), tv, expandText,
+                                viewMore), TextView.BufferType.SPANNABLE);
+                    }
+                    else if (maxLine > 0 && tv.getLineCount() >= maxLine)
+                    {
+                        int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
+                        String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+
+                        tv.setText(text);
+                        tv.setMovementMethod(LinkMovementMethod.getInstance());
+
+                        tv.setText(addClickablePartTextViewResizable(
+                                Html.fromHtml(tv.getText().toString()), tv, expandText,
+                                viewMore), TextView.BufferType.SPANNABLE);
+                    }
+                    else
+                    {
+                        int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
+                        String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
+
+                        tv.setText(text);
+                        tv.setMovementMethod(LinkMovementMethod.getInstance());
+
+                        tv.setText(addClickablePartTextViewResizable(
+                                Html.fromHtml(tv.getText().toString()), tv, expandText,
+                                viewMore), TextView.BufferType.SPANNABLE);
+                    }
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "makeTextViewResizable: exception while making text view resizable:\n");
+            e.printStackTrace();
+        }
+    }
+
+    private static SpannableStringBuilder addClickablePartTextViewResizable(final Spanned spanned,
+                                                                            final TextView tv,
+                                                                            final String spannableText,
+                                                                            final boolean viewMore)
+    {
+        String text = spanned.toString();
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(spanned);
+
+        if (text.contains(spannableText))
+        {
+            spannableStringBuilder.setSpan(new MySpannable(false)
+                                           {
+                                               @Override
+                                               public void onClick(@NonNull View widget)
+                                               {
+                                                   if (viewMore)
+                                                   {
+                                                       tv.setLayoutParams(tv.getLayoutParams());
+                                                       tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
+                                                       tv.invalidate();
+                                                       makeTextViewResizable(tv, -1, "... Read Less", false);
+                                                   }
+                                                   else
+                                                   {
+                                                       tv.setLayoutParams(tv.getLayoutParams());
+                                                       tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
+                                                       tv.invalidate();
+                                                       makeTextViewResizable(tv, 4, "... Read More", true);
+                                                   }
+                                               }
+                                           },
+                    text.indexOf(spannableText), text.indexOf(spannableText) + spannableText.length(), 0);
+        }
+
+        return spannableStringBuilder;
     }
 }

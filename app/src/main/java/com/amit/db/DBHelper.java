@@ -518,7 +518,7 @@ public class DBHelper
                 // if yes the conditional values should not be null
                 if (hasConditions)
                 {
-                    // check ig conditional values is passed
+                    // check if conditional values is passed
                     // it should be of string builder type
                     // where user has to pass values to be passed in where clause
                     //

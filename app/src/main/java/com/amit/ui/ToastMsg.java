@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.amit.R;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 @SuppressLint("InflateParams")
 public class ToastMsg
 {

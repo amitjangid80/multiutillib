@@ -4,10 +4,10 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.NinePatchDrawable;
-import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 
 import com.amit.R;
@@ -18,6 +18,7 @@ import com.amit.R;
  *
  * Toast message utils class
 **/
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class ToastMsgUtils
 {
     private ToastMsgUtils()
@@ -44,13 +45,15 @@ public class ToastMsgUtils
 
     static Drawable getDrawable(@NonNull Context context, @DrawableRes int id)
     {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        return ContextCompat.getDrawable(context, id);
+
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
             return context.getDrawable(id);
         }
         else
         {
             return context.getResources().getDrawable(id, null);
-        }
+        }*/
     }
 }
