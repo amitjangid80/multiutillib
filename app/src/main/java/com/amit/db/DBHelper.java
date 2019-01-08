@@ -2,6 +2,7 @@ package com.amit.db;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.util.Log;
 
 import com.amit.utilities.SharedPreferenceData;
@@ -23,6 +24,9 @@ public class DBHelper
     private static final String TAG = DBHelper.class.getSimpleName();
 
     private final Database db;
+
+    private ArrayList<DbData> dbDataArrayList = new ArrayList<>();
+    private ArrayList<DbColumn> dbColumnArrayList = new ArrayList<>();
 
     /**
      * Constructor of the class
@@ -876,6 +880,625 @@ public class DBHelper
             Log.e(TAG, "executeQuery: exception while executing query:\n");
             ex.printStackTrace();
             return false;
+        }
+    }
+
+    //#region COMMENTS FOR addColumnForTable method
+    /**
+     * 2019 January 08 - Tuesday - 03:32 PM
+     * add column for table method
+     *
+     * @param dbColumn - Db Column is a model class
+     *                   used for defining column name and data types
+     *
+     * this method will help user for adding the columns to the table
+    **/
+    //#endregion COMMENTS FOR addColumnForTable method
+    public DBHelper addColumnForTable(DbColumn dbColumn)
+    {
+        // checking if db columns was provided or not
+        if (dbColumn == null || dbColumn.toString().isEmpty())
+        {
+            Log.e(TAG, "addColumnForTable: Db Column was null or empty, Cannot proceed with null or empty Db Column.");
+            dbColumnArrayList = new ArrayList<>();
+            return this;
+        }
+
+        dbColumnArrayList.add(dbColumn);
+        return this;
+    }
+
+    //#region COMMENTS FOR addDataForTable method
+    /**
+     * 2019 January 08 - Tuesday - 03:32 PM
+     * add column for table method
+     *
+     * @param dbData - Db data is a model class
+     *                 used for defining column name and data for the columns
+     *
+     * this method will help in adding data to the table for respective column name in the table
+    **/
+    //#endregion COMMENTS FOR addDataForTable method
+    public DBHelper addDataForTable(DbData dbData)
+    {
+        // checking if data was provided or not
+        if (dbData == null || dbData.toString().isEmpty())
+        {
+            Log.e(TAG, "addDataForTable: Db Data was null or empty, Cannot proceed with null or empty Db Data.");
+            dbDataArrayList = new ArrayList<>();
+            return this;
+        }
+
+        dbDataArrayList.add(dbData);
+        return this;
+    }
+
+    //#region COMMENTS FOR createTable method
+    /**
+     * 2019 January 08 - Tuesday - 03:52 PM
+     * create table method
+     *
+     * @param tableName - name of the table which is to be created
+     *
+     * this method is responsible for creating the table
+     * with the name and columns and data types provided
+    **/
+    //#endregion COMMENTS FOR createTable method
+    public DBHelper createTable(String tableName)
+    {
+        // checking if table name was provided or not
+        if (tableName == null || tableName.isEmpty())
+        {
+            Log.e(TAG, "createTable: Table name was null or empty.");
+            return this;
+        }
+
+        // checking if columns were provided or not for creating table
+        if (dbColumnArrayList == null || dbColumnArrayList.size() > 0)
+        {
+            Log.e(TAG, "createTable: No columns provided for creating table.");
+            return this;
+        }
+
+        // string builder for generating create table query
+        StringBuilder query = new StringBuilder();
+        query.append("CREATE TABLE IF NOT EXISTS ").append(tableName).append(" (");
+
+        // loop for getting all the columns and their respective data types
+        for (int i = 0; i < dbColumnArrayList.size(); i++)
+        {
+            query.append(dbColumnArrayList.get(i).columnName)
+                    .append(" ")
+                    .append(dbColumnArrayList.get(i).columnDataType);
+
+            // checking if the loop is at the end of all the columns added
+            // if yes the appending brackets
+            // else appending comma for separating two columns
+            if (i == dbColumnArrayList.size() - 1)
+            {
+                query.append(")");
+            }
+            else
+            {
+                query.append(" , ");
+            }
+        }
+
+        Log.e(TAG, "createTable: Create table query is: " + query.toString());
+
+        db.getWritableDatabase().execSQL(query.toString());
+        dbColumnArrayList = new ArrayList<>();
+
+        return this;
+    }
+
+    //#region COMMENTS FOR insertData method
+    /**
+     * 2019 January 08 - Tuesday - 04:03 PM
+     * insert data method
+     *
+     * @param tableName - name of the table for inserting records
+     *
+     * this method is used for inserting records into table
+    **/
+    //#endregion COMMENTS FOR insertData method
+    public DBHelper insertData(String tableName)
+    {
+        // checking if table name was provided or not
+        if (tableName == null || tableName.isEmpty())
+        {
+            Log.e(TAG, "insertData: Table name was null or empty.");
+            return this;
+        }
+
+        // checking if data was provided or not for inserting in database
+        if (dbDataArrayList == null || dbDataArrayList.size() > 0)
+        {
+            Log.e(TAG, "insertData: No data provided for inserting.");
+            return this;
+        }
+
+        StringBuilder query = new StringBuilder();
+        StringBuilder columnName = new StringBuilder();
+        StringBuilder columnData = new StringBuilder();
+
+        query.append("INSERT INTO ").append(tableName).append(" (");
+
+        // loop for no of data to be inserted
+        for (int i = 0; i < dbDataArrayList.size(); i++)
+        {
+            // extracting column name and column data for array list
+            columnName.append(dbDataArrayList.get(i).columnName);
+
+            if (dbDataArrayList.get(i).blobData != null)
+            {
+                columnData.append(dbDataArrayList.get(i).blobData);
+            }
+            else if (dbDataArrayList.get(i).columnData != null)
+            {
+                columnData.append(dbDataArrayList.get(i).columnData);
+            }
+
+            // checking if the loop is at the end of data array list
+            // if yes then appending bracket at end of the query for columns and datas
+            // else appending comma between two columns and data
+            if (i == dbDataArrayList.size() - 1)
+            {
+                columnName.append(")");
+                columnData.append(")");
+            }
+            else
+            {
+                columnName.append(" , ");
+                columnData.append(" , ");
+            }
+        }
+
+        query.append(columnName.toString()).append(" VALUES (").append(columnData.toString());
+        Log.e(TAG, "insertData: Insert query is: " + query.toString());
+
+        db.getWritableDatabase().execSQL(query.toString());
+        dbDataArrayList = new ArrayList<>();
+
+        return this;
+    }
+
+    //#region COMMENTS FOR updateData method
+    /**
+     * 2019 January 08 - Tuesday - 04:28 PM
+     * update data method
+     *
+     * @param tableName     - name of the table on which update query is to be performed
+     *
+     * @param columnName    - name of the column to check whether the record is present so the data is updated
+     *
+     * @param columnData    - data of the column name provided to check if record is present for data update
+     *
+     * this method will update records of the table in database
+    **/
+    //#endregion COMMENTS FOR updateData method
+    public DBHelper updateData(String tableName, String columnName, String columnData)
+    {
+        // checking if table name was provided or not
+        if (tableName == null || tableName.isEmpty())
+        {
+            Log.e(TAG, "updateData: Table name was null or empty.");
+            return this;
+        }
+
+        // checking if column name was provided or not
+        if (columnName == null || columnName.isEmpty())
+        {
+            Log.e(TAG, "updateData: Column name was null or empty.");
+            return this;
+        }
+
+        // checking if column data was provided or not
+        if (columnData == null || columnData.isEmpty())
+        {
+            Log.e(TAG, "updateData: Column data was null or empty.");
+            return this;
+        }
+
+        // checking if data was provided or not
+        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+        {
+            Log.e(TAG, "updateData: Data was not provided for updating records.");
+            return this;
+        }
+
+        StringBuilder query = new StringBuilder();
+        query.append("UPDATE ").append(tableName).append(" SET ");
+
+        // loop for no of data provided
+        for (int i = 0; i < dbDataArrayList.size(); i++)
+        {
+            query.append(dbDataArrayList.get(i).columnName)
+                    .append(" = ");
+
+            if (dbDataArrayList.get(i).blobData != null)
+            {
+                query.append(dbDataArrayList.get(i).blobData);
+            }
+            else if (dbDataArrayList.get(i).columnData != null)
+            {
+                query.append(dbDataArrayList.get(i).columnData);
+            }
+
+            // checking if loop is not at end of the data array list
+            // if not then appending comma between two columns
+            if (i != dbDataArrayList.size() - 1)
+            {
+                query.append(" , ");
+            }
+        }
+
+        query.append(" WHERE ")
+                .append(columnName)
+                .append(" = ")
+                .append(DatabaseUtils.sqlEscapeString(columnData));
+
+        Log.e(TAG, "updateData: Update query is: " + query.toString());
+
+        db.getWritableDatabase().execSQL(query.toString());
+        dbDataArrayList = new ArrayList<>();
+
+        return this;
+    }
+
+    //#region COMMENTS FOR deleteTable method
+    /**
+     * 2019 January 08 - Tuesday - 04:40 PM
+     * delete table method
+     *
+     * @param tableName - name of the table to be deleted
+     *
+     * this method will delete the table from database
+    **/
+    //#endregion COMMENTS FOR deleteTable method
+    public boolean deleteTable(String tableName)
+    {
+        try
+        {
+            // checking if table name was provided or not
+            if (tableName == null || tableName.isEmpty())
+            {
+                Log.e(TAG, "deleteTable: Table name was null or empty.");
+                return false;
+            }
+
+            String query = "DELETE TABLE IF EXISTS " + tableName;
+            db.getWritableDatabase().execSQL(query);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "deleteTable: exception while deleting table:\n");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    //#region COMMENTS FOR getAllRecords method
+    /**
+     * 2019 January 08 - Tuesday - 04:44 PM
+     * get all records method
+     *
+     * @param tableName             - name of the table for getting the record
+     *
+     * @param isAscending           - True for ascending order and False for descending order
+     *
+     * @param orderByColumnName     - name of the column for getting records in descending order
+     *
+     * @param tClass                - Pass your Model class like this
+     *                                Ex: ModelClass.class this is required for setting the values
+     *
+     * @return Array list of ModelClass you provided in method
+     *
+     * this method will get all the records from the table
+     * in ascending or descending order as provided by the user
+     *
+     * this method is a generic method which can be directly bounded to the array list of custom type
+     * Ex: ArrayList<YourModelClass> arrayList = getAllRecords
+    **/
+    //#endregion COMMENTS FOR getAllRecords method
+    public <T> ArrayList<T> getAllRecords(String tableName, boolean isAscending,
+                                          String orderByColumnName, Class<T> tClass)
+    {
+        try
+        {
+            Cursor cursor;
+            String orderBy = "";
+            ArrayList<T> tArrayList = new ArrayList<>();
+
+            // checking if table name is provided or not
+            if (tableName == null || tableName.isEmpty())
+            {
+                Log.e(TAG, "getAllRecords: Table name was null or empty.");
+                return null;
+            }
+
+            // checking if isAscending is false
+            // and order by column name is not null and not empty for descending order
+            if (!isAscending && (orderByColumnName != null && !orderByColumnName.isEmpty()))
+            {
+                orderBy = " ORDER BY " + orderByColumnName + " DESC";
+            }
+
+            // checking if model class was provided or not
+            // it not then not proceeding further
+            if (tClass == null)
+            {
+                Log.e(TAG, "getAllRecords: Model class parameter was null. Please provide model class parameter");
+                return null;
+            }
+
+            String query = "SELECT * FROM " + tableName + orderBy;
+            Log.e(TAG, "getAllRecords: Select query for getting all records is: " + query);
+
+            // executing generated select query
+            cursor = db.getWritableDatabase().rawQuery(query, null);
+
+            // checking if cursor is not null and cursor has moved to first position
+            if (cursor != null && cursor.moveToFirst())
+            {
+                //#region LOOP FOR EXTRACTING DATA FROM DATABASE
+                for (int i = 0; i < cursor.getCount(); i++)
+                {
+                    // setting new instance of the class passed
+                    // for invoking the values returned from database
+                    Object instance = tClass.newInstance();
+
+                    //#region LOOP FOR COUNT OF COLUMNS
+                    for (int j = 0; j < cursor.getColumnCount(); j++)
+                    {
+                        try
+                        {
+                            //#region LOOP FOR GETTING ALL USER DECLARED METHODS
+                            for (Method method : tClass.getDeclaredMethods())
+                            {
+                                // getting column name from database
+                                String columnName = cursor.getColumnName(j).toLowerCase();
+
+                                // getting name of the methods which are user declared or created
+                                String methodName = method.getName().toLowerCase();
+
+                                // checking for set method only for setting the value
+                                // with prefix set followed by the name of column from database
+                                if (methodName.contains("set" + columnName))
+                                {
+                                    // getting name of the methods which are user declared or created
+                                    // with parameter types for setting value
+                                    method = tClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
+                                    String parameterType = method.getParameterTypes()[0].toString();
+
+                                    // checking if parameter type is int
+                                    if (int.class == method.getParameterTypes()[0])
+                                    {
+                                        // getting int value from database
+                                        method.invoke(instance, cursor.getInt(j));
+                                    }
+                                    // checking if parameter type is boolean
+                                    else if (boolean.class == method.getParameterTypes()[0])
+                                    {
+                                        // getting string value from database
+                                        method.invoke(instance, cursor.getString(j));
+                                    }
+                                    // checking if parameter type is float
+                                    else if (float.class == method.getParameterTypes()[0])
+                                    {
+                                        // getting float value from database
+                                        method.invoke(instance, cursor.getFloat(j));
+                                    }
+                                    // checking if parameter type is double
+                                    else if (double.class == method.getParameterTypes()[0])
+                                    {
+                                        // getting double value from database
+                                        method.invoke(instance, String.valueOf(cursor.getDouble(j)));
+                                    }
+                                    // any other data type will be get string from database
+                                    else
+                                    {
+                                        // getting string value from database
+                                        method.invoke(instance, String.valueOf(cursor.getString(j)));
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.e(TAG, "getAllRecords: exception while type casting:\n");
+                            e.printStackTrace();
+                        }
+                    }
+                    //#endregion LOOP FOR COUNT OF COLUMNS
+
+                    tArrayList.add((T) instance);
+                    cursor.moveToNext();
+                }
+                //#endregion LOOP FOR EXTRACTING DATA FROM DATABASE
+
+                cursor.close();
+                return tArrayList;
+            }
+            else
+            {
+                Log.e(TAG, "getAllRecords: Cursor was null or empty.");
+                return null;
+            }
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "getAllRecords: exception while getting all records:\n");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //#region COMMENTS FOR getAllRecords method
+    /**
+     * 2019 January 08 - Tuesday - 04:44 PM
+     * get all records method
+     *
+     * @param tableName             - name of the table for getting the record
+     *
+     * @param conditionalValues     - conditions for selecting records from table in database
+     *                                either individual conditions for multiple conditions
+     *                                Ex: ID = 1 or code = 1 or firstName = 'FirstName'
+     *                                    or ID = 1 AND firstName = 'FirstName'
+     *
+     * @param isAscending           - True for ascending order and False for descending order
+     *
+     * @param orderByColumnName     - name of the column for getting records in descending order
+     *
+     * @param tClass                - Pass your Model class like this
+     *                                Ex: ModelClass.class this is required for setting the values
+     *
+     * @return Array list of ModelClass you provided in method
+     *
+     * this method will get all the records from the table
+     * in ascending or descending order as provided by the user
+     *
+     * this method is a generic method which can be directly bounded to the array list of custom type
+     * Ex: ArrayList<YourModelClass> arrayList = getAllRecords
+    **/
+    //#endregion COMMENTS FOR getAllRecords method
+    public <T> ArrayList<T> getAllRecords(String tableName, boolean isAscending,
+                                          String conditionalValues,
+                                          String orderByColumnName, Class<T> tClass)
+    {
+        try
+        {
+            Cursor cursor;
+            String orderBy = "", whereClause = "";
+            ArrayList<T> tArrayList = new ArrayList<>();
+
+            // checking if table name is provided or not
+            if (tableName == null || tableName.isEmpty())
+            {
+                Log.e(TAG, "getAllRecords: Table name was null or empty.");
+                return null;
+            }
+
+            if (conditionalValues != null && !conditionalValues.isEmpty())
+            {
+                whereClause = " WHERE " + conditionalValues;
+            }
+
+            // checking if isAscending is false
+            // and order by column name is not null and not empty for descending order
+            if (!isAscending && (orderByColumnName != null && !orderByColumnName.isEmpty()))
+            {
+                orderBy = " ORDER BY " + orderByColumnName + " DESC";
+            }
+
+            // checking if model class was provided or not
+            // it not then not proceeding further
+            if (tClass == null)
+            {
+                Log.e(TAG, "getAllRecords: Model class parameter was null. Please provide model class parameter");
+                return null;
+            }
+
+            String query = "SELECT * FROM " + tableName + whereClause + orderBy;
+            Log.e(TAG, "getAllRecords: Select query for getting all records is: " + query);
+
+            // executing generated select query
+            cursor = db.getWritableDatabase().rawQuery(query, null);
+
+            // checking if cursor is not null and cursor has moved to first position
+            if (cursor != null && cursor.moveToFirst())
+            {
+                //#region LOOP FOR EXTRACTING DATA FROM DATABASE
+                for (int i = 0; i < cursor.getCount(); i++)
+                {
+                    // setting new instance of the class passed
+                    // for invoking the values returned from database
+                    Object instance = tClass.newInstance();
+
+                    //#region LOOP FOR COUNT OF COLUMNS
+                    for (int j = 0; j < cursor.getColumnCount(); j++)
+                    {
+                        try
+                        {
+                            //#region LOOP FOR GETTING ALL USER DECLARED METHODS
+                            for (Method method : tClass.getDeclaredMethods())
+                            {
+                                // getting column name from database
+                                String columnName = cursor.getColumnName(j).toLowerCase();
+
+                                // getting name of the methods which are user declared or created
+                                String methodName = method.getName().toLowerCase();
+
+                                // checking for set method only for setting the value
+                                // with prefix set followed by the name of column from database
+                                if (methodName.contains("set" + columnName))
+                                {
+                                    // getting name of the methods which are user declared or created
+                                    // with parameter types for setting value
+                                    method = tClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
+                                    String parameterType = method.getParameterTypes()[0].toString();
+
+                                    // checking if parameter type is int
+                                    if (int.class == method.getParameterTypes()[0])
+                                    {
+                                        // getting int value from database
+                                        method.invoke(instance, cursor.getInt(j));
+                                    }
+                                    // checking if parameter type is boolean
+                                    else if (boolean.class == method.getParameterTypes()[0])
+                                    {
+                                        // getting string value from database
+                                        method.invoke(instance, cursor.getString(j));
+                                    }
+                                    // checking if parameter type is float
+                                    else if (float.class == method.getParameterTypes()[0])
+                                    {
+                                        // getting float value from database
+                                        method.invoke(instance, cursor.getFloat(j));
+                                    }
+                                    // checking if parameter type is double
+                                    else if (double.class == method.getParameterTypes()[0])
+                                    {
+                                        // getting double value from database
+                                        method.invoke(instance, String.valueOf(cursor.getDouble(j)));
+                                    }
+                                    // any other data type will be get string from database
+                                    else
+                                    {
+                                        // getting string value from database
+                                        method.invoke(instance, String.valueOf(cursor.getString(j)));
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Log.e(TAG, "getAllRecords: exception while type casting:\n");
+                            e.printStackTrace();
+                        }
+                    }
+                    //#endregion LOOP FOR COUNT OF COLUMNS
+
+                    tArrayList.add((T) instance);
+                    cursor.moveToNext();
+                }
+                //#endregion LOOP FOR EXTRACTING DATA FROM DATABASE
+
+                cursor.close();
+                return tArrayList;
+            }
+            else
+            {
+                Log.e(TAG, "getAllRecords: Cursor was null or empty.");
+                return null;
+            }
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "getAllRecords: exception while getting all records:\n");
+            e.printStackTrace();
+            return null;
         }
     }
 }
