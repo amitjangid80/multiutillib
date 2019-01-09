@@ -1,8 +1,9 @@
 package com.amit.db;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.amit.utilities.SharedPreferenceData;
@@ -10,6 +11,7 @@ import com.amit.utilities.SharedPreferenceData;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.TreeSet;
 
 /**
  * Created by AMIT JANGID
@@ -18,7 +20,7 @@ import java.util.LinkedHashMap;
  * this class has method for executing db queries
  * like: creating table, inserting into table, deleting table, dropping table
 **/
-@SuppressWarnings({"unused", "unchecked"})
+@SuppressWarnings({"unused", "unchecked", "PrimitiveArrayArgumentToVarargsMethod", "ConstantConditions"})
 public class DBHelper
 {
     private static final String TAG = DBHelper.class.getSimpleName();
@@ -609,6 +611,11 @@ public class DBHelper
                                             // getting double value from database
                                             method.invoke(instance, String.valueOf(cursor.getDouble(j)));
                                         }
+                                        // checking if parameter type is byte array
+                                        /*else if (byte[].class == method.getParameterTypes()[0])
+                                        {
+                                            method.invoke(instance, cursor.getBlob(j));
+                                        }*/
                                         // any other data type will be get string from database
                                         else
                                         {
@@ -1012,54 +1019,171 @@ public class DBHelper
         }
 
         // checking if data was provided or not for inserting in database
-        if (dbDataArrayList == null || dbDataArrayList.size() > 0)
+        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
         {
             Log.e(TAG, "insertData: No data provided for inserting.");
             return this;
         }
 
-        StringBuilder query = new StringBuilder();
-        StringBuilder columnName = new StringBuilder();
-        StringBuilder columnData = new StringBuilder();
-
-        query.append("INSERT INTO ").append(tableName).append(" (");
+        // content values for putting column name
+        // and data for inserting into database table
+        ContentValues contentValues = new ContentValues();
 
         // loop for no of data to be inserted
         for (int i = 0; i < dbDataArrayList.size(); i++)
         {
-            // extracting column name and column data for array list
-            columnName.append(dbDataArrayList.get(i).columnName);
+            // adding column names and column data into content values
+            contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+        }
 
-            if (dbDataArrayList.get(i).blobData != null)
-            {
-                columnData.append(dbDataArrayList.get(i).blobData);
-            }
-            else if (dbDataArrayList.get(i).columnData != null)
-            {
-                columnData.append(dbDataArrayList.get(i).columnData);
-            }
+        // executing inserting statement for inserting records in table
+        db.getWritableDatabase().insert(tableName, null, contentValues);
+        dbDataArrayList = new ArrayList<>();
 
-            // checking if the loop is at the end of data array list
-            // if yes then appending bracket at end of the query for columns and datas
-            // else appending comma between two columns and data
-            if (i == dbDataArrayList.size() - 1)
+        return this;
+    }
+
+    //#region COMMENTS FOR insertDataWithTransaction method
+    /**
+     * 2019 January 09 - Wednesday - 06:49 PM
+     * insert data with transaction method
+     *
+     * @param tableName - name of the table where the data is to be inserted
+     *
+     * this method will insert data into table using database transaction
+     * this method is useful for inserting bulk records into table in less time
+    **/
+    //#endregion COMMENTS FOR insertDataWithTransaction method
+    public DBHelper insertDataWithTransaction(String tableName)
+    {
+        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+        {
+            Log.e(TAG, "insertDataWithTransaction: Db Data was not provided. Cannot insert data in table.");
+            return this;
+        }
+
+        // tree set is used for removing duplicate column name from data array list
+        TreeSet<String> treeSet = new TreeSet<>();
+
+        // this array list will hold unique column name from data array list
+        ArrayList<String> columnsArrayList = new ArrayList<>();
+
+        // loop for removing duplicate values from data array list
+        for (int i = 0; i < dbDataArrayList.size(); i++)
+        {
+            for (DbData item : dbDataArrayList)
             {
-                columnName.append(")");
-                columnData.append(")");
-            }
-            else
-            {
-                columnName.append(" , ");
-                columnData.append(" , ");
+                // checking if tree set contains columns from data array list
+                // if not contains then adding it to columns array list
+                if (!treeSet.contains(item.columnName))
+                {
+                    // column name not present in columns array list
+                    // adding to columns array list and tree set
+                    treeSet.add(item.columnName);
+                    columnsArrayList.add(item.columnName);
+                }
             }
         }
 
-        query.append(columnName.toString()).append(" VALUES (").append(columnData.toString());
-        Log.e(TAG, "insertData: Insert query is: " + query.toString());
+        // getting columns count for generating insert query
+        // and inserting records into corresponding columns
+        int columnCount = columnsArrayList.size();
 
-        db.getWritableDatabase().execSQL(query.toString());
+        // this string builder is used to append names of columns for the query
+        // for saving records into corresponding columns
+        StringBuilder queryBuilder = new StringBuilder();
+
+        // this string builder is used to append indexes for the query
+        StringBuilder indexesBuilder = new StringBuilder();
+
+        // generating insert query
+        queryBuilder.append("INSERT INTO ").append(tableName).append(" (");
+        indexesBuilder.append(" VALUES (");
+
+        // loop for generating insert query with columns name and indexes
+        for (int i = 0; i < columnCount; i++)
+        {
+            indexesBuilder.append("?");
+            queryBuilder.append(columnsArrayList.get(i));
+
+            // checking if column's count is equals to i
+            // if yes then appending brackets
+            // else appending comma
+            if (i == columnCount - 1)
+            {
+                queryBuilder.append(")");
+                indexesBuilder.append(")");
+            }
+            else
+            {
+                queryBuilder.append(" , ");
+                indexesBuilder.append(" , ");
+            }
+        }
+
+        // this is final query
+        String query = queryBuilder.toString() + indexesBuilder.toString();
+        Log.e(TAG, "insertDataWithTransaction: Insert query with transaction is: " + query);
+
+        // starting database transaction for inserting records
+        db.getWritableDatabase().beginTransaction();
+
+        // compiling insert query with indexes
+        SQLiteStatement statement = db.getWritableDatabase().compileStatement(query);
+
+        // this position is used for SQLite statement
+        // for binding data with columns
+        int position = 0;
+
+        // loop for inserting records with statement
+        for (int i = 0; i <= dbDataArrayList.size(); i++)
+        {
+            // checking if position is equals to column count
+            // this check will make sure that only those records get inserted
+            // for which the columns are passed
+            // irrespective of no of columns table has
+            // if yes then executing the statement
+            if (position == columnCount)
+            {
+                position = 0;
+                statement.execute();
+                statement.clearBindings();
+            }
+
+            // checking if i is equals to data array list's size
+            // if yes then breaking loop so the below code is not executed
+            // this check will ensure that last records are inserted
+            // and no index out of bound exception occurs
+            if (i == dbDataArrayList.size())
+            {
+                continue;
+            }
+
+            // increasing the position value by 1 for mapping data with column
+            position += 1;
+
+            // retrieving data from data array list
+            Object columnData = dbDataArrayList.get(i).columnData;
+
+            // checking the type of data and binding to corresponding type
+            if (columnData instanceof Integer)
+            {
+                statement.bindLong(position, Integer.parseInt(columnData.toString()));
+            }
+            else if (columnData instanceof String )
+            {
+                statement.bindString(position, columnData.toString());
+            }
+            else if (columnData instanceof Double || columnData instanceof Float)
+            {
+                statement.bindDouble(position, Double.parseDouble(columnData.toString()));
+            }
+        }
+
+        db.getWritableDatabase().setTransactionSuccessful();
+        db.getWritableDatabase().endTransaction();
+
         dbDataArrayList = new ArrayList<>();
-
         return this;
     }
 
@@ -1068,16 +1192,23 @@ public class DBHelper
      * 2019 January 08 - Tuesday - 04:28 PM
      * update data method
      *
-     * @param tableName     - name of the table on which update query is to be performed
+     * @param tableName      - name of the table on which update query is to be performed
      *
-     * @param columnName    - name of the column to check whether the record is present so the data is updated
+     * @param whereClause    - name of the column to check whether the record is present so the data is updated
+     *                         pass this parameter in the way given in example below
+     *                         Ex: code = ? or ID = ? etc // this is important
      *
-     * @param columnData    - data of the column name provided to check if record is present for data update
+     * @param whereArgs      - data of the column name provided to check if record is present for data update
+     *                         here you need to pass the data for the corresponding where clause
+     *                         Ex: 1 or 2 etc
      *
      * this method will update records of the table in database
+     * this method uses database's update method for updating records
+     *
+     * parameter whereClause and whereArgs must be passed in the form given
     **/
     //#endregion COMMENTS FOR updateData method
-    public DBHelper updateData(String tableName, String columnName, String columnData)
+    public DBHelper updateData(String tableName, String whereClause, String whereArgs)
     {
         // checking if table name was provided or not
         if (tableName == null || tableName.isEmpty())
@@ -1087,14 +1218,14 @@ public class DBHelper
         }
 
         // checking if column name was provided or not
-        if (columnName == null || columnName.isEmpty())
+        if (whereClause == null || whereClause.isEmpty())
         {
             Log.e(TAG, "updateData: Column name was null or empty.");
             return this;
         }
 
         // checking if column data was provided or not
-        if (columnData == null || columnData.isEmpty())
+        if (whereArgs == null || whereArgs.isEmpty())
         {
             Log.e(TAG, "updateData: Column data was null or empty.");
             return this;
@@ -1107,40 +1238,18 @@ public class DBHelper
             return this;
         }
 
-        StringBuilder query = new StringBuilder();
-        query.append("UPDATE ").append(tableName).append(" SET ");
+        // content values for putting column name
+        // and data for inserting into database table
+        ContentValues contentValues = new ContentValues();
 
         // loop for no of data provided
         for (int i = 0; i < dbDataArrayList.size(); i++)
         {
-            query.append(dbDataArrayList.get(i).columnName)
-                    .append(" = ");
-
-            if (dbDataArrayList.get(i).blobData != null)
-            {
-                query.append(dbDataArrayList.get(i).blobData);
-            }
-            else if (dbDataArrayList.get(i).columnData != null)
-            {
-                query.append(dbDataArrayList.get(i).columnData);
-            }
-
-            // checking if loop is not at end of the data array list
-            // if not then appending comma between two columns
-            if (i != dbDataArrayList.size() - 1)
-            {
-                query.append(" , ");
-            }
+            // adding column names and column data into content values
+            contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
         }
 
-        query.append(" WHERE ")
-                .append(columnName)
-                .append(" = ")
-                .append(DatabaseUtils.sqlEscapeString(columnData));
-
-        Log.e(TAG, "updateData: Update query is: " + query.toString());
-
-        db.getWritableDatabase().execSQL(query.toString());
+        db.getWritableDatabase().update(tableName, contentValues, whereClause, new String[]{whereArgs});
         dbDataArrayList = new ArrayList<>();
 
         return this;
@@ -1204,6 +1313,7 @@ public class DBHelper
     //#endregion COMMENTS FOR getAllRecords method
     public <T> ArrayList<T> getAllRecords(String tableName, boolean isAscending,
                                           String orderByColumnName, Class<T> tClass)
+
     {
         try
         {
@@ -1296,6 +1406,11 @@ public class DBHelper
                                         // getting double value from database
                                         method.invoke(instance, String.valueOf(cursor.getDouble(j)));
                                     }
+                                    // checking if parameter type is byte array
+                                    /*else if (byte[].class == method.getParameterTypes()[0])
+                                    {
+                                        method.invoke(instance, cursor.getBlob(j));
+                                    }*/
                                     // any other data type will be get string from database
                                     else
                                     {
@@ -1463,6 +1578,11 @@ public class DBHelper
                                         // getting double value from database
                                         method.invoke(instance, String.valueOf(cursor.getDouble(j)));
                                     }
+                                    // checking if parameter type is byte array
+                                    /*else if (byte[].class == method.getParameterTypes()[0])
+                                    {
+                                        method.invoke(instance, cursor.getBlob(j));
+                                    }*/
                                     // any other data type will be get string from database
                                     else
                                     {
