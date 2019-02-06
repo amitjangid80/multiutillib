@@ -134,8 +134,7 @@ public class DBHelper
      * @return true or false
     **/
     // endregion
-    public boolean executeDatabaseOperations(String tableName,
-                                             String operations,
+    public boolean executeDatabaseOperations(String tableName, String operations,
                                              LinkedHashMap<String, String> values,
                                              boolean hasConditions,
                                              LinkedHashMap<String, String> conditionalValues)
@@ -403,8 +402,7 @@ public class DBHelper
      *       no matter condition is there or not
     **/
     // endregion COMMENTS FOR executeSelectQuery method
-    public Cursor executeSelectQuery(String tableName,
-                                     String values,
+    public Cursor executeSelectQuery(String tableName, String values,
                                      boolean hasConditions,
                                      StringBuilder conditionalValues)
     {
@@ -505,11 +503,9 @@ public class DBHelper
      *
     **/
     //#endregion COMMENTS FOR executeSelectQuery method
-    public <T> ArrayList<T> executeSelectQuery(String tableName,
-                                               String values,
+    public <T> ArrayList<T> executeSelectQuery(String tableName, String values,
                                                boolean hasConditions,
-                                               String conditionalValues,
-                                               Class<T> tClass)
+                                               String conditionalValues, Class<T> tClass)
     {
         try
         {
@@ -562,7 +558,7 @@ public class DBHelper
                     {
                         // setting new instance of the class passed
                         // for invoking the values returned from database
-                        Object instance = tClass.newInstance();
+                        T instance = tClass.newInstance();
 
                         //#region LOOP FOR COUNT OF COLUMNS
                         for (int j = 0; j < cursor.getColumnCount(); j++)
@@ -634,7 +630,7 @@ public class DBHelper
                         }
                         //#endregion LOOP FOR COUNT OF COLUMNS
 
-                        tArrayList.add((T) instance);
+                        tArrayList.add(instance);
                         cursor.moveToNext();
                     }
                     //#endregion LOOP FOR EXTRACTING DATA FROM DATABASE
@@ -692,10 +688,8 @@ public class DBHelper
      *** @return this method will return the count of the record in the table
     **/
     // endregion COMMENTS FOR getRecordCount method
-    public int getRecordCount(String tableName,
-                              String values,
-                              boolean hasConditions,
-                              StringBuilder conditionalValues)
+    public int getRecordCount(String tableName, String values,
+                              boolean hasConditions, StringBuilder conditionalValues)
     {
         try
         {
@@ -961,7 +955,7 @@ public class DBHelper
         }
 
         // checking if columns were provided or not for creating table
-        if (dbColumnArrayList == null || dbColumnArrayList.size() > 0)
+        if (dbColumnArrayList == null || dbColumnArrayList.size() == 0)
         {
             Log.e(TAG, "createTable: No columns provided for creating table.");
             return this;
@@ -1357,7 +1351,7 @@ public class DBHelper
                 {
                     // setting new instance of the class passed
                     // for invoking the values returned from database
-                    Object instance = tClass.newInstance();
+                    T instance = tClass.newInstance();
 
                     //#region LOOP FOR COUNT OF COLUMNS
                     for (int j = 0; j < cursor.getColumnCount(); j++)
@@ -1428,7 +1422,7 @@ public class DBHelper
                     }
                     //#endregion LOOP FOR COUNT OF COLUMNS
 
-                    tArrayList.add((T) instance);
+                    tArrayList.add(instance);
                     cursor.moveToNext();
                 }
                 //#endregion LOOP FOR EXTRACTING DATA FROM DATABASE
@@ -1529,7 +1523,7 @@ public class DBHelper
                 {
                     // setting new instance of the class passed
                     // for invoking the values returned from database
-                    Object instance = tClass.newInstance();
+                    T instance = tClass.newInstance();
 
                     //#region LOOP FOR COUNT OF COLUMNS
                     for (int j = 0; j < cursor.getColumnCount(); j++)
@@ -1600,7 +1594,7 @@ public class DBHelper
                     }
                     //#endregion LOOP FOR COUNT OF COLUMNS
 
-                    tArrayList.add((T) instance);
+                    tArrayList.add(instance);
                     cursor.moveToNext();
                 }
                 //#endregion LOOP FOR EXTRACTING DATA FROM DATABASE

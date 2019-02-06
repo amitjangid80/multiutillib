@@ -31,6 +31,11 @@ public class Database extends SQLiteOpenHelper
             {
                 if (mDatabase == null)
                 {
+                    if (!databaseName.endsWith(".db"))
+                    {
+                        databaseName += ".db";
+                    }
+
                     mDatabase = new Database(context, databaseName);
                 }
             }
@@ -45,6 +50,7 @@ public class Database extends SQLiteOpenHelper
 
     }
 
+    //#region COMMENTS FOR getRecordCount method
     /**
      * 2018 April 17 - Tuesday - 12:11 PM
      * Get Record Count
@@ -57,6 +63,7 @@ public class Database extends SQLiteOpenHelper
      *                          OR
      *                    SELECT * FROM TABLE_NAME WHERE ID = 1
     **/
+    //#endregion COMMENTS FOR getRecordCount method
     int getRecordCount(String query)
     {
         try
