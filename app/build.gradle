@@ -1,4 +1,9 @@
 apply plugin: 'com.android.library'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.amitjangid80'
@@ -35,10 +40,6 @@ repositories {
     mavenCentral()
 }
 
-ext {
-    supportLibraryVersion = '28.0.0'
-}
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -49,4 +50,10 @@ dependencies {
 
     // RxJava dependencies
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+
+    // kotlin dependencies
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+
+    // More Info: https://github.com/Yalantis/uCrop
+    implementation 'com.github.yalantis:ucrop:2.2.2'
 }
