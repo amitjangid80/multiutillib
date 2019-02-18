@@ -1244,6 +1244,10 @@ DeviceUtils.getMacAddress(Context context)
 
 >**This class will help users to Select image from gallery or capture using camera. This class also helps in croping, compressing the image.**
 
+>**To get all the images you captured in camera or gallery or cropped you can get normally in onActivityResult**
+
+>**The permissions are handled automatically here for Camera and Gallery.**
+
 ```java
 // Pick image using Gallery:
 // this example is to use directly in kotlin
@@ -1312,6 +1316,4 @@ ImagePicker.Companion.with(this)
     	//Final image resolution will be less than 620 x 620
 	    .maxResultSize(620, 620)
      .start()
-     
-To get all the images you captured in camera or gallery or cropped you can get normally in onActivityResult
 ```
