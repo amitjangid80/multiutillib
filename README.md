@@ -1240,3 +1240,78 @@ DeviceUtils.getMacAddress(Context context)
     android:layout_marginTop="@dimen/five_dp" />
 
 ```
+### ImagePicker
+
+>**This class will help users to Select image from gallery or capture using camera. This class also helps in croping, compressing the image.**
+
+```java
+// Pick image using Gallery:
+// this example is to use directly in kotlin
+ImagePicker.with(this)
+	    .galleryOnly()        //User can only select image from Gallery
+	    .start(REQUEST_CODE)		//Default Request Code is ImagePicker.REQUEST_CODE
+     
+// this example is to use in java
+ImagePicker.Companion.with(this)
+	    .galleryOnly()        //User can only select image from Gallery
+	    .start(REQUEST_CODE)		//Default Request Code is ImagePicker.REQUEST_CODE
+     
+// Capture image using Camera:
+// this example is to use directly in kotlin
+ImagePicker.with(this)
+	    .cameraOnly()         //User can only capture image using Camera
+	    .start(REQUEST_CODE)		//Default Request Code is ImagePicker.REQUEST_CODE
+     
+// this example is to use in java
+ImagePicker.Companion.with(this)
+	    .cameraOnly()         //User can only capture image using Camera
+	    .start(REQUEST_CODE)		//Default Request Code is ImagePicker.REQUEST_CODE
+     
+// Crop image
+// in kotlin
+ImagePicker.with(this)
+	    .crop(16f, 9f)	   //Crop image with 16:9 aspect ratio
+	    .start()
+     
+// in java
+ImagePicker.Companion.with(this)
+	    .crop(16f, 9f)	   //Crop image with 16:9 aspect ratio
+	    .start()
+     
+// Crop square image(e.g for profile)
+// in kotlin
+ImagePicker.with(this)
+       .cropSquare()	   //Crop square image, its same as crop(1f, 1f)
+       .start()
+       
+// in java
+ImagePicker.Companion.with(this)
+       .cropSquare()	   //Crop square image, its same as crop(1f, 1f)
+       .start()
+       
+// Compress image size(e.g image should be maximum 1 MB)
+// in kotlin
+ImagePicker.with(this)
+	    .compress(1024)	   //Final image size will be less than 1 MB
+	    .start()
+     
+// in java
+ImagePicker.Companion.with(this)
+	    .compress(1024)	   //Final image size will be less than 1 MB
+	    .start()
+     
+// Resize image resolution
+// in kotlin
+ImagePicker.with(this)
+    	//Final image resolution will be less than 620 x 620
+	    .maxResultSize(620, 620)	   
+	    .start()
+     
+// in java
+ImagePicker.Companion.with(this)
+    	//Final image resolution will be less than 620 x 620
+	    .maxResultSize(620, 620)
+     .start()
+     
+To get all the images you captured in camera or gallery or cropped you can get normally in onActivityResult
+```
