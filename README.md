@@ -297,6 +297,75 @@ dbHelper.executeSelectQuery(tableName, values, hasConditions, conditionalValues,
 //          either for entire table or for a single column
 
 dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
+
+>**Now creating table and inserting records in database is more simpler.**
+
+**Creating Table**
+// this example is with single data type and no constraints
+dbHelper.addColumnForTable(new DbColumns("ID" /*this is the name of the column*/, "integer" /*this is the data type for that column*/))
+    .createTable("TABLE_NAME");
+    
+// if you want to create table with constraints then use following example
+dbHelper.addColumnForTable(new DbColumns("ID", new String[]{"integer", "primary key", "autoincrement"}))
+    .createTable("TABLE_NAME");
+    
+    
+**Inserting Records**
+// this is an example for inserting records
+dbHelper.addDataForTable(new DbData("age" /*this is the name of the column*/, 26 /*data for that column*/))
+    .insertData("TABLE_NAME");'
+    
+>**Getting all records directly into you model class:**
+
+/**
+ * @param tableName             - name of the table for getting the record
+ *
+ * @param isAscending           - True for ascending order and False for descending order
+ *
+ * @param orderByColumnName     - name of the column for getting records in descending order
+ *
+ * @param tClass                - Pass your Model class like this
+ *                                Ex: ModelClass.class this is required for setting the values
+ *                                    make sure your model class's setters has same name as database column name
+ *                                    Example: columnName: "age", so setter's name should be: "setAge"
+ *
+ * @return Array list of ModelClass you provided in method
+ *
+ * this method will get all the records from the table
+ * in ascending or descending order as provided by the user
+ *
+ * this method is a generic method which can be directly bounded to the array list of custom type
+**/
+// For getting all the records from database
+ArrayList<YourModelClassName> arrayList = dbHelper.getAllRecords(
+"TABLE_NAME", isAscending: true or false, orderByColumnName: null or name of the column, YourModelClassName.class);
+
+/**
+ * @param tableName             - name of the table for getting the record
+ *
+ * @param conditionalValues     - conditions for selecting records from table in database
+ *                                either individual conditions for multiple conditions
+ *                                Ex: ID = 1 or code = 1 or firstName = 'FirstName'
+ *                                    or ID = 1 AND firstName = 'FirstName'
+ *
+ * @param isAscending           - True for ascending order and False for descending order
+ *
+ * @param orderByColumnName     - name of the column for getting records in descending order
+ *
+ * @param tClass                - Pass your Model class like this
+ *                                Ex: ModelClass.class this is required for setting the values
+ *                                    make sure your model class's setters has same name as database column name
+ *                                    Example: columnName: "age", so setter's name should be: "setAge"
+ *
+ * @return Array list of ModelClass you provided in method
+ *
+ * this method will get all the records from the table
+ * in ascending or descending order as provided by the user
+ *
+ * this method is a generic method which can be directly bounded to the array list of custom type
+**/
+ArrayList<YourModelClassName> arrayList = dbHelper.getAllRecords(
+"TABLE_NAME", isAscending: true or false, conditionalValues, orderByColumnName: null or name of the column, YourModelClassName.class);
 ```
 
 ### DatePickerFragment
