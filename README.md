@@ -22,7 +22,7 @@ allprojects{
 ```
 dependencies {
     ...
-    implementation 'com.github.amitjangid80:multiutillib:v1.4.0'
+    implementation 'com.github.amitjangid80:multiutillib:v1.6.0'
 }
 ```
 
@@ -43,7 +43,7 @@ dependencies {
 <dependency>
    <groupId>com.github.amitjangid80</groupId>
    <artifactId>multiutillib</artifactId>
-   <version>v1.4.0</version>
+   <version>v1.6.0</version>
 <dependency>
 ```
 
