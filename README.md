@@ -50,9 +50,9 @@ dependencies {
 >**Add compileOptions in your gradle file for supporting this library for Java 8.**
 ```
 compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+}
 ```
 
 ## Usage
