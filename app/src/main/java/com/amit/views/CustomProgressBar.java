@@ -6,8 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 
-import com.amit.R;
-
 /**
  * Created by AMIT JANGID on 17-Sep-18.
  *
@@ -19,7 +17,7 @@ import com.amit.R;
 @SuppressWarnings("unused")
 public class CustomProgressBar
 {
-    private Context mContext;
+    private final Context mContext;
 
     private int currentProgress = 0;
     private int progressBarMaxSize = 100;
