@@ -47,7 +47,7 @@ dependencies {
 <dependency>
 ```
 
->**Add compileOptions in your gradle file for supporting this library for Java 8.**
+**Add compileOptions in your gradle file for supporting this library for Java 8.**
 ```
 compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
