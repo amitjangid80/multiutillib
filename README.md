@@ -1337,7 +1337,7 @@ PermissionHelper.requestAllPermissions(this, requestCode);
 // **in Java**
 PermissionHelper.Companion.requestAllPermissions(this, requestCode);
 
-// For requesting selected permission
+// For requesting single permission
 // **in Java**
 PermissionHelper.Companion.requestPermission(this, requestCode, Manifest.permission.CAMERA);
 
