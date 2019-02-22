@@ -1325,3 +1325,43 @@ ImagePicker.Companion.with(this)
 	    .maxResultSize(620, 620)
      .start()
 ```
+### PermissionHelper Class
+
+>**PermissionHelper class will help developers for requesting permissions.**
+
+```java
+// For requesting all permissions 
+// **in Kotlin**
+PermissionHelper.requestAllPermissions(this, requestCode);
+
+// **in Java**
+PermissionHelper.Companion.requestAllPermissions(this, requestCode);
+
+// For requesting selected permission
+// **in Java**
+PermissionHelper.Companion.requestPermission(this, requestCode, Manifest.permission.CAMERA);
+
+// **in Kotlin**
+PermissionHelper.requestPermission(this, requestCode, Manifest.permission.CAMERA)
+
+// For requesting multiple permissions
+// **in Kotlin**
+val requestPermissionsList = arrayOf(
+                Manifest.permission.CAMERA, 
+                Manifest.permission.WRITE_CONTACTS, 
+                Manifest.permission.READ_CONTACTS, 
+                Manifest.permission.READ_CALENDAR, 
+                Manifest.permission.WRITE_CALENDAR)
+        
+PermissionHelper.requestPermission(this, requestCode, requestPermissionsList)
+
+// **in Java**
+String[] requestPermissionsList = new String[]{
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_CONTACTS,
+                Manifest.permission.READ_CONTACTS,
+                Manifest.permission.READ_CALENDAR,
+                Manifest.permission.WRITE_CALENDAR};
+		
+PermissionHelper.Companion.requestPermission(this, requestCode, requestPermissionsList);
+```
