@@ -46,4 +46,11 @@
         <item name="android:backgroundDimAmount">0.4</item>
     </style>
 
+    <style name="SpinnerDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

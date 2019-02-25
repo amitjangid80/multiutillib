@@ -33,6 +33,10 @@
     <!-- transparent color -->
     <color name="transparent">#00000000</color>
     <color name="translucent">#09000000</color>
+    <color name="translucent_60">#60000000</color>
+    <color name="translucent_70">#70000000</color>
+    <color name="translucent_80">#80000000</color>
+    <color name="translucent_90">#90000000</color>
 
     <!-- gray color -->
     <color name="gray">#FFDEDEDE</color>
