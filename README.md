@@ -321,7 +321,7 @@ dbHelper.addColumnForTable(new DbColumns("ID", new String[]{"integer", "primary 
 **Inserting Records**
 // this is an example for inserting records
 dbHelper.addDataForTable(new DbData("age" /*this is the name of the column*/, 26 /*data for that column*/))
-    .insertData("TABLE_NAME");'
+    .insertData("TABLE_NAME");
     
 >**Getting all records directly into you model class:**
 
