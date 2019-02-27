@@ -57,4 +57,7 @@ dependencies {
 
     // More Info: https://github.com/Yalantis/uCrop
     implementation 'com.github.yalantis:ucrop:2.2.2'
+
+    // Material Progress bar
+    implementation 'com.pnikosis:materialish-progress:1.7'
 }

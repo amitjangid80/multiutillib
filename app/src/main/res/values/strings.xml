@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">multiutillib</string>
 
-    <string name="search">Search</string>
     <string name="time_ago_now">few moments ago</string>
     <string name="time_ago_full_seconds">%1$d seconds ago</string>
     <string name="time_ago_full_minute">%1$d minute ago</string>
@@ -42,4 +41,6 @@
     <string name="image_picker_provider_authority_suffix">.provider</string>
 
     <string name="ok">OK</string>
+    <string name="title">Title</string>
+    <string name="search">Search</string>
 </resources>

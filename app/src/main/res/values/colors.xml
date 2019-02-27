@@ -41,9 +41,11 @@
     <!-- gray color -->
     <color name="gray">#FFDEDEDE</color>
     <color name="darker_grey">#999999</color>
+    <color name="gray_btn_bg_color">#D0D0D0</color>
     <color name="white_background_txt">#777777</color>
     <color name="dialog_choose_icon_color">#757575</color>
     <color name="dialog_choose_text_color">#757575</color>
+    <color name="gray_btn_bg_pressed_color">#B6B6B6</color>
 
     <!-- social button colors -->
     <color name="google_plus">#DB4437</color>
@@ -64,5 +66,9 @@
     <color name="color_type_warning">#e8bd4b</color>
     <color name="color_type_success">#90b06e</color>
     <!-- Prompt dialog colors -->
+
+    <color name="red_btn_bg_color">#DD6B55</color>
+    <color name="success_stroke_color">#A5DC86</color>
+    <color name="red_btn_bg_pressed_color">#CD5B55</color>
 
 </resources>
