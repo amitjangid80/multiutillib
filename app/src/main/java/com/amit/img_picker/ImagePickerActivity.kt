@@ -15,6 +15,7 @@ import java.io.File
 /**
  * Created by AMIT JANGID on 18/02/2019.
 **/
+@Suppress("NON_EXHAUSTIVE_WHEN")
 class ImagePickerActivity : FragmentActivity()
 {
     private lateinit var mCropProvider: CropProvider

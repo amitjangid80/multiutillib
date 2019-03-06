@@ -9,6 +9,7 @@ import java.io.IOException
 /**
  * Created by AMIT JANGID on 18/02/2019.
 **/
+@Suppress("DEPRECATION")
 object ImageUtil
 {
     @Throws(IOException::class)

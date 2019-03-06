@@ -15,6 +15,7 @@ import java.io.File
 /**
  * Created by AMIT JANGID on 18/02/2019.
 **/
+@Suppress("UNUSED_PARAMETER")
 class CameraProvider(activity: ImagePickerActivity) : BaseProvider(activity)
 {
     companion object
