@@ -700,6 +700,15 @@ TextUtils.replaceTrueOrFalse(string); // this will return int value.
 TextUtils.replaceNullWithZero(String stringToReplace)
 
 /**
+ * replace null method
+ * this method will replace null with empty space
+ *
+ * @param string - string where you want to replace null
+ * @return it will return empty string
+**/
+TextUtils.replaceNullWithDash(String string)
+
+/**
  * 2018 September 14 - Friday - 12:34 PM
  * remove last char method
  *
