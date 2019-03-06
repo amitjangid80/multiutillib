@@ -26,7 +26,7 @@ public class DBHelper
     private static final String TAG = DBHelper.class.getSimpleName();
 
     private final Database db;
-
+    
     private ArrayList<DbData> dbDataArrayList = new ArrayList<>();
     private ArrayList<DbColumn> dbColumnArrayList = new ArrayList<>();
 
@@ -1036,7 +1036,7 @@ public class DBHelper
 
         return this;
     }
-
+    
     //#region COMMENTS FOR insertDataWithTransaction method
     /**
      * 2019 January 09 - Wednesday - 06:49 PM
@@ -1046,9 +1046,157 @@ public class DBHelper
      *
      * this method will insert data into table using database transaction
      * this method is useful for inserting bulk records into table in less time
+     **/
+    //#endregion COMMENTS FOR insertDataWithTransaction method
+    @Deprecated
+    public DBHelper insertDataWithTransaction(String tableName)
+    {
+        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+        {
+            Log.e(TAG, "insertDataWithTransaction: Db Data was not provided. Cannot insert data in table.");
+            return this;
+        }
+        
+        // tree set is used for removing duplicate column name from data array list
+        TreeSet<String> treeSet = new TreeSet<>();
+        
+        // this array list will hold unique column name from data array list
+        ArrayList<String> columnsArrayList = new ArrayList<>();
+        
+        // loop for removing duplicate values from data array list
+        // for (int i = 0; i < dbDataArrayList.size(); i++)
+        for (int i = 0; i < dbDataArrayList.size(); i++)
+        {
+            for (DbData item : dbDataArrayList)
+            {
+                // checking if tree set contains columns from data array list
+                // if not contains then adding it to columns array list
+                if (!treeSet.contains(item.columnName))
+                {
+                    // column name not present in columns array list
+                    // adding to columns array list and tree set
+                    treeSet.add(item.columnName);
+                    columnsArrayList.add(item.columnName);
+                }
+            }
+        }
+        
+        // getting columns count for generating insert query
+        // and inserting records into corresponding columns
+        int columnCount = columnsArrayList.size();
+        
+        // this string builder is used to append names of columns for the query
+        // for saving records into corresponding columns
+        StringBuilder queryBuilder = new StringBuilder();
+        
+        // this string builder is used to append indexes for the query
+        StringBuilder indexesBuilder = new StringBuilder();
+        
+        // generating insert query
+        queryBuilder.append("INSERT INTO ").append(tableName).append(" (");
+        indexesBuilder.append(" VALUES (");
+        
+        // loop for generating insert query with columns name and indexes
+        for (int i = 0; i < columnCount; i++)
+        {
+            indexesBuilder.append("?");
+            queryBuilder.append(columnsArrayList.get(i));
+            
+            // checking if column's count is equals to i
+            // if yes then appending brackets
+            // else appending comma
+            if (i == columnCount - 1)
+            {
+                queryBuilder.append(")");
+                indexesBuilder.append(")");
+            }
+            else
+            {
+                queryBuilder.append(" , ");
+                indexesBuilder.append(" , ");
+            }
+        }
+        
+        // this is final query
+        String query = queryBuilder.toString() + indexesBuilder.toString();
+        Log.e(TAG, "insertDataWithTransaction: Insert query with transaction is: " + query);
+        
+        // starting database transaction for inserting records
+        db.getWritableDatabase().beginTransaction();
+        
+        // compiling insert query with indexes
+        SQLiteStatement statement = db.getWritableDatabase().compileStatement(query);
+        
+        // this position is used for SQLite statement
+        // for binding data with columns
+        int position = 0;
+        
+        // loop for inserting records with statement
+        for (int i = 0; i <= dbDataArrayList.size(); i++)
+        {
+            // checking if position is equals to column count
+            // this check will make sure that only those records get inserted
+            // for which the columns are passed
+            // irrespective of no of columns table has
+            // if yes then executing the statement
+            if (position == columnCount)
+            {
+                position = 0;
+                statement.execute();
+                statement.clearBindings();
+            }
+            
+            // checking if i is equals to data array list's size
+            // if yes then breaking loop so the below code is not executed
+            // this check will ensure that last records are inserted
+            // and no index out of bound exception occurs
+            if (i == dbDataArrayList.size())
+            {
+                continue;
+            }
+            
+            // increasing the position value by 1 for mapping data with column
+            position += 1;
+            
+            // retrieving data from data array list
+            Object columnData = dbDataArrayList.get(i).columnData;
+            
+            // checking the type of data and binding to corresponding type
+            if (columnData instanceof Integer)
+            {
+                statement.bindLong(position, Integer.parseInt(columnData.toString()));
+            }
+            else if (columnData instanceof String )
+            {
+                statement.bindString(position, columnData.toString());
+            }
+            else if (columnData instanceof Double || columnData instanceof Float)
+            {
+                statement.bindDouble(position, Double.parseDouble(columnData.toString()));
+            }
+        }
+        
+        db.getWritableDatabase().setTransactionSuccessful();
+        db.getWritableDatabase().endTransaction();
+        
+        dbDataArrayList = new ArrayList<>();
+        return this;
+    }
+
+    //#region COMMENTS FOR insertDataWithTransaction method
+    /**
+     * 2019 January 09 - Wednesday - 06:49 PM
+     * insert data with transaction method
+     *
+     * @param tableName - name of the table where the data is to be inserted
+     *
+     * @param dbColumnCount - total number of columns in the table you want to insert data
+     *
+     * this method will insert data into table using database transaction
+     * this method is useful for inserting bulk records into table in less time
     **/
     //#endregion COMMENTS FOR insertDataWithTransaction method
-    public DBHelper insertDataWithTransaction(String tableName)
+    public DBHelper insertDataWithTransaction(String tableName, int dbColumnCount)
     {
         if (dbDataArrayList == null || dbDataArrayList.size() == 0)
         {
@@ -1063,10 +1211,16 @@ public class DBHelper
         ArrayList<String> columnsArrayList = new ArrayList<>();
 
         // loop for removing duplicate values from data array list
-        for (int i = 0; i < dbDataArrayList.size(); i++)
+        // for (int i = 0; i < dbDataArrayList.size(); i++)
+        for (int i = 0; i < dbColumnCount; i++)
         {
             for (DbData item : dbDataArrayList)
             {
+                if (columnsArrayList.size() == dbColumnCount)
+                {
+                    break;
+                }
+                
                 // checking if tree set contains columns from data array list
                 // if not contains then adding it to columns array list
                 if (!treeSet.contains(item.columnName))

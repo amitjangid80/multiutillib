@@ -20,13 +20,17 @@ import java.util.Locale;
  * this class will display a date picker dialog
  * it will return selected date in the format defined
 **/
-@SuppressWarnings({"unused", "deprecation"})
+@SuppressWarnings({"unused", "deprecation", "DeprecatedIsStillUsed"})
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener
 {
     private static final String TAG = DatePickerFragment.class.getSimpleName();
 
-    private Calendar calendar;
+    private Calendar mCalendar;
+
+    @Deprecated
     private SelectedDate mSelectedDate;
+
+    private OnDateSelectedListener mOnDateSelectedListener;
 
     private static boolean mIsCurrentDateMin;
     private static String mSelectedDateFormat;
@@ -44,6 +48,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
      *
      * @param isCurrentDateMin - pass true to set current date as minimum date else pass false.
     **/
+    @Deprecated
     public void showDatePickerDialog(@NonNull Context context, @NonNull SelectedDate selectedDate,
                                      @NonNull String selectedDateFormat, boolean isCurrentDateMin)
     {
@@ -55,15 +60,40 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         datePickerFragment.show(((Activity) context).getFragmentManager(), "DatePicker");
     }
 
+    /**
+     * 2018 October 24 - Wednesday - 03:34 PM
+     * show date picker dialog method
+     *
+     * this method will show the date picker dialog fragment
+     *
+     * @param context - context of the application
+     * @param onDateSelectedListener - interface of date picker fragment for getting the selected date value
+     * @param selectedDateFormat - format in which you want the date.
+     *                             Example: yyyy-MM-dd hh:mm:ss
+     *
+     * @param isCurrentDateMin - pass true to set current date as minimum date else pass false.
+    **/
+    public void showDatePickerDialog(@NonNull Context context,
+                                     @NonNull OnDateSelectedListener onDateSelectedListener,
+                                     @NonNull String selectedDateFormat, boolean isCurrentDateMin)
+    {
+        mIsCurrentDateMin = isCurrentDateMin;
+        mSelectedDateFormat = selectedDateFormat;
+
+        DatePickerFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.initializeInterface(onDateSelectedListener);
+        datePickerFragment.show(((Activity) context).getFragmentManager(), "DatePicker");
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         // Use the current date as the default date in the picker
-        calendar = Calendar.getInstance();
+        mCalendar = Calendar.getInstance();
 
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int year = mCalendar.get(Calendar.YEAR);
+        int month = mCalendar.get(Calendar.MONTH);
+        int day = mCalendar.get(Calendar.DAY_OF_MONTH);
 
         // Create a new instance of DatePickerDialog and return it
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), this, year, month, day);
@@ -79,25 +109,50 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
     {
-        calendar.set(year, month, dayOfMonth);
+        mCalendar.set(year, month, dayOfMonth);
         SimpleDateFormat sdf = new SimpleDateFormat(mSelectedDateFormat, Locale.getDefault());
 
-        String selectedDate = sdf.format(calendar.getTime());
+        String selectedDate = sdf.format(mCalendar.getTime());
         Log.e(TAG, "onDateSet: selected date is: " + selectedDate);
 
         if (mSelectedDate != null)
         {
             mSelectedDate.selectedDate(selectedDate);
         }
+        else
+        {
+            Log.e(TAG, "onDateSet: selectedDate interface is null.");
+        }
+
+        if (mOnDateSelectedListener != null)
+        {
+            mOnDateSelectedListener.onDateSelected(selectedDate);
+        }
+        else
+        {
+            Log.e(TAG, "onDateSet: onDateSelectedListener interface is null.");
+        }
     }
 
+    @Deprecated
     private void initializeInterface(SelectedDate selectedDate)
     {
         this.mSelectedDate = selectedDate;
     }
 
+    private void initializeInterface(OnDateSelectedListener onDateSelectedListener)
+    {
+        this.mOnDateSelectedListener = onDateSelectedListener;
+    }
+
+    @Deprecated
     public interface SelectedDate
     {
         void selectedDate(String selectedDate);
+    }
+
+    public interface OnDateSelectedListener
+    {
+        void onDateSelected(String selectedDate);
     }
 }

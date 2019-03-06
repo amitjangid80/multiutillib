@@ -4,7 +4,7 @@ package com.amit.utilities;
 * Created By AMIT JANGID
 * 2018 April 17 - Tuesday - 12:52 PM
 **/
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class TextUtils
 {
     /**
@@ -79,6 +79,35 @@ public class TextUtils
         {
             return Integer.parseInt(stringToReplace);
         }
+    }
+    
+    /**
+     * replace null method
+     * this method will replace null with empty space
+     *
+     * @param string - string where you want to replace null
+     * @return it will return empty string
+    **/
+    public static String replaceNullWithDash(String string)
+    {
+        if (string == null)
+        {
+            return "-";
+        }
+        else if (string.equalsIgnoreCase("null"))
+        {
+            return "-";
+        }
+        else if (string.equalsIgnoreCase(" "))
+        {
+            return "-";
+        }
+        else if (string.equalsIgnoreCase(""))
+        {
+            return "-";
+        }
+        
+        return string;
     }
 
     /**
