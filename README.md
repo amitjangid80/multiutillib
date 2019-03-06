@@ -224,10 +224,32 @@ apiServices.makeApiCall(apiName, requestMethod, parameters, jsonObject, hasToken
 // 
 // return - the method will return true or false if the operation is successful or failed.
 //
- 
 DBHelper dbHelper = new DBHelper(context);
 dbHelper.executeDatabaseOperation(tableName, operation, values, hasConditions, conditionalValues);
 
+// this method can be used for inserting bulk data into table using database transaction
+// pass the name of the table where you want to insert data
+// and also pass the total number of columns for which you want to insert data in.
+dbHelper.insertDataWithTransaction("tableName", 10);
+
+Example Usage of above method is:
+// first we are generating data for inserting into the table
+for (int i = 0; i < 20000; i++)
+{
+    dbHelper.addDataForTable(new DbData("columnName1", "data"))
+            .addDataForTable(new DbData("columnName2", "data"))
+            .addDataForTable(new DbData("columnName3", "data"))
+            .addDataForTable(new DbData("columnName4", "data"))
+            .addDataForTable(new DbData("columnName5", "data"))
+            .addDataForTable(new DbData("columnName6", "data"))
+            .addDataForTable(new DbData("columnName7", "data"))
+            .addDataForTable(new DbData("columnName8", "data"))
+            .addDataForTable(new DbData("columnName9", "data"))
+            .addDataForTable(new DbData("columnName10", "data"));
+}
+
+// remember to put this method outside for loop.
+dbHelper.insertDataWithTransaction("tableName", 10);
 
 // for select query use this method
 //
@@ -248,9 +270,7 @@ dbHelper.executeDatabaseOperation(tableName, operation, values, hasConditions, c
 //                     it is similar as in executeDatabaseOperation method's conditionalValues parameter.
 // 
 // return - this method wull return Cursor with values or will return null
-
 dbHelper.executeSelectQuery(tableName, values, hasConditions, conditionalValues);
-
 
 /**
  * execute Select Query method
@@ -303,7 +323,6 @@ dbHelper.executeSelectQuery(tableName, values, hasConditions, conditionalValues,
 // 
 // return - this method wull return count of records in the table 
 //          either for entire table or for a single column
-
 dbHelper.getRecordCount(tableName, values, hasConditions, conditionalValues);
 
 >**Now creating table and inserting records in database is more simpler.**
