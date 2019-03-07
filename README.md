@@ -72,7 +72,7 @@ Example:
 <provider
     android:name="android.support.v4.content.FileProvider" // replace this line with the line below
     android:name=".MyFileProvider"
-    android:authorities="com.mindtech.seed_manager.file_provider"
+    android:authorities="com.example.file_provider"
     android:exported="false"
     android:grantUriPermissions="true">
     <meta-data
