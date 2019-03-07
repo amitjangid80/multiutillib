@@ -22,7 +22,7 @@ allprojects{
 ```
 dependencies {
     ...
-    implementation 'com.github.amitjangid80:multiutillib:v1.6.2'
+    implementation 'com.github.amitjangid80:multiutillib:[![](https://jitpack.io/v/amitjangid80/multiutillib.svg)](https://jitpack.io/#amitjangid80/multiutillib)'
 }
 ```
 
@@ -43,7 +43,7 @@ dependencies {
 <dependency>
    <groupId>com.github.amitjangid80</groupId>
    <artifactId>multiutillib</artifactId>
-   <version>v1.6.2</version>
+   <version>[![](https://jitpack.io/v/amitjangid80/multiutillib.svg)](https://jitpack.io/#amitjangid80/multiutillib)</version>
 <dependency>
 ```
 
