@@ -55,6 +55,32 @@ compileOptions {
 }
 ```
 
+>If you get **Manifest merger failed with multiple errors, see logs** error while running or syncing gradle then you just have to create a class which extends **android.support.v4.content.FileProvider**.
+
+```java
+Example:
+
+import android.support.v4.content.FileProvider;
+
+public class MyFileProvider extends FileProvider
+{
+
+}
+
+// after you have created this file then you have to register this in your manifest file.
+Example: 
+<provider
+    android:name="android.support.v4.content.FileProvider" // replace this line with the line below
+    android:name=".MyFileProvider"
+    android:authorities="com.mindtech.seed_manager.file_provider"
+    android:exported="false"
+    android:grantUriPermissions="true">
+    <meta-data
+	android:name="android.support.FILE_PROVIDER_PATHS"
+	android:resource="@xml/file_provider_path" />
+</provider>
+```
+
 ## Usage
 
 ### ProjectApplication Class
