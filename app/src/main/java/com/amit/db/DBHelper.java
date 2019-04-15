@@ -992,6 +992,59 @@ public class DBHelper
 
         return this;
     }
+    
+    //#region COMMENTS FOR alterTable method
+    /**
+     * 2019 April 15 - Monday - 01:13 PM
+     * alter table method
+     *
+     * @param tableName - name of the table where column is to be added
+     *
+     * this method will alter the table and will add new column to the table
+    **/
+    //#endregion COMMENTS FOR alterTable method
+    public DBHelper alterTable(String tableName)
+    {
+        try
+        {
+            if (dbColumnArrayList == null || dbColumnArrayList.size() == 0)
+            {
+                Log.e(TAG, "alterTable: No Db Columns were provided.");
+                return this;
+            }
+            
+            for (int i = 0; i < dbColumnArrayList.size(); i++)
+            {
+                String columnName = dbColumnArrayList.get(i).columnName;
+                String columnDataType = dbColumnArrayList.get(i).columnDataType;
+                
+                String query = "SELECT COUNT(*) FROM pragma_table_info('" + tableName + "') " +
+                        "WHERE name = '" + columnName + "'";
+                
+                int count = db.getRecordCount(query);
+                
+                if (count == 0)
+                {
+                    query = "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + columnDataType;
+                    Log.e(TAG, "alterTable: query for adding new column or altering table is: " + query);
+                    db.getWritableDatabase().execSQL(query);
+                }
+                else
+                {
+                    Log.e(TAG, "alterTable: " + columnName + " already exists in " + tableName);
+                }
+            }
+            
+            return this;
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "alterTable: exception while altering table:\n");
+            e.printStackTrace();
+            
+            return null;
+        }
+    }
 
     //#region COMMENTS FOR insertData method
     /**

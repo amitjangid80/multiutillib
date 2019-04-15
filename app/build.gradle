@@ -15,8 +15,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 36 // this indicates the number of releases of library
-        versionName "1.4.0" // this indicates the current version of library
+        versionCode 42 // this indicates the number of releases of library
+        versionName "1.6.3" // this indicates the current version of library
     }
 
     buildTypes {
