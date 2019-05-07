@@ -1419,3 +1419,32 @@ String[] requestPermissionsList = new String[]{
 		
 PermissionHelper.Companion.requestPermission(this, requestCode, requestPermissionsList);
 ```
+
+### ASpinner
+>****
+
+```xml
+// XML
+<com.amit.ui.ASpinner
+        android:id="@+id/mySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="@string/select_gender"
+        android:textColor="@color/black_shade"
+        app:backgroundTint="@color/colorPrimary"
+        app:spinner_dialog_icon_tint="@color/colorPrimary"
+        app:spinner_dialog_title="@string/select_gender"
+        app:spinner_dialog_title_color="@color/colorPrimary" />
+
+// Code
+ASpinner mySpinner = findViewById(R.id.mySpinner);
+mySpinner.setTitle(getResources().getString(R.string.select_gender));
+mySpinner.setItems(getResources().getStringArray(R.array.gender_array));
+
+mySpinner.setOnItemClickListener((selectedItem, position) ->
+{
+    Log.e(TAG, "onItemClick: selected item is: " + selectedItem);
+    Log.e(TAG, "onItemClick: selected item's position is: " + position);
+});
+```
