@@ -22,7 +22,7 @@ allprojects{
 ```
 dependencies {
     ...
-    implementation 'com.github.amitjangid80:multiutillib:v1.6.2'
+    implementation 'com.github.amitjangid80:multiutillib:v1.6.3'
 }
 ```
 
