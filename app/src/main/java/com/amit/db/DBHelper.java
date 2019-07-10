@@ -8,8 +8,12 @@ import android.util.Log;
 
 import com.amit.utilities.SharedPreferenceData;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.TreeSet;
 
@@ -20,7 +24,7 @@ import java.util.TreeSet;
  * this class has method for executing db queries
  * like: creating table, inserting into table, deleting table, dropping table
 **/
-@SuppressWarnings({"unused", "unchecked", "PrimitiveArrayArgumentToVarargsMethod", "ConstantConditions"})
+@SuppressWarnings({"unused", "WeakerAccess", "UnusedReturnValue"})
 public class DBHelper
 {
     private static final String TAG = DBHelper.class.getSimpleName();
@@ -1102,12 +1106,12 @@ public class DBHelper
      **/
     //#endregion COMMENTS FOR insertDataWithTransaction method
     @Deprecated
-    public DBHelper insertDataWithTransaction(String tableName)
+    public void insertDataWithTransaction(String tableName)
     {
         if (dbDataArrayList == null || dbDataArrayList.size() == 0)
         {
             Log.e(TAG, "insertDataWithTransaction: Db Data was not provided. Cannot insert data in table.");
-            return this;
+            return;
         }
         
         // tree set is used for removing duplicate column name from data array list
@@ -1233,7 +1237,6 @@ public class DBHelper
         db.getWritableDatabase().endTransaction();
         
         dbDataArrayList = new ArrayList<>();
-        return this;
     }
 
     //#region COMMENTS FOR insertDataWithTransaction method
@@ -1249,12 +1252,12 @@ public class DBHelper
      * this method is useful for inserting bulk records into table in less time
     **/
     //#endregion COMMENTS FOR insertDataWithTransaction method
-    public DBHelper insertDataWithTransaction(String tableName, int dbColumnCount)
+    public void insertDataWithTransaction(String tableName, int dbColumnCount)
     {
         if (dbDataArrayList == null || dbDataArrayList.size() == 0)
         {
             Log.e(TAG, "insertDataWithTransaction: Db Data was not provided. Cannot insert data in table.");
-            return this;
+            return;
         }
 
         // tree set is used for removing duplicate column name from data array list
@@ -1385,7 +1388,155 @@ public class DBHelper
         db.getWritableDatabase().endTransaction();
 
         dbDataArrayList = new ArrayList<>();
-        return this;
+    }
+    
+    //#region COMMENTS FOR insertDataWithJson method
+    /**
+     * 2019 Apr 25 - Thursday - 12:25 PM
+     * insert data with json method
+     *
+     * this method will insert data using JSON Array or JSON Object
+     *
+     * @param tableName - name of the table to insert data in
+     *
+     * @param object    - JSON Object or JSON Array of records and columns to be inserted
+     *
+     * @return True or False for success for failure in inserting records
+    **/
+    //#endregion COMMENTS FOR insertDataWithJson method
+    public boolean insertDataWithJson(String tableName, Object object)
+    {
+        try
+        {
+            JSONArray jsonArray = new JSONArray();
+            
+            if (object == null)
+            {
+                Log.e(TAG, "insertData: object value cannot be null.");
+                return false;
+            }
+            
+            if (object instanceof ArrayList)
+            {
+                Log.e(TAG, "insertDataWithJson: cannot parse array list, you can use json object or json array.");
+                return false;
+            }
+            
+            if (object instanceof JSONObject)
+            {
+                Iterator<String> iterator = ((JSONObject) object).keys();
+                
+                while (iterator.hasNext())
+                {
+                    String key = iterator.next();
+                    jsonArray = ((JSONObject) object).getJSONArray(key);
+                    
+                    Log.e(TAG, "insertData: json array for " + key + " is: " + jsonArray);
+                }
+            }
+            else if (object instanceof JSONArray)
+            {
+                jsonArray = (JSONArray) object;
+            }
+            
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Iterator<String> iterator = jsonObject.keys();
+                
+                while (iterator.hasNext())
+                {
+                    String columnName = iterator.next();
+                    String columnData = jsonObject.getString(columnName);
+                    
+                    // Log.e(TAG, "insertData: name of column from json is: " + columnName);
+                    // Log.e(TAG, "insertData: value of column from json is: " + columnData);
+                    
+                    this.addDataForTable(new DbData(columnName, columnData));
+                }
+            }
+            
+            this.insertDataWithTransaction(tableName, 5);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "insertData: exception while inserting data using json:\n");
+            e.printStackTrace();
+            
+            return false;
+        }
+    }
+    
+    //#region COMMENTS FOR insertDataWithJsonAndTransaction method
+    /**
+     * 2019 Apr 25 - Thursday - 12:25 PM
+     * insert data with json method
+     *
+     * this method will insert data using JSON Array or JSON Object
+     * this method will user SQLite Database Transaction for inserting records in db
+     *
+     * @param tableName         - name of the table to insert data in
+     *
+     * @param object            - JSON Object or JSON Array of records and columns to be inserted
+     *
+     * @param tableColumnCount  - Count of Number of columns for that table
+     *
+     * @return True or False for success for failure in inserting records
+     **/
+    //#endregion COMMENTS FOR insertDataWithJsonAndTransaction method
+    public boolean insertDataWithJsonAndTransaction(String tableName, Object object, int tableColumnCount)
+    {
+        try
+        {
+            JSONArray jsonArray = new JSONArray();
+            
+            if (object == null)
+            {
+                Log.e(TAG, "insertData: object value cannot be null.");
+                return false;
+            }
+            
+            if (object instanceof JSONObject)
+            {
+                Iterator<String> iterator = ((JSONObject) object).keys();
+                
+                while (iterator.hasNext())
+                {
+                    String key = iterator.next();
+                    jsonArray = ((JSONObject) object).getJSONArray(key);
+                    
+                    // Log.e(TAG, "insertData: json array for " + key + " is: " + jsonArray);
+                }
+            }
+            else if (object instanceof JSONArray)
+            {
+                jsonArray = (JSONArray) object;
+            }
+            
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Iterator<String> iterator = jsonObject.keys();
+                
+                while (iterator.hasNext())
+                {
+                    String columnName = iterator.next();
+                    String columnData = jsonObject.getString(columnName);
+                    this.addDataForTable(new DbData(columnName, columnData));
+                }
+            }
+            
+            this.insertDataWithTransaction(tableName, tableColumnCount);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "insertData: exception while inserting data using json:\n");
+            e.printStackTrace();
+            
+            return false;
+        }
     }
 
     //#region COMMENTS FOR updateData method

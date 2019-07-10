@@ -17,6 +17,7 @@ import com.amit.R;
 /**
  * Created by AMIT JANGID on 25/02/2019.
 **/
+@SuppressWarnings("unchecked")
 public class ASpinner extends AppCompatEditText
 {
     private int mExpandTint;
