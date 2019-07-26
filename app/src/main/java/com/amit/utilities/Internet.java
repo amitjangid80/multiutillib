@@ -31,7 +31,7 @@ public class Internet
         if (connectivityManager != null)
         {
             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
         }
         else
         {

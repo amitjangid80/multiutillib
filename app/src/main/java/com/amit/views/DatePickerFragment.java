@@ -119,18 +119,10 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         {
             mSelectedDate.selectedDate(selectedDate);
         }
-        else
-        {
-            Log.e(TAG, "onDateSet: selectedDate interface is null.");
-        }
 
         if (mOnDateSelectedListener != null)
         {
             mOnDateSelectedListener.onDateSelected(selectedDate);
-        }
-        else
-        {
-            Log.e(TAG, "onDateSet: onDateSelectedListener interface is null.");
         }
     }
 

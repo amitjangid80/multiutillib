@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Transformation;
 
 import com.amit.R;
 
@@ -47,7 +48,7 @@ public class AnimUtil
      * this activity will make the activity to slide in from left and slide out from right
      *
      * @param context - context of the activity
-     **/
+    **/
     public static void slideActivityFromLeftToRight(@NonNull Context context)
     {
         try
@@ -161,7 +162,7 @@ public class AnimUtil
      * this method will make the activity to slide from bottom to up.
      *
      * @param context - context of the activity
-     **/
+    **/
     public static void slideActivityFromBottomToUp(@NonNull Context context)
     {
         try
@@ -180,7 +181,7 @@ public class AnimUtil
      * this method will make the activity to slide from up to bottom.
      *
      * @param context - context of the activity
-     **/
+    **/
     public static void slideActivityFromUpToBottom(@NonNull Context context)
     {
         try
@@ -207,9 +208,7 @@ public class AnimUtil
      * @param duration - duration of the transition
     **/
     @TargetApi(21)
-    public static void explodeTransition(@NonNull Context context,
-                                         ViewGroup viewGroup,
-                                         int duration)
+    public static void explodeTransition(@NonNull Context context, ViewGroup viewGroup, int duration)
     {
         try
         {
@@ -238,9 +237,7 @@ public class AnimUtil
      * @param view - view to animate
      * @param duration - duration of animation
     **/
-    public static void slideAnimFromRight(@NonNull Context context,
-                                          @NonNull View view,
-                                          int duration)
+    public static void slideAnimFromRight(@NonNull Context context, @NonNull View view, int duration)
     {
         try
         {
@@ -265,9 +262,7 @@ public class AnimUtil
      * @param view - view to animate
      * @param duration - duration of animation
     **/
-    public static void slideAnimFromLeft(@NonNull Context context,
-                                         @NonNull View view,
-                                         int duration)
+    public static void slideAnimFromLeft(@NonNull Context context, @NonNull View view, int duration)
     {
         try
         {
@@ -293,10 +288,7 @@ public class AnimUtil
      * @param duration - duration of the animation
      * @param animResId - anim resouce for animation
     **/
-    public static void slideAnim(@NonNull Context context,
-                                 @NonNull View view,
-                                 int duration,
-                                 @AnimRes int animResId)
+    public static void slideAnim(@NonNull Context context, @NonNull View view, int duration, @AnimRes int animResId)
     {
         try
         {
@@ -319,7 +311,7 @@ public class AnimUtil
      *
      * @param context - context of the application
      * @param view - view to animate
-     **/
+    **/
     public static void bounceAnim(Context context, View view)
     {
         try
@@ -334,5 +326,175 @@ public class AnimUtil
             Log.e(TAG, "bounceAnim: exception while making bounce animation.");
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * 2019 July 22 - Monday - 12:30 PM
+     * expand view method
+     *
+     * this method is used to expand the view to its content's height
+     *
+     * @param v - View that needs to be expanded
+    **/
+    public static void expandView(final View v)
+    {
+        int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+        int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        
+        v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+        final int targetHeight = v.getMeasuredHeight();
+        
+        // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+        v.getLayoutParams().height = 1;
+        v.setVisibility(View.VISIBLE);
+        
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t)
+            {
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        : (int) (targetHeight * interpolatedTime);
+                
+                v.requestLayout();
+            }
+            
+            @Override
+            public boolean willChangeBounds()
+            {
+                return true;
+            }
+        };
+        
+        // Expansion speed of 1dp/ms
+        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+        v.startAnimation(a);
+    }
+    
+    /**
+     * 2019 July 22 - Monday - 12:30 PM
+     * collapse view method
+     *
+     * this method is used to collapse the view to its content's height
+     *
+     * @param v - View that needs to be collapsed
+    **/
+    public static void collapseView(final View v)
+    {
+        final int initialHeight = v.getMeasuredHeight();
+        
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t)
+            {
+                if (interpolatedTime == 1)
+                {
+                    v.setVisibility(View.GONE);
+                }
+                else
+                {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+            
+            @Override
+            public boolean willChangeBounds()
+            {
+                return true;
+            }
+        };
+        
+        // Collapse speed of 1dp/ms
+        a.setDuration((int) (initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        v.startAnimation(a);
+    }
+    
+    /**
+     * 2019 July 22 - Monday - 12:30 PM
+     * expand view method
+     *
+     * this method is used to expand the view to its content's height
+     *
+     * @param v             - View that needs to be expanded
+     *
+     * @param animDuration  - duration of the animation for expanding the view
+    **/
+    public static void expandView(final View v, int animDuration)
+    {
+        int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+        int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        
+        v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+        final int targetHeight = v.getMeasuredHeight();
+        
+        // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+        v.getLayoutParams().height = 1;
+        v.setVisibility(View.VISIBLE);
+        
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t)
+            {
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        : (int) (targetHeight * interpolatedTime);
+                
+                v.requestLayout();
+            }
+            
+            @Override
+            public boolean willChangeBounds()
+            {
+                return true;
+            }
+        };
+        
+        a.setDuration(animDuration);
+        v.startAnimation(a);
+    }
+    
+    /**
+     * 2019 July 22 - Monday - 12:30 PM
+     * collapse view method
+     *
+     * this method is used to collapse the view to its content's height
+     *
+     * @param v             - View that needs to be collapsed
+     *
+     * @param animDuration  - duration of the animation for collapsing the view
+    **/
+    public static void collapseView(final View v, int animDuration)
+    {
+        final int initialHeight = v.getMeasuredHeight();
+        
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t)
+            {
+                if (interpolatedTime == 1)
+                {
+                    v.setVisibility(View.GONE);
+                }
+                else
+                {
+                    v.getLayoutParams().height = initialHeight - (int) (initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+            
+            @Override
+            public boolean willChangeBounds()
+            {
+                return true;
+            }
+        };
+        
+        a.setDuration(animDuration);
+        v.startAnimation(a);
     }
 }

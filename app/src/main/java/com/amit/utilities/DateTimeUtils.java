@@ -1,10 +1,12 @@
 package com.amit.utilities;
 
+import android.content.Context;
 import android.text.format.DateFormat;
 import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -106,10 +108,8 @@ public class DateTimeUtils
         int seconds = (int) (milliseconds / 1000) % 60;
         int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
         int hours = (int) ((milliseconds / (1000 * 60 * 60)) % 24);
-
-        return twoDigitString(hours) + " : " +
-                twoDigitString(minutes) + " : "
-                + twoDigitString(seconds);
+    
+        return twoDigitString(hours) + ":" + twoDigitString(minutes) + ":" + twoDigitString(seconds);
     }
 
     /**
@@ -149,5 +149,80 @@ public class DateTimeUtils
     public static long convertDaysInMillis(int days)
     {
         return days * 24 * 60 * 60 * 1000;
+    }
+    
+    /**
+     * 2019 June 03 - Monday - 12:14 PM
+     * get current fin year method
+     *
+     * this method will get current fin year in yy-yy format
+     *
+     * @param context - context of the application or activity
+     *
+     * @return it will return current fin year in yy-yy format
+    **/
+    public static String getCurrentFinYear(Context context)
+    {
+        try
+        {
+            String currentFinYear;
+            
+            int currentYear = Integer.parseInt(DateTimeUtils.getCurrentDateTime("yy"));
+            int currentMonth = Integer.parseInt(DateTimeUtils.getCurrentDateTime("MM"));
+            
+            int nextYear = currentYear + 1;
+            
+            if (currentMonth <= 3)
+            {
+                nextYear = currentYear;
+                currentYear = currentYear - 1;
+            }
+            
+            currentFinYear = currentYear + "-" + nextYear;
+            return currentFinYear;
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "getCurrentFinYear: exception while getting current fin year:\n");
+            e.printStackTrace();
+            
+            return "";
+        }
+    }
+    
+    /**
+     * 2019 July 15 - Monday - 01:29 PM
+     * convert to date time from milliseconds method
+     *
+     * this method will convert milliseconds to date time
+     *
+     * @param context           - context of the application or activity
+     *
+     * @param milliseconds      - milli seconds to be converted to date time
+     *
+     * @param inDateTimeFormat  - format in which you want date time
+     *                            Example: yyyy-MM-dd HH:mm:ss
+     *
+     * @return Date time in specified in inDateTimeFormat
+    **/
+    private static String convertToDateTimeFromMilliseconds(Context context, Long milliseconds, String inDateTimeFormat)
+    {
+        try
+        {
+            // Create a DateFormatter object for displaying date in specified format.
+            SimpleDateFormat formatter = new SimpleDateFormat(inDateTimeFormat, Locale.US);
+            
+            // Create a calendarIcon object that will convert the date and time value in milliseconds to date.
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(milliseconds);
+            return formatter.format(calendar.getTime());
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "exception while converting to date time from milliseconds:\n");
+            e.printStackTrace();
+            
+            return String.valueOf(milliseconds);
+        }
     }
 }

@@ -1,6 +1,10 @@
 package com.amit.utilities;
 
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
+import android.text.SpannableString;
+import android.text.style.CharacterStyle;
+import android.text.style.StyleSpan;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -292,5 +296,71 @@ public class TextUtils
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ENGLISH);
         DecimalFormat decimalFormat = new DecimalFormat("#", symbols);
         return decimalFormat.format(valueToFormat);
+    }
+    
+    /**
+     * 2019 May 13 - Monday - 03:44 PM
+     * highlight text method
+     *
+     * this method will highlight the searched string in bold style
+    **/
+    public static CharSequence highlightSearchedText(CharSequence text, CharSequence wordPrefix)
+    {
+        final int index = indexOfQuery(text, wordPrefix);
+        
+        if (index != -1)
+        {
+            final SpannableString result = new SpannableString(text);
+            CharacterStyle characterStyle = new StyleSpan(Typeface.BOLD);
+            result.setSpan(characterStyle, index, index + wordPrefix.length(), 0);
+            return result;
+        }
+        else
+        {
+            return text;
+        }
+    }
+    
+    /**
+     * 2019 May 13 - Monday - 03:44 PM
+     * index of query method
+     *
+     * this method will get the index of the searched term
+     * if found else will return -1
+    **/
+    private static int indexOfQuery(CharSequence text, CharSequence query)
+    {
+        if (query == null || text == null)
+        {
+            return -1;
+        }
+        
+        final int textLength = text.length();
+        final int queryLength = query.length();
+        
+        if (queryLength == 0 || textLength < queryLength)
+        {
+            return -1;
+        }
+        
+        for (int i = 0; i <= textLength - queryLength; i++)
+        {
+            int j;
+            
+            for (j = 0; j < queryLength; j++)
+            {
+                if (text.toString().toUpperCase().charAt(i + j) != query.toString().toUpperCase().charAt(j))
+                {
+                    break;
+                }
+            }
+            
+            if (j == queryLength)
+            {
+                return i;
+            }
+        }
+        
+        return -1;
     }
 }

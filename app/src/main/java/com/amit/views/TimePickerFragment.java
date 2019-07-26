@@ -16,18 +16,18 @@ import java.util.Locale;
 /**
  * Created by AMIT JANGID on 29-Oct-18.
 **/
-@SuppressWarnings({"deprecation", "unused"})
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener
 {
     private static final String TAG = TimePickerFragment.class.getSimpleName();
 
     private static Calendar calendar;
     private OnTimeSelected onTimeSelected;
+    private OnTimeSelectedListener mOnTimeSelectedListener;
 
     private static int year, month, day;
     private static boolean mIs24HourView;
     private static String mSelectedTimeFormat;
-
+    
     /**
      * 2018 October 24 - Wednesday - 03:34 PM
      * show time picker dialog method
@@ -47,6 +47,28 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
         TimePickerFragment timePickerFragment = new TimePickerFragment();
         timePickerFragment.initializeInterface(timeSelected);
+        timePickerFragment.show(((Activity) context).getFragmentManager(), "TimePicker");
+    }
+    
+    /**
+     * 2018 October 24 - Wednesday - 03:34 PM
+     * show time picker dialog method
+     *
+     * this method will show the time picker dialog fragment
+     *
+     * @param context                           - context of the application
+     * @param onTimeSelectedListener            - interface of time picker fragment for getting the selected time value
+     * @param selectedTimeFormat                - format in which you want the time.
+     *                                            Example: hh:mm
+    **/
+    public void showTimePickerDialog(Context context, OnTimeSelectedListener onTimeSelectedListener,
+                                     String selectedTimeFormat, boolean is24HourView)
+    {
+        mIs24HourView = is24HourView;
+        mSelectedTimeFormat = selectedTimeFormat;
+        
+        TimePickerFragment timePickerFragment = new TimePickerFragment();
+        timePickerFragment.initializeInterface(onTimeSelectedListener);
         timePickerFragment.show(((Activity) context).getFragmentManager(), "TimePicker");
     }
 
@@ -78,15 +100,31 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         {
             onTimeSelected.selectedTime(selectedTime);
         }
+        
+        if (mOnTimeSelectedListener != null)
+        {
+            mOnTimeSelectedListener.onTimeSelected(selectedTime);
+        }
     }
 
     private void initializeInterface(OnTimeSelected timeSelected)
     {
         this.onTimeSelected = timeSelected;
     }
+    
+    private void initializeInterface(OnTimeSelectedListener onTimeSelectedListener)
+    {
+        this.mOnTimeSelectedListener = onTimeSelectedListener;
+    }
 
+    @Deprecated
     public interface OnTimeSelected
     {
         void selectedTime(String selectedTime);
+    }
+    
+    public interface OnTimeSelectedListener
+    {
+        void onTimeSelected(String selectedTime);
     }
 }
