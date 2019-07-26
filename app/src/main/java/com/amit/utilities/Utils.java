@@ -14,6 +14,7 @@ import android.os.Build;
 import android.support.annotation.AttrRes;
 import android.support.annotation.CheckResult;
 import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -255,7 +256,7 @@ public class Utils
         if (md != null)
         {
             md.update(dataToHash);
-            byte byteData[] = md.digest();
+            byte[] byteData = md.digest();
             return Base64.encodeToString(byteData, Base64.DEFAULT);
         }
 
@@ -272,7 +273,7 @@ public class Utils
      *
      * @return returns drawable
     **/
-    public static Drawable getDrawable(@NonNull Context context, int id)
+    public static Drawable getDrawable(@NonNull Context context, @DrawableRes int id)
     {
         return ContextCompat.getDrawable(context, id);
     }
@@ -368,7 +369,7 @@ public class Utils
      * @param drawable - drawable to be converted into bitmap
      * @return bitmap
     **/
-    public static Bitmap drawableToBitmap (Drawable drawable)
+    public static Bitmap drawableToBitmap(Drawable drawable)
     {
         if (drawable instanceof BitmapDrawable)
         {
@@ -501,10 +502,7 @@ public class Utils
      *
      * @param viewMore - pass true for this parameter
     **/
-    public static void makeTextViewResizable(final TextView tv,
-                                             final int maxLine,
-                                             final String expandText,
-                                             final boolean viewMore)
+    public static void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore)
     {
         try
         {

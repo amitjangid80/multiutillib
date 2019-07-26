@@ -141,8 +141,14 @@ sharedPreferenceData.setStrSetValue("keyname", Set<String> value);
 // generic method for getting values returns 0 by default as string type.
 sharedPreferenceData.getValue(key);
 
+// generic method for getting values returns defaultValue passed if not found.
+sharedPreferenceData.getValue(key, defaultValue);
+
 // specific for getting string values returns 0 by default as string type.
 sharedPreferenceData.getStrValue(key);
+
+// generic method for getting values returns defaultValue passed if not found.
+sharedPreferenceData.getStrValue(key, defaultValue);
 
 // specific for getting int values returns 0 by default as int type.
 sharedPreferenceData.getIntValue(key);
@@ -362,12 +368,81 @@ dbHelper.addColumnForTable(new DbColumns("ID" /*this is the name of the column*/
 dbHelper.addColumnForTable(new DbColumns("ID", new String[]{"integer", "primary key", "autoincrement"}))
     .createTable("TABLE_NAME");
     
-    
 **Inserting Records**
 // this is an example for inserting records
 dbHelper.addDataForTable(new DbData("age" /*this is the name of the column*/, 26 /*data for that column*/))
     .insertData("TABLE_NAME");
-    
+
+**Inserting Records With Transaction**
+// this is an example for inserting records with transaction
+// first create data by using addDataForTable method in a loop
+dbHelper.addDataForTable(new DbData("age" /*this is the name of the column*/, 26 /*data for that column*/));
+
+// then call this method outside the loop once data is built
+// pass the no of column counts of your table
+dbHelper.insertDataWithTransaction(String tableName, int dbColumnCount)
+
+**Altering Table**
+// this is an example for altering table
+// this method will add new columns to the table
+dbHelper.addDataForTable(new DbData("age" /*this is the name of the column*/, 26 /*data for that column*/))
+    .alterTable("TABLE_NAME");
+
+**Inserting records using json array or json object**
+/**
+ * insert data with json method
+ *
+ * this method will insert data using JSON Array or JSON Object
+ *
+ * @param tableName - name of the table to insert data in
+ *
+ * @param object    - JSON Object or JSON Array of records and columns to be inserted
+ *
+ * @return True or False for success for failure in inserting records
+**/
+DbHelper dbHelper = new DbHelper(Context context);
+dbHelper.insertDataWithJson(String tableName, Object object);
+
+/**
+ * insert data with json method
+ *
+ * this method will insert data using JSON Array or JSON Object
+ * this method will user SQLite Database Transaction for inserting records in db
+ *
+ * @param tableName         - name of the table to insert data in
+ *
+ * @param object            - JSON Object or JSON Array of records and columns to be inserted
+ *
+ * @param tableColumnCount  - Count of Number of columns for that table
+ *
+ * @return True or False for success for failure in inserting records
+**/
+DbHelper dbHelper = new DbHelper(Context context);
+dbHelper.insertDataWithJsonAndTransaction(String tableName, Object object, int tableColumnCount)
+
+**Updating Records**
+
+/**
+ * update data method
+ *
+ * @param tableName      - name of the table on which update query is to be performed
+ *
+ * @param whereClause    - name of the column to check whether the record is present so the data is updated
+ *                         pass this parameter in the way given in example below
+ *                         Ex: code = ? or ID = ? etc // this is important
+ *
+ * @param whereArgs      - data of the column name provided to check if record is present for data update
+ *                         here you need to pass the data for the corresponding where clause
+ *                         Ex: 1 or 2 etc
+ *
+ * this method will update records of the table in database
+ * this method uses database's update method for updating records
+ *
+ * parameter whereClause and whereArgs must be passed in the form given
+**/
+dbHelper.addDataForTable(new DbData("age" /*this is the name of the column*/, 26 /*data for that column*/))
+    .updateData(String tableName, String whereClause, String whereArgs)
+
 >**Getting all records directly into you model class:**
 
 /**
@@ -419,6 +494,9 @@ ArrayList<YourModelClassName> arrayList = dbHelper.getAllRecords(
 **/
 ArrayList<YourModelClassName> arrayList = dbHelper.getAllRecords(
 "TABLE_NAME", isAscending: true or false, conditionalValues, orderByColumnName: null or name of the column, YourModelClassName.class);
+
+
+
 ```
 
 ### DatePickerFragment
@@ -499,7 +577,6 @@ public void selectedTime(String selectedTime)
     android:scaleType="centerCrop"
     android:src="@drawable/no_image" />
 ```
-
 
 ### CircularImageView
 
@@ -721,9 +798,18 @@ TextUtils.replaceTrueOrFalse(string); // this will return int value.
  * this method will replace null or empty values of string with zero
  *
  * @param stringToReplace - string to replace null with
- * @return it will return 1 or 0
+ * @return it will return 1 or 0 as int
 **/
 TextUtils.replaceNullWithZero(String stringToReplace)
+
+/**
+ * replace one or zero to boolean method
+ * this method will replace 1 or 0 value to True or False
+ *
+ * @param valueToReplace - integer value to be replaced
+ * @return True or False
+**/
+TextUtils.replaceOneOrZeroToBoolean(int valueToReplace)
 
 /**
  * replace null method
@@ -746,6 +832,16 @@ TextUtils.replaceNullWithDash(String string)
 TextUtils.removeLastChar(String stringToRemovedLastCharFrom)
 
 /**
+ * replace null by zero method
+ *
+ * this method will replace null or empty values of string with zero
+ *
+ * @param stringToReplace - string to replace null with
+ * @return it will return string value passed or 0 as string
+**/
+TextUtils.replaceNullByZero(String stringToReplace)
+
+/**
  * capitalizeString method
  *
  * this method will capitalizeString or set the string to upper case
@@ -754,6 +850,69 @@ TextUtils.removeLastChar(String stringToRemovedLastCharFrom)
  * return - will return the string which was passed in capitalize form
 **/
 TextUtils.capitalizeString(String string)
+
+/**
+ * format decimal for one places.
+ *
+ * this method will format decimal value to one places after decimal
+ *
+ * @param valueToFormat - value in double data type to format
+ *
+ * @return formatted value in double with one places after decimal
+**/
+TextUtils.formatDecimalForOnePlaces(double valueToFormat)
+
+/**
+ * format decimal for two places.
+ *
+ * this method will format decimal value to two places after decimal
+ *
+ * @param valueToFormat - value in double data type to format
+ *
+ * @return formatted value in double with two places after decimal
+**/
+TextUtils.formatDecimalForTwoPlaces(double valueToFormat)
+
+/**
+ * format decimal for three places.
+ *
+ * this method will format decimal value to three places after decimal
+ *
+ * @param valueToFormat - value in double data type to format
+ *
+ * @return formatted value in double with three places after decimal
+**/
+TextUtils.formatDecimalForThreePlaces(double valueToFormat)
+
+/**
+ * format decimal for four places.
+ *
+ * this method will format decimal value to four places after decimal
+ *
+ * @param valueToFormat - value in double data type to format
+ *
+ * @return formatted value in double with four places after decimal
+**/
+TextUtils.formatDecimalForFourPlaces(double valueToFormat)
+
+/**
+ * format decimal to single digit
+ *
+ * this method will format decimal value to single digit
+ * if you don't want to show 0 after decimal
+ *
+ * @param valueToFormat - value in double data type to format
+ *
+ * @return formatted value in double with three places after decimal
+**/
+TextUtils.formatDecimalToSingleDigit(double valueToFormat)
+
+/**
+ * highlight text method
+ *
+ * this method will highlight the searched string in bold style
+**/
+TextUtils.highlightSearchedText(CharSequence text, CharSequence wordPrefix)
 
 ```
 
@@ -938,6 +1097,37 @@ Utils.getSha512Hash(stringToHash);
 Utils.getSha512Hash(byte[] dataToHash);
 
 /**
+ * get drawable
+ * this method will get you the drawables
+ *
+ * @param context - context of the application
+ * @param id - drawable id
+ *
+ * @return returns drawable
+**/
+Utils.getDrawable(@NonNull Context context, @DrawableRes int id)
+
+/**
+ * get Color wrapper
+ * this method will get the color resource based on android version
+ *
+ * @param context - context of the application
+ * @param id - id of the color resource
+ *
+ * @return int - color in integer.
+**/
+Utils.getColorWrapper(@NonNull Context context, @ColorRes int id)
+
+/**
+ * drawable to bitmap
+ * this method will convert a drawable to bitmap
+ *
+ * @param drawable - drawable to be converted into bitmap
+ * @return bitmap
+**/
+Utils.drawableToBitmap(Drawable drawable)
+
+/**
  * 2018 June 23 - Saturday - 10:30 AM
  * right padding method
  *
@@ -964,6 +1154,43 @@ Utils.rightPadding(String strText, int length);
  * @return - returns the string with spaces appended to the left of the string.
 **/
 Utils.leftPadding(String strText, int length);
+
+/**
+ * Schedules the shared element transition to be started immediately
+ * after the shared element has been measured and laid out within the
+ * activity's view hierarchy. Some common places where it might make
+ * sense to call this method are:
+ *
+ * (1) Inside a Fragment's onCreateView() method (if the shared element
+ *     lives inside a Fragment hosted by the called Activity).
+ *
+ * (2) Inside a Picasso Callback object (if you need to wait for Picasso to
+ *     asynchronously load/scale a bitmap before the transition can begin).
+ *
+ * @param activity - Activity on which shared transition is to be performed
+ *
+ * @param sharedElement - The view on which the actual animation will be done
+**/
+Utils.scheduleStartPostponedTransition(final Activity activity, final View sharedElement)
+
+/**
+ * make text view resizable method
+ *
+ * this method will make the text view resizeable
+ * when you have a large description and don't want to show entire
+ * details completely then you can use this to show a link like text "See More"
+ *
+ * @param tv - text view to make it resizeable
+ *
+ * @param maxLine - number of lines to be shown before see more button
+ *
+ * @param expandText - text you want to show for the user to click
+ *                     Example: Read more (THIS IS USED BY DEFAULT)
+ *
+ * @param viewMore - pass true for this parameter
+**/
+Utils.makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore)
+    
 ```
 
 ### AnimUtil
@@ -1021,6 +1248,47 @@ AnimUtil.slideAnim(@NonNull Context context, View view, int duration, @AnimRes i
 
 // Use this method to make a button or a view bounce
 AnimUtil.bounceAnim(Context context, View view);
+
+/**
+ * expand view method
+ *
+ * this method is used to expand the view to its content's height
+ *
+ * @param v - View that needs to be expanded
+**/
+AnimUtil.expandView(final View v)
+
+/**
+ * collapse view method
+ *
+ * this method is used to collapse the view to its content's height
+ *
+ * @param v - View that needs to be collapsed
+**/
+AnimUtil.collapseView(final View v)
+
+/**
+ * expand view method
+ *
+ * this method is used to expand the view to its content's height
+ *
+ * @param v             - View that needs to be expanded
+ *
+ * @param animDuration  - duration of the animation for expanding the view
+**/
+AnimUtil.expandView(final View v, int animDuration)
+
+/**
+ * collapse view method
+ *
+ * this method is used to collapse the view to its content's height
+ *
+ * @param v             - View that needs to be collapsed
+ *
+ * @param animDuration  - duration of the animation for collapsing the view
+**/
+AnimUtil.collapseView(final View v, int animDuration)
+
 ```
 
 ### Social Buttons
@@ -1126,7 +1394,6 @@ shineButton.init(MainActivity.this);
 ```java
 
 /**
- * 2018 November 03 - Saturday - 12:00 PM
  * get current date time method
  *
  * this method will current date time in string type
@@ -1137,7 +1404,7 @@ shineButton.init(MainActivity.this);
  *
  * @return - date or date time returned
 **/
- DateTimeUtils.getCurrentDateTime(String inDateTimeFormat)
+DateTimeUtils.getCurrentDateTime(String inDateTimeFormat)
 
 /**
  * format date time method
@@ -1173,7 +1440,6 @@ DateTimeUtils.formatDateTime(String dateToFormat, String inDateTimeFormat)
 DateTimeUtils.formatDateTime(String dateToFormat, String inDateTimeFormat, String fromDateTimFormat)
 
 /**
- * 2018 April 27 - Friday - 04:00 PM
  * format milli seconds to time method
  *
  * this method formats the string in hh:mm:ss format
@@ -1192,7 +1458,6 @@ DateTimeUtils.formatMilliSecondsToTime(long milliseconds)
 DateTimeUtils.twoDigitString(long number)
 
 /**
- * 2018 September 22 - Saturday - 04:38 PM
  * convert days in millis method
  *
  * this method will convert days in milliseconds
@@ -1202,6 +1467,33 @@ DateTimeUtils.twoDigitString(long number)
  * @return returns milli seconds value of given number of days
 **/
 DateTimeUtils.convertDaysInMillis(int days)
+
+/**
+ * get current fin year method
+ *
+ * this method will get current fin year in yy-yy format
+ *
+ * @param context - context of the application or activity
+ *
+ * @return it will return current fin year in yy-yy format
+**/
+DateTimeUtils.getCurrentFinYear(Context context)
+
+/**
+ * convert to date time from milliseconds method
+ *
+ * this method will convert milliseconds to date time
+ *
+ * @param context           - context of the application or activity
+ *
+ * @param milliseconds      - milli seconds to be converted to date time
+ *
+ * @param inDateTimeFormat  - format in which you want date time
+ *                            Example: yyyy-MM-dd HH:mm:ss
+ *
+ * @return Date time in specified in inDateTimeFormat
+**/
+DateTimeUtils.convertToDateTimeFromMilliseconds(Context context, Long milliseconds, String inDateTimeFormat)
 
 ```
 
@@ -1302,6 +1594,7 @@ DeviceUtils.getMacAddress(Context context)
     android:layout_marginTop="@dimen/five_dp" />
 
 ```
+
 ### ImagePicker
 
 >**This class will help users to Select image from gallery or capture using camera. This class also helps in croping, compressing the image.**
@@ -1379,6 +1672,7 @@ ImagePicker.Companion.with(this)
 	    .maxResultSize(620, 620)
      .start()
 ```
+
 ### PermissionHelper Class
 
 >**PermissionHelper class will help developers for requesting permissions.**
