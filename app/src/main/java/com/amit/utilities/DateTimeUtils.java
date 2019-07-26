@@ -205,7 +205,7 @@ public class DateTimeUtils
      *
      * @return Date time in specified in inDateTimeFormat
     **/
-    private static String convertToDateTimeFromMilliseconds(Context context, Long milliseconds, String inDateTimeFormat)
+    public static String convertToDateTimeFromMilliseconds(Context context, Long milliseconds, String inDateTimeFormat)
     {
         try
         {
