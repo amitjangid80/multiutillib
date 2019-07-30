@@ -326,6 +326,8 @@ public class DBHelper
             // if successful then it will return true
             // return true;
             db.getWritableDatabase().execSQL(query);
+            db.close();
+            
             return true;
         }
         catch (Exception e)
@@ -353,7 +355,7 @@ public class DBHelper
         try
         {
             // query execution
-            Cursor cursor = db.getWritableDatabase().rawQuery(query, null);
+            Cursor cursor = db.getReadableDatabase().rawQuery(query, null);
 
             // if cursor is not null then moving the position to first
             // and returning the cursor
@@ -448,7 +450,7 @@ public class DBHelper
                 }
 
                 // executing query
-                cursor = db.getWritableDatabase().rawQuery(query, null);
+                cursor = db.getReadableDatabase().rawQuery(query, null);
 
                 // if cursor is not null then moving the position to first
                 // and returning the cursor
@@ -551,7 +553,7 @@ public class DBHelper
                 }
 
                 // executing query
-                cursor = db.getWritableDatabase().rawQuery(query, null);
+                cursor = db.getReadableDatabase().rawQuery(query, null);
 
                 // if cursor is not null then moving the position to first
                 // and returning the cursor
@@ -873,6 +875,8 @@ public class DBHelper
             if (query != null && !query.equalsIgnoreCase(""))
             {
                 db.getWritableDatabase().execSQL(query);
+                db.close();
+                
                 return true;
             }
             else
@@ -954,6 +958,11 @@ public class DBHelper
         // checking if table name was provided or not
         if (tableName == null || tableName.isEmpty())
         {
+            if (dbColumnArrayList != null)
+            {
+                dbColumnArrayList.clear();
+            }
+            
             Log.e(TAG, "createTable: Table name was null or empty.");
             return this;
         }
@@ -992,6 +1001,8 @@ public class DBHelper
         Log.e(TAG, "createTable: Create table query is: " + query.toString());
 
         db.getWritableDatabase().execSQL(query.toString());
+        db.close();
+        
         dbColumnArrayList = new ArrayList<>();
 
         return this;
@@ -1031,7 +1042,9 @@ public class DBHelper
                 {
                     query = "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + columnDataType;
                     Log.e(TAG, "alterTable: query for adding new column or altering table is: " + query);
+                    
                     db.getWritableDatabase().execSQL(query);
+                    db.close();
                 }
                 else
                 {
@@ -1065,6 +1078,11 @@ public class DBHelper
         // checking if table name was provided or not
         if (tableName == null || tableName.isEmpty())
         {
+            if (dbDataArrayList != null)
+            {
+                dbDataArrayList.clear();
+            }
+            
             Log.e(TAG, "insertData: Table name was null or empty.");
             return this;
         }
@@ -1089,8 +1107,9 @@ public class DBHelper
 
         // executing inserting statement for inserting records in table
         db.getWritableDatabase().insert(tableName, null, contentValues);
+        db.close();
+        
         dbDataArrayList = new ArrayList<>();
-
         return this;
     }
     
@@ -1103,7 +1122,7 @@ public class DBHelper
      *
      * this method will insert data into table using database transaction
      * this method is useful for inserting bulk records into table in less time
-     **/
+    **/
     //#endregion COMMENTS FOR insertDataWithTransaction method
     @Deprecated
     public void insertDataWithTransaction(String tableName)
@@ -1235,6 +1254,7 @@ public class DBHelper
         
         db.getWritableDatabase().setTransactionSuccessful();
         db.getWritableDatabase().endTransaction();
+        db.close();
         
         dbDataArrayList = new ArrayList<>();
     }
@@ -1386,6 +1406,7 @@ public class DBHelper
 
         db.getWritableDatabase().setTransactionSuccessful();
         db.getWritableDatabase().endTransaction();
+        db.close();
 
         dbDataArrayList = new ArrayList<>();
     }
@@ -1456,7 +1477,7 @@ public class DBHelper
                 }
             }
             
-            this.insertDataWithTransaction(tableName, 5);
+            this.insertData(tableName);
             return true;
         }
         catch (Exception e)
@@ -1565,6 +1586,11 @@ public class DBHelper
         // checking if table name was provided or not
         if (tableName == null || tableName.isEmpty())
         {
+            if (dbDataArrayList != null)
+            {
+                dbDataArrayList.clear();
+            }
+            
             Log.e(TAG, "updateData: Table name was null or empty.");
             return this;
         }
@@ -1572,14 +1598,12 @@ public class DBHelper
         // checking if column name was provided or not
         if (whereClause == null || whereClause.isEmpty())
         {
+            if (dbDataArrayList != null)
+            {
+                dbDataArrayList.clear();
+            }
+            
             Log.e(TAG, "updateData: Column name was null or empty.");
-            return this;
-        }
-
-        // checking if column data was provided or not
-        if (whereArgs == null || whereArgs.isEmpty())
-        {
-            Log.e(TAG, "updateData: Column data was null or empty.");
             return this;
         }
 
@@ -1600,8 +1624,19 @@ public class DBHelper
             // adding column names and column data into content values
             contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
         }
-
-        db.getWritableDatabase().update(tableName, contentValues, whereClause, new String[]{whereArgs});
+    
+        // checking if column data was provided or not
+        if (whereArgs != null && whereArgs.isEmpty())
+        {
+            db.getWritableDatabase().update(tableName, contentValues, whereClause, new String[]{whereArgs});
+        }
+        else
+        {
+            // you can directly pass the values to where clause
+            db.getWritableDatabase().update(tableName, contentValues, whereClause, null);
+        }
+        
+        db.close();
         dbDataArrayList = new ArrayList<>();
 
         return this;
@@ -1629,7 +1664,10 @@ public class DBHelper
             }
 
             String query = "DELETE TABLE IF EXISTS " + tableName;
+            
             db.getWritableDatabase().execSQL(query);
+            db.close();
+            
             return true;
         }
         catch (Exception e)
@@ -1699,7 +1737,7 @@ public class DBHelper
             Log.e(TAG, "getAllRecords: Select query for getting all records is: " + query);
 
             // executing generated select query
-            cursor = db.getWritableDatabase().rawQuery(query, null);
+            cursor = db.getReadableDatabase().rawQuery(query, null);
 
             // checking if cursor is not null and cursor has moved to first position
             if (cursor != null && cursor.moveToFirst())
@@ -1871,7 +1909,7 @@ public class DBHelper
             Log.e(TAG, "getAllRecords: Select query for getting all records is: " + query);
 
             // executing generated select query
-            cursor = db.getWritableDatabase().rawQuery(query, null);
+            cursor = db.getReadableDatabase().rawQuery(query, null);
 
             // checking if cursor is not null and cursor has moved to first position
             if (cursor != null && cursor.moveToFirst())
