@@ -1113,6 +1113,58 @@ public class DBHelper
         return this;
     }
     
+    //#region COMMENTS FOR insertData method
+    /**
+     * 2019 January 08 - Tuesday - 04:03 PM
+     * insert data with return id method
+     *
+     * this method is used for inserting records into table
+     *
+     * @param tableName - name of the table for inserting records
+     *
+     * @return inserted row id if successful or -1 if not inserted
+    **/
+    //#endregion COMMENTS FOR insertData method
+    public long insertDataWithReturnId(String tableName)
+    {
+        // checking if table name was provided or not
+        if (tableName == null || tableName.isEmpty())
+        {
+            if (dbDataArrayList != null)
+            {
+                dbDataArrayList.clear();
+            }
+            
+            Log.e(TAG, "insertData: Table name was null or empty.");
+            return -1;
+        }
+        
+        // checking if data was provided or not for inserting in database
+        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+        {
+            Log.e(TAG, "insertData: No data provided for inserting.");
+            return -1;
+        }
+        
+        // content values for putting column name
+        // and data for inserting into database table
+        ContentValues contentValues = new ContentValues();
+        
+        // loop for no of data to be inserted
+        for (int i = 0; i < dbDataArrayList.size(); i++)
+        {
+            // adding column names and column data into content values
+            contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+        }
+        
+        // executing inserting statement for inserting records in table
+        long insertedId = db.getWritableDatabase().insert(tableName, null, contentValues);
+        db.close();
+        
+        dbDataArrayList = new ArrayList<>();
+        return insertedId;
+    }
+    
     //#region COMMENTS FOR insertDataWithTransaction method
     /**
      * 2019 January 09 - Wednesday - 06:49 PM
@@ -1470,9 +1522,6 @@ public class DBHelper
                     String columnName = iterator.next();
                     String columnData = jsonObject.getString(columnName);
                     
-                    // Log.e(TAG, "insertData: name of column from json is: " + columnName);
-                    // Log.e(TAG, "insertData: value of column from json is: " + columnData);
-                    
                     this.addDataForTable(new DbData(columnName, columnData));
                 }
             }
@@ -1486,6 +1535,80 @@ public class DBHelper
             e.printStackTrace();
             
             return false;
+        }
+    }
+    
+    //#region COMMENTS FOR insertDataWithJson method
+    /**
+     * 2019 Apr 25 - Thursday - 12:25 PM
+     * insert data with json with return id method
+     *
+     * this method will insert data using JSON Array or JSON Object
+     *
+     * @param tableName - name of the table to insert data in
+     *
+     * @param object    - JSON Object or JSON Array of records and columns to be inserted
+     *
+     * @return True or False for success for failure in inserting records
+    **/
+    //#endregion COMMENTS FOR insertDataWithJson method
+    public long insertDataWithJsonWithReturnId(String tableName, Object object)
+    {
+        try
+        {
+            JSONArray jsonArray = new JSONArray();
+            
+            if (object == null)
+            {
+                Log.e(TAG, "insertData: object value cannot be null.");
+                return -1;
+            }
+            
+            if (object instanceof ArrayList)
+            {
+                Log.e(TAG, "insertDataWithJson: cannot parse array list, you can use json object or json array.");
+                return -1;
+            }
+            
+            if (object instanceof JSONObject)
+            {
+                Iterator<String> iterator = ((JSONObject) object).keys();
+                
+                while (iterator.hasNext())
+                {
+                    String key = iterator.next();
+                    jsonArray = ((JSONObject) object).getJSONArray(key);
+                    
+                    Log.e(TAG, "insertData: json array for " + key + " is: " + jsonArray);
+                }
+            }
+            else if (object instanceof JSONArray)
+            {
+                jsonArray = (JSONArray) object;
+            }
+            
+            for (int i = 0; i < jsonArray.length(); i++)
+            {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Iterator<String> iterator = jsonObject.keys();
+                
+                while (iterator.hasNext())
+                {
+                    String columnName = iterator.next();
+                    String columnData = jsonObject.getString(columnName);
+                    
+                    this.addDataForTable(new DbData(columnName, columnData));
+                }
+            }
+            
+            return this.insertDataWithReturnId(tableName);
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "insertData: exception while inserting data using json:\n");
+            e.printStackTrace();
+    
+            return -1;
         }
     }
     
@@ -1640,6 +1763,92 @@ public class DBHelper
         dbDataArrayList = new ArrayList<>();
 
         return this;
+    }
+    
+    //#region COMMENTS FOR updateData method
+    /**
+     * 2019 January 08 - Tuesday - 04:28 PM
+     * update data with return id method
+     *
+     * @param tableName      - name of the table on which update query is to be performed
+     *
+     * @param whereClause    - name of the column to check whether the record is present so the data is updated
+     *                         pass this parameter in the way given in example below
+     *                         Ex: code = ? or ID = ? etc // this is important
+     *
+     * @param whereArgs      - data of the column name provided to check if record is present for data update
+     *                         here you need to pass the data for the corresponding where clause
+     *                         Ex: 1 or 2 etc
+     *
+     * this method will update records of the table in database
+     * this method uses database's update method for updating records
+     *
+     * parameter whereClause and whereArgs must be passed in the form given
+     *
+     * @return -1 if failed to update the record
+    **/
+    //#endregion COMMENTS FOR updateData method
+    public long updateDataWithReturnId(String tableName, String whereClause, String whereArgs)
+    {
+        // checking if table name was provided or not
+        if (tableName == null || tableName.isEmpty())
+        {
+            if (dbDataArrayList != null)
+            {
+                dbDataArrayList.clear();
+            }
+            
+            Log.e(TAG, "updateData: Table name was null or empty.");
+            return -1;
+        }
+        
+        // checking if column name was provided or not
+        if (whereClause == null || whereClause.isEmpty())
+        {
+            if (dbDataArrayList != null)
+            {
+                dbDataArrayList.clear();
+            }
+            
+            Log.e(TAG, "updateData: Column name was null or empty.");
+            return -1;
+        }
+        
+        // checking if data was provided or not
+        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+        {
+            Log.e(TAG, "updateData: Data was not provided for updating records.");
+            return -1;
+        }
+        
+        // content values for putting column name
+        // and data for inserting into database table
+        ContentValues contentValues = new ContentValues();
+        
+        // loop for no of data provided
+        for (int i = 0; i < dbDataArrayList.size(); i++)
+        {
+            // adding column names and column data into content values
+            contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+        }
+        
+        long updatedId;
+        
+        // checking if column data was provided or not
+        if (whereArgs != null && whereArgs.isEmpty())
+        {
+            updatedId = db.getWritableDatabase().update(tableName, contentValues, whereClause, new String[]{whereArgs});
+        }
+        else
+        {
+            // you can directly pass the values to where clause
+            updatedId = db.getWritableDatabase().update(tableName, contentValues, whereClause, null);
+        }
+        
+        db.close();
+        dbDataArrayList = new ArrayList<>();
+        
+        return updatedId;
     }
 
     //#region COMMENTS FOR deleteTable method

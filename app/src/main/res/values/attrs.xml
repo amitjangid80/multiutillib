@@ -73,4 +73,21 @@
         <attr name="spinner_dialog_title_color" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="FloatingHintEditText">
+        <attr name="android:text" />
+        <attr name="android:maxLines" />
+        <attr name="android:textSize" />
+        <attr name="android:textColor" />
+        <attr name="android:textStyle" />
+        <attr name="android:inputType" />
+        <attr name="android:hint" format="string" />
+        <attr name="fl_is_read_only" format="boolean" />
+        <attr name="fl_edit_text_icon" format="reference" />
+        <attr name="fl_edit_text_box_color" format="color" />
+        <attr name="fl_floating_label_color" format="color" />
+        <attr name="fl_edit_text_icon_color" format="color" />
+        <attr name="fl_card_collapsed_height" format="dimension" />
+        <attr name="fl_floating_label_anim_duration_in_ms" format="integer" />
+    </declare-styleable>
+
 </resources>
