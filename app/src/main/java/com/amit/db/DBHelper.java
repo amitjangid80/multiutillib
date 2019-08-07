@@ -1926,12 +1926,23 @@ public class DBHelper
                 Log.e(TAG, "getAllRecords: Table name was null or empty.");
                 return null;
             }
+    
+            // checking if order by column name is not null and not empty for ascending order
+            if (orderByColumnName != null && !orderByColumnName.isEmpty())
+            {
+                Log.e(TAG, "getAllRecords: order by column name was null or empty.");
+                return null;
+            }
 
             // checking if isAscending is false
             // and order by column name is not null and not empty for descending order
-            if (!isAscending && (orderByColumnName != null && !orderByColumnName.isEmpty()))
+            if (!isAscending)
             {
                 orderBy = " ORDER BY " + orderByColumnName + " DESC";
+            }
+            else
+            {
+                orderBy = " ORDER BY " + orderByColumnName + " ASC";
             }
 
             // checking if model class was provided or not
@@ -2098,12 +2109,23 @@ public class DBHelper
             {
                 whereClause = " WHERE " + conditionalValues;
             }
-
+    
+            // checking if order by column name is not null and not empty for ascending order
+            if (orderByColumnName != null && !orderByColumnName.isEmpty())
+            {
+                Log.e(TAG, "getAllRecords: order by column name was null or empty.");
+                return null;
+            }
+    
             // checking if isAscending is false
             // and order by column name is not null and not empty for descending order
-            if (!isAscending && (orderByColumnName != null && !orderByColumnName.isEmpty()))
+            if (!isAscending)
             {
                 orderBy = " ORDER BY " + orderByColumnName + " DESC";
+            }
+            else
+            {
+                orderBy = " ORDER BY " + orderByColumnName + " ASC";
             }
 
             // checking if model class was provided or not
