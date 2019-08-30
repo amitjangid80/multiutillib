@@ -355,7 +355,8 @@ public class DBHelper
         try
         {
             // query execution
-            Cursor cursor = db.getReadableDatabase().rawQuery(query, null);
+            Cursor cursor = db.getWritableDatabase().rawQuery(query, null);
+            db.close();
 
             // if cursor is not null then moving the position to first
             // and returning the cursor
@@ -450,7 +451,8 @@ public class DBHelper
                 }
 
                 // executing query
-                cursor = db.getReadableDatabase().rawQuery(query, null);
+                cursor = db.getWritableDatabase().rawQuery(query, null);
+                db.close();
 
                 // if cursor is not null then moving the position to first
                 // and returning the cursor
@@ -553,7 +555,8 @@ public class DBHelper
                 }
 
                 // executing query
-                cursor = db.getReadableDatabase().rawQuery(query, null);
+                cursor = db.getWritableDatabase().rawQuery(query, null);
+                db.close();
 
                 // if cursor is not null then moving the position to first
                 // and returning the cursor
@@ -767,7 +770,8 @@ public class DBHelper
             String query = "SELECT DISTINCT tbl_name FROM sqlite_master WHERE tbl_name = '" + tableName + "'";
 
             // executing the query using cursor
-            Cursor cursor = db.getReadableDatabase().rawQuery(query, null);
+            Cursor cursor = db.getWritableDatabase().rawQuery(query, null);
+            db.close();
 
             // checking if cursor is not null
             if (cursor != null)
@@ -826,7 +830,8 @@ public class DBHelper
                 }
 
                 String query = "SELECT MAX(" + field + ") AS ID FROM " + tableName;
-                Cursor cursor = db.getReadableDatabase().rawQuery(query, null);
+                Cursor cursor = db.getWritableDatabase().rawQuery(query, null);
+                db.close();
 
                 if (cursor != null)
                 {
@@ -1957,7 +1962,8 @@ public class DBHelper
             Log.e(TAG, "getAllRecords: Select query for getting all records is: " + query);
 
             // executing generated select query
-            cursor = db.getReadableDatabase().rawQuery(query, null);
+            cursor = db.getWritableDatabase().rawQuery(query, null);
+            db.close();
 
             // checking if cursor is not null and cursor has moved to first position
             if (cursor != null && cursor.moveToFirst())
@@ -2140,7 +2146,8 @@ public class DBHelper
             Log.e(TAG, "getAllRecords: Select query for getting all records is: " + query);
 
             // executing generated select query
-            cursor = db.getReadableDatabase().rawQuery(query, null);
+            cursor = db.getWritableDatabase().rawQuery(query, null);
+            db.close();
 
             // checking if cursor is not null and cursor has moved to first position
             if (cursor != null && cursor.moveToFirst())
