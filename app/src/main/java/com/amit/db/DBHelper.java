@@ -326,7 +326,6 @@ public class DBHelper
             // if successful then it will return true
             // return true;
             db.getWritableDatabase().execSQL(query);
-            db.close();
             
             return true;
         }
@@ -356,7 +355,6 @@ public class DBHelper
         {
             // query execution
             Cursor cursor = db.getWritableDatabase().rawQuery(query, null);
-            db.close();
 
             // if cursor is not null then moving the position to first
             // and returning the cursor
@@ -452,7 +450,6 @@ public class DBHelper
 
                 // executing query
                 cursor = db.getWritableDatabase().rawQuery(query, null);
-                db.close();
 
                 // if cursor is not null then moving the position to first
                 // and returning the cursor
@@ -556,7 +553,6 @@ public class DBHelper
 
                 // executing query
                 cursor = db.getWritableDatabase().rawQuery(query, null);
-                db.close();
 
                 // if cursor is not null then moving the position to first
                 // and returning the cursor
@@ -771,7 +767,6 @@ public class DBHelper
 
             // executing the query using cursor
             Cursor cursor = db.getWritableDatabase().rawQuery(query, null);
-            db.close();
 
             // checking if cursor is not null
             if (cursor != null)
@@ -831,7 +826,6 @@ public class DBHelper
 
                 String query = "SELECT MAX(" + field + ") AS ID FROM " + tableName;
                 Cursor cursor = db.getWritableDatabase().rawQuery(query, null);
-                db.close();
 
                 if (cursor != null)
                 {
@@ -880,7 +874,6 @@ public class DBHelper
             if (query != null && !query.equalsIgnoreCase(""))
             {
                 db.getWritableDatabase().execSQL(query);
-                db.close();
                 
                 return true;
             }
@@ -1006,8 +999,6 @@ public class DBHelper
         Log.e(TAG, "createTable: Create table query is: " + query.toString());
 
         db.getWritableDatabase().execSQL(query.toString());
-        db.close();
-        
         dbColumnArrayList = new ArrayList<>();
 
         return this;
@@ -1049,7 +1040,6 @@ public class DBHelper
                     Log.e(TAG, "alterTable: query for adding new column or altering table is: " + query);
                     
                     db.getWritableDatabase().execSQL(query);
-                    db.close();
                 }
                 else
                 {
@@ -1112,7 +1102,6 @@ public class DBHelper
 
         // executing inserting statement for inserting records in table
         db.getWritableDatabase().insert(tableName, null, contentValues);
-        db.close();
         
         dbDataArrayList = new ArrayList<>();
         return this;
@@ -1164,7 +1153,6 @@ public class DBHelper
         
         // executing inserting statement for inserting records in table
         long insertedId = db.getWritableDatabase().insert(tableName, null, contentValues);
-        db.close();
         
         dbDataArrayList = new ArrayList<>();
         return insertedId;
@@ -1311,7 +1299,6 @@ public class DBHelper
         
         db.getWritableDatabase().setTransactionSuccessful();
         db.getWritableDatabase().endTransaction();
-        db.close();
         
         dbDataArrayList = new ArrayList<>();
     }
@@ -1463,7 +1450,6 @@ public class DBHelper
 
         db.getWritableDatabase().setTransactionSuccessful();
         db.getWritableDatabase().endTransaction();
-        db.close();
 
         dbDataArrayList = new ArrayList<>();
     }
@@ -1763,8 +1749,7 @@ public class DBHelper
             // you can directly pass the values to where clause
             db.getWritableDatabase().update(tableName, contentValues, whereClause, null);
         }
-        
-        db.close();
+
         dbDataArrayList = new ArrayList<>();
 
         return this;
@@ -1849,8 +1834,7 @@ public class DBHelper
             // you can directly pass the values to where clause
             updatedId = db.getWritableDatabase().update(tableName, contentValues, whereClause, null);
         }
-        
-        db.close();
+
         dbDataArrayList = new ArrayList<>();
         
         return updatedId;
@@ -1880,7 +1864,6 @@ public class DBHelper
             String query = "DELETE TABLE IF EXISTS " + tableName;
             
             db.getWritableDatabase().execSQL(query);
-            db.close();
             
             return true;
         }
@@ -1922,7 +1905,7 @@ public class DBHelper
         try
         {
             Cursor cursor;
-            String orderBy = "";
+            String orderBy;
             ArrayList<T> tArrayList = new ArrayList<>();
 
             // checking if table name is provided or not
@@ -1963,7 +1946,6 @@ public class DBHelper
 
             // executing generated select query
             cursor = db.getWritableDatabase().rawQuery(query, null);
-            db.close();
 
             // checking if cursor is not null and cursor has moved to first position
             if (cursor != null && cursor.moveToFirst())
@@ -2101,7 +2083,7 @@ public class DBHelper
         try
         {
             Cursor cursor;
-            String orderBy = "", whereClause = "";
+            String orderBy, whereClause = "";
             ArrayList<T> tArrayList = new ArrayList<>();
 
             // checking if table name is provided or not
@@ -2147,7 +2129,6 @@ public class DBHelper
 
             // executing generated select query
             cursor = db.getWritableDatabase().rawQuery(query, null);
-            db.close();
 
             // checking if cursor is not null and cursor has moved to first position
             if (cursor != null && cursor.moveToFirst())
