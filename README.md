@@ -385,7 +385,7 @@ dbHelper.insertDataWithTransaction(String tableName, int dbColumnCount)
 **Altering Table**
 // this is an example for altering table
 // this method will add new columns to the table
-dbHelper.addDataForTable(new DbData("age" /*this is the name of the column*/, 26 /*data for that column*/))
+dbHelper.addColumnForTable(new DbColumn("age" /*this is the name of the column*/, int /*datatype for that column*/))
     .alterTable("TABLE_NAME");
 
 **Inserting records using json array or json object**
