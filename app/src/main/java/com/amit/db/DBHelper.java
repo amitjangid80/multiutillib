@@ -797,6 +797,56 @@ public class DBHelper
         }
     }
 
+    /**
+     * 2019 November 19 - Tuesday - 12:49 PM
+     * check if column exists method
+     *
+     * this method will check if a column in a table exists or not
+     *
+     * @param tableName - table name to check for column name
+     *
+     * @param columnName - column name to check if exists or not
+     *
+     * @return returns true if column exists in table or false if not
+    **/
+    private boolean checkIsColumnExists(String tableName, String columnName)
+    {
+        try
+        {
+            boolean isExists = false;
+
+            String query = "PRAGMA TABLE_INFO('" + tableName + "')";
+            Cursor cursor = db.getWritableDatabase().rawQuery(query, null);
+
+            if (cursor != null && cursor.moveToFirst())
+            {
+                for (int i = 0; i < cursor.getCount(); i++)
+                {
+                    String currentColumnName = cursor.getString(cursor.getColumnIndex("name"));
+
+                    if (currentColumnName.equalsIgnoreCase(columnName))
+                    {
+                        isExists = true;
+                        Log.e(TAG, "checkIsColumnExists: " + columnName + " found in table " + tableName);
+                    }
+
+                    cursor.moveToNext();
+                }
+
+                cursor.close();
+            }
+
+            return isExists;
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "checkIsColumnExists: exception while checking if column exists or not\n");
+            e.printStackTrace();
+
+            return false;
+        }
+    }
+
     //#region COMMENTS FOR getMaxId method
     /**
      * 2018 August 13 - Monday - 12:34 PM
