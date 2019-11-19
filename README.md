@@ -22,7 +22,7 @@ allprojects{
 ```
 dependencies {
     ...
-    implementation 'com.github.amitjangid80:multiutillib:v1.6.50'
+    implementation 'com.github.amitjangid80:multiutillib:v1.6.51'
 }
 ```
 
@@ -43,7 +43,7 @@ dependencies {
 <dependency>
    <groupId>com.github.amitjangid80</groupId>
    <artifactId>multiutillib</artifactId>
-   <version>v1.6.42</version>
+   <version>v1.6.51</version>
 <dependency>
 ```
 
@@ -385,7 +385,7 @@ dbHelper.insertDataWithTransaction(String tableName, int dbColumnCount)
 **Altering Table**
 // this is an example for altering table
 // this method will add new columns to the table
-dbHelper.addDataForTable(new DbData("age" /*this is the name of the column*/, 26 /*data for that column*/))
+dbHelper.addColumnForTable(new DbColumn("age" /*this is the name of the column*/, int /*datatype for that column*/))
     .alterTable("TABLE_NAME");
 
 **Inserting records using json array or json object**
