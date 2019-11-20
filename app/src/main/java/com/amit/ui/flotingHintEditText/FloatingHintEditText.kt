@@ -490,7 +490,7 @@ class FloatingHintEditText : FrameLayout
         imageColour = styledAttrs.getColor(R.styleable.FloatingHintEditText_fl_edit_text_icon_color, Color.GRAY)
         cardCollapsedHeight = styledAttrs.getDimensionPixelOffset(
                 R.styleable.FloatingHintEditText_fl_card_collapsed_height,
-                context.resources.getDimensionPixelOffset(R.dimen.four_dp)
+                context.resources.getDimensionPixelOffset(R.dimen._4_dp)
         )
         readOnly = styledAttrs.getBoolean(R.styleable.FloatingHintEditText_fl_is_read_only, false)
         hintText = styledAttrs.getString(R.styleable.FloatingHintEditText_android_hint) ?: ""
