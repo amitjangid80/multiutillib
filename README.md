@@ -22,7 +22,7 @@ allprojects{
 ```
 dependencies {
     ...
-    implementation 'com.github.amitjangid80:multiutillib:v1.6.51'
+    implementation 'com.github.amitjangid80:multiutillib:v1.7.21'
 }
 ```
 
@@ -43,7 +43,7 @@ dependencies {
 <dependency>
    <groupId>com.github.amitjangid80</groupId>
    <artifactId>multiutillib</artifactId>
-   <version>v1.6.51</version>
+   <version>v1.7.21</version>
 <dependency>
 ```
 
@@ -219,6 +219,16 @@ apiServices.makeApiCall(apiName, requestMethod, parameters, jsonObject, hasToken
 >Set the dbName in sharedPreferenceData with key name **'dbName'**. Shown above in **ProjectApplication** section.
 
 ```java
+// this method will check if a table exists in database
+// true - if table exists in database
+// false - if table not exists in database
+DBHelper dbHelper = new DBHelper(context);
+dbHelper.isTableExists(tableName);
+
+// this method will check if a column in a table exists or not
+// returns true if column exists in table or false if not
+dbHelper.checkIsColumnExists(tableName, columnName);
+
 // parameters to be passed are as follows:
 // 
 // tableName - table on which query should be performed.
@@ -256,7 +266,6 @@ apiServices.makeApiCall(apiName, requestMethod, parameters, jsonObject, hasToken
 // 
 // return - the method will return true or false if the operation is successful or failed.
 //
-DBHelper dbHelper = new DBHelper(context);
 dbHelper.executeDatabaseOperation(tableName, operation, values, hasConditions, conditionalValues);
 
 // this method can be used for inserting bulk data into table using database transaction
@@ -333,7 +342,6 @@ dbHelper.executeSelectQuery(tableName, values, hasConditions, conditionalValues)
 **/
 //#endregion COMMENTS FOR executeSelectQuery method
 dbHelper.executeSelectQuery(tableName, values, hasConditions, conditionalValues, class);
-
 
 // for select query use this method
 //
