@@ -810,7 +810,7 @@ public class DBHelper
      *
      * @return returns true if column exists in table or false if not
     **/
-    private boolean checkIsColumnExists(String tableName, String columnName)
+    public boolean checkIsColumnExists(String tableName, String columnName)
     {
         try
         {
