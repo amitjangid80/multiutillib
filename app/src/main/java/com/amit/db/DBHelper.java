@@ -659,6 +659,7 @@ public class DBHelper
         {
             Log.e(TAG, "executeSelectQuery: in database helper class:\n");
             e.printStackTrace();
+
             return null;
         }
     }
@@ -1096,16 +1097,18 @@ public class DBHelper
                     Log.e(TAG, "alterTable: " + columnName + " already exists in " + tableName);
                 }
             }
-            
-            return this;
+
+            dbColumnArrayList = new ArrayList<>();
         }
         catch (Exception e)
         {
+            dbColumnArrayList = new ArrayList<>();
+
             Log.e(TAG, "alterTable: exception while altering table:\n");
             e.printStackTrace();
-            
-            return null;
         }
+
+        return this;
     }
 
     //#region COMMENTS FOR insertData method
@@ -1120,40 +1123,50 @@ public class DBHelper
     //#endregion COMMENTS FOR insertData method
     public DBHelper insertData(String tableName)
     {
-        // checking if table name was provided or not
-        if (tableName == null || tableName.isEmpty())
+        try
         {
-            if (dbDataArrayList != null)
+            // checking if table name was provided or not
+            if (tableName == null || tableName.isEmpty())
             {
-                dbDataArrayList.clear();
+                if (dbDataArrayList != null)
+                {
+                    dbDataArrayList.clear();
+                }
+
+                Log.e(TAG, "insertData: Table name was null or empty.");
+                return this;
             }
-            
-            Log.e(TAG, "insertData: Table name was null or empty.");
-            return this;
-        }
 
-        // checking if data was provided or not for inserting in database
-        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+            // checking if data was provided or not for inserting in database
+            if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+            {
+                Log.e(TAG, "insertData: No data provided for inserting.");
+                return this;
+            }
+
+            // content values for putting column name
+            // and data for inserting into database table
+            ContentValues contentValues = new ContentValues();
+
+            // loop for no of data to be inserted
+            for (int i = 0; i < dbDataArrayList.size(); i++)
+            {
+                // adding column names and column data into content values
+                contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+            }
+
+            // executing inserting statement for inserting records in table
+            db.getWritableDatabase().insert(tableName, null, contentValues);
+            dbDataArrayList = new ArrayList<>();
+        }
+        catch (Exception e)
         {
-            Log.e(TAG, "insertData: No data provided for inserting.");
-            return this;
+            dbDataArrayList = new ArrayList<>();
+
+            Log.e(TAG, "insertData: exception while inserting data into table: " + tableName + ":\n");
+            e.printStackTrace();
         }
 
-        // content values for putting column name
-        // and data for inserting into database table
-        ContentValues contentValues = new ContentValues();
-
-        // loop for no of data to be inserted
-        for (int i = 0; i < dbDataArrayList.size(); i++)
-        {
-            // adding column names and column data into content values
-            contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
-        }
-
-        // executing inserting statement for inserting records in table
-        db.getWritableDatabase().insert(tableName, null, contentValues);
-        
-        dbDataArrayList = new ArrayList<>();
         return this;
     }
     
@@ -1171,41 +1184,53 @@ public class DBHelper
     //#endregion COMMENTS FOR insertData method
     public long insertDataWithReturnId(String tableName)
     {
-        // checking if table name was provided or not
-        if (tableName == null || tableName.isEmpty())
+        try
         {
-            if (dbDataArrayList != null)
+            // checking if table name was provided or not
+            if (tableName == null || tableName.isEmpty())
             {
-                dbDataArrayList.clear();
+                if (dbDataArrayList != null)
+                {
+                    dbDataArrayList.clear();
+                }
+
+                Log.e(TAG, "insertData: Table name was null or empty.");
+                return -1;
             }
-            
-            Log.e(TAG, "insertData: Table name was null or empty.");
-            return -1;
+
+            // checking if data was provided or not for inserting in database
+            if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+            {
+                Log.e(TAG, "insertData: No data provided for inserting.");
+                return -1;
+            }
+
+            // content values for putting column name
+            // and data for inserting into database table
+            ContentValues contentValues = new ContentValues();
+
+            // loop for no of data to be inserted
+            for (int i = 0; i < dbDataArrayList.size(); i++)
+            {
+                // adding column names and column data into content values
+                contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+            }
+
+            // executing inserting statement for inserting records in table
+            long insertedId = db.getWritableDatabase().insert(tableName, null, contentValues);
+            dbDataArrayList = new ArrayList<>();
+
+            return insertedId;
         }
-        
-        // checking if data was provided or not for inserting in database
-        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+        catch (Exception e)
         {
-            Log.e(TAG, "insertData: No data provided for inserting.");
-            return -1;
+            dbDataArrayList = new ArrayList<>();
+
+            Log.e(TAG, "insertDataWithReturnId: exception while inserting data with return id for table: " + tableName + ":\n");
+            e.printStackTrace();
+
+            return 0L;
         }
-        
-        // content values for putting column name
-        // and data for inserting into database table
-        ContentValues contentValues = new ContentValues();
-        
-        // loop for no of data to be inserted
-        for (int i = 0; i < dbDataArrayList.size(); i++)
-        {
-            // adding column names and column data into content values
-            contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
-        }
-        
-        // executing inserting statement for inserting records in table
-        long insertedId = db.getWritableDatabase().insert(tableName, null, contentValues);
-        
-        dbDataArrayList = new ArrayList<>();
-        return insertedId;
     }
     
     //#region COMMENTS FOR insertDataWithTransaction method
@@ -1222,135 +1247,151 @@ public class DBHelper
     @Deprecated
     public void insertDataWithTransaction(String tableName)
     {
-        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+        try
         {
-            Log.e(TAG, "insertDataWithTransaction: Db Data was not provided. Cannot insert data in table.");
-            return;
-        }
-        
-        // tree set is used for removing duplicate column name from data array list
-        TreeSet<String> treeSet = new TreeSet<>();
-        
-        // this array list will hold unique column name from data array list
-        ArrayList<String> columnsArrayList = new ArrayList<>();
-        
-        // loop for removing duplicate values from data array list
-        // for (int i = 0; i < dbDataArrayList.size(); i++)
-        for (int i = 0; i < dbDataArrayList.size(); i++)
-        {
-            for (DbData item : dbDataArrayList)
+            if (dbDataArrayList == null || dbDataArrayList.size() == 0)
             {
-                // checking if tree set contains columns from data array list
-                // if not contains then adding it to columns array list
-                if (!treeSet.contains(item.columnName))
+                Log.e(TAG, "insertDataWithTransaction: Db Data was not provided. Cannot insert data in table.");
+                return;
+            }
+
+            // tree set is used for removing duplicate column name from data array list
+            TreeSet<String> treeSet = new TreeSet<>();
+
+            // this array list will hold unique column name from data array list
+            ArrayList<String> columnsArrayList = new ArrayList<>();
+
+            // loop for removing duplicate values from data array list
+            // for (int i = 0; i < dbDataArrayList.size(); i++)
+            for (int i = 0; i < dbDataArrayList.size(); i++)
+            {
+                for (DbData item : dbDataArrayList)
                 {
-                    // column name not present in columns array list
-                    // adding to columns array list and tree set
-                    treeSet.add(item.columnName);
-                    columnsArrayList.add(item.columnName);
+                    // checking if tree set contains columns from data array list
+                    // if not contains then adding it to columns array list
+                    if (!treeSet.contains(item.columnName))
+                    {
+                        // column name not present in columns array list
+                        // adding to columns array list and tree set
+                        treeSet.add(item.columnName);
+                        columnsArrayList.add(item.columnName);
+                    }
                 }
             }
+
+            // getting columns count for generating insert query
+            // and inserting records into corresponding columns
+            int columnCount = columnsArrayList.size();
+
+            // this string builder is used to append names of columns for the query
+            // for saving records into corresponding columns
+            StringBuilder queryBuilder = new StringBuilder();
+
+            // this string builder is used to append indexes for the query
+            StringBuilder indexesBuilder = new StringBuilder();
+
+            // generating insert query
+            queryBuilder.append("INSERT INTO ").append(tableName).append(" (");
+            indexesBuilder.append(" VALUES (");
+
+            // loop for generating insert query with columns name and indexes
+            for (int i = 0; i < columnCount; i++)
+            {
+                indexesBuilder.append("?");
+                queryBuilder.append(columnsArrayList.get(i));
+
+                // checking if column's count is equals to i
+                // if yes then appending brackets
+                // else appending comma
+                if (i == columnCount - 1)
+                {
+                    queryBuilder.append(")");
+                    indexesBuilder.append(")");
+                }
+                else
+                {
+                    queryBuilder.append(" , ");
+                    indexesBuilder.append(" , ");
+                }
+            }
+
+            // this is final query
+            String query = queryBuilder.toString() + indexesBuilder.toString();
+            Log.e(TAG, "insertDataWithTransaction: Insert query with transaction is: " + query);
+
+            // starting database transaction for inserting records
+            db.getWritableDatabase().beginTransaction();
+
+            // compiling insert query with indexes
+            SQLiteStatement statement = db.getWritableDatabase().compileStatement(query);
+
+            // this position is used for SQLite statement
+            // for binding data with columns
+            int position = 0;
+
+            // loop for inserting records with statement
+            for (int i = 0; i <= dbDataArrayList.size(); i++)
+            {
+                // checking if position is equals to column count
+                // this check will make sure that only those records get inserted
+                // for which the columns are passed
+                // irrespective of no of columns table has
+                // if yes then executing the statement
+                if (position == columnCount)
+                {
+                    position = 0;
+                    statement.execute();
+                    statement.clearBindings();
+                }
+
+                // checking if i is equals to data array list's size
+                // if yes then breaking loop so the below code is not executed
+                // this check will ensure that last records are inserted
+                // and no index out of bound exception occurs
+                if (i == dbDataArrayList.size())
+                {
+                    continue;
+                }
+
+                // increasing the position value by 1 for mapping data with column
+                position += 1;
+
+                // retrieving data from data array list
+                Object columnData = dbDataArrayList.get(i).columnData;
+
+                // checking the type of data and binding to corresponding type
+                if (columnData instanceof Integer)
+                {
+                    statement.bindLong(position, Integer.parseInt(columnData.toString()));
+                }
+                else if (columnData instanceof String )
+                {
+                    statement.bindString(position, columnData.toString());
+                }
+                else if (columnData instanceof Double || columnData instanceof Float)
+                {
+                    statement.bindDouble(position, Double.parseDouble(columnData.toString()));
+                }
+            }
+
+            db.getWritableDatabase().setTransactionSuccessful();
+            db.getWritableDatabase().endTransaction();
+
+            dbDataArrayList = new ArrayList<>();
         }
-        
-        // getting columns count for generating insert query
-        // and inserting records into corresponding columns
-        int columnCount = columnsArrayList.size();
-        
-        // this string builder is used to append names of columns for the query
-        // for saving records into corresponding columns
-        StringBuilder queryBuilder = new StringBuilder();
-        
-        // this string builder is used to append indexes for the query
-        StringBuilder indexesBuilder = new StringBuilder();
-        
-        // generating insert query
-        queryBuilder.append("INSERT INTO ").append(tableName).append(" (");
-        indexesBuilder.append(" VALUES (");
-        
-        // loop for generating insert query with columns name and indexes
-        for (int i = 0; i < columnCount; i++)
+        catch (Exception e)
         {
-            indexesBuilder.append("?");
-            queryBuilder.append(columnsArrayList.get(i));
-            
-            // checking if column's count is equals to i
-            // if yes then appending brackets
-            // else appending comma
-            if (i == columnCount - 1)
+            Log.e(TAG, "insertDataWithTransaction: exception while inserting records with transaction into table: " + tableName + ":\n");
+            e.printStackTrace();
+
+            if (db.getWritableDatabase().inTransaction())
             {
-                queryBuilder.append(")");
-                indexesBuilder.append(")");
+                db.getWritableDatabase().setTransactionSuccessful();
+                db.getWritableDatabase().endTransaction();
             }
-            else
-            {
-                queryBuilder.append(" , ");
-                indexesBuilder.append(" , ");
-            }
+
+            dbDataArrayList = new ArrayList<>();
         }
-        
-        // this is final query
-        String query = queryBuilder.toString() + indexesBuilder.toString();
-        Log.e(TAG, "insertDataWithTransaction: Insert query with transaction is: " + query);
-        
-        // starting database transaction for inserting records
-        db.getWritableDatabase().beginTransaction();
-        
-        // compiling insert query with indexes
-        SQLiteStatement statement = db.getWritableDatabase().compileStatement(query);
-        
-        // this position is used for SQLite statement
-        // for binding data with columns
-        int position = 0;
-        
-        // loop for inserting records with statement
-        for (int i = 0; i <= dbDataArrayList.size(); i++)
-        {
-            // checking if position is equals to column count
-            // this check will make sure that only those records get inserted
-            // for which the columns are passed
-            // irrespective of no of columns table has
-            // if yes then executing the statement
-            if (position == columnCount)
-            {
-                position = 0;
-                statement.execute();
-                statement.clearBindings();
-            }
-            
-            // checking if i is equals to data array list's size
-            // if yes then breaking loop so the below code is not executed
-            // this check will ensure that last records are inserted
-            // and no index out of bound exception occurs
-            if (i == dbDataArrayList.size())
-            {
-                continue;
-            }
-            
-            // increasing the position value by 1 for mapping data with column
-            position += 1;
-            
-            // retrieving data from data array list
-            Object columnData = dbDataArrayList.get(i).columnData;
-            
-            // checking the type of data and binding to corresponding type
-            if (columnData instanceof Integer)
-            {
-                statement.bindLong(position, Integer.parseInt(columnData.toString()));
-            }
-            else if (columnData instanceof String )
-            {
-                statement.bindString(position, columnData.toString());
-            }
-            else if (columnData instanceof Double || columnData instanceof Float)
-            {
-                statement.bindDouble(position, Double.parseDouble(columnData.toString()));
-            }
-        }
-        
-        db.getWritableDatabase().setTransactionSuccessful();
-        db.getWritableDatabase().endTransaction();
-        
-        dbDataArrayList = new ArrayList<>();
     }
 
     //#region COMMENTS FOR insertDataWithTransaction method
@@ -1368,140 +1409,156 @@ public class DBHelper
     //#endregion COMMENTS FOR insertDataWithTransaction method
     public void insertDataWithTransaction(String tableName, int dbColumnCount)
     {
-        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+        try
         {
-            Log.e(TAG, "insertDataWithTransaction: Db Data was not provided. Cannot insert data in table.");
-            return;
-        }
-
-        // tree set is used for removing duplicate column name from data array list
-        TreeSet<String> treeSet = new TreeSet<>();
-
-        // this array list will hold unique column name from data array list
-        ArrayList<String> columnsArrayList = new ArrayList<>();
-
-        // loop for removing duplicate values from data array list
-        // for (int i = 0; i < dbDataArrayList.size(); i++)
-        for (int i = 0; i < dbColumnCount; i++)
-        {
-            for (DbData item : dbDataArrayList)
+            if (dbDataArrayList == null || dbDataArrayList.size() == 0)
             {
-                if (columnsArrayList.size() == dbColumnCount)
+                Log.e(TAG, "insertDataWithTransaction: Db Data was not provided. Cannot insert data in table.");
+                return;
+            }
+
+            // tree set is used for removing duplicate column name from data array list
+            TreeSet<String> treeSet = new TreeSet<>();
+
+            // this array list will hold unique column name from data array list
+            ArrayList<String> columnsArrayList = new ArrayList<>();
+
+            // loop for removing duplicate values from data array list
+            // for (int i = 0; i < dbDataArrayList.size(); i++)
+            for (int i = 0; i < dbColumnCount; i++)
+            {
+                for (DbData item : dbDataArrayList)
                 {
-                    break;
+                    if (columnsArrayList.size() == dbColumnCount)
+                    {
+                        break;
+                    }
+
+                    // checking if tree set contains columns from data array list
+                    // if not contains then adding it to columns array list
+                    if (!treeSet.contains(item.columnName))
+                    {
+                        // column name not present in columns array list
+                        // adding to columns array list and tree set
+                        treeSet.add(item.columnName);
+                        columnsArrayList.add(item.columnName);
+                    }
                 }
-                
-                // checking if tree set contains columns from data array list
-                // if not contains then adding it to columns array list
-                if (!treeSet.contains(item.columnName))
+            }
+
+            // getting columns count for generating insert query
+            // and inserting records into corresponding columns
+            int columnCount = columnsArrayList.size();
+
+            // this string builder is used to append names of columns for the query
+            // for saving records into corresponding columns
+            StringBuilder queryBuilder = new StringBuilder();
+
+            // this string builder is used to append indexes for the query
+            StringBuilder indexesBuilder = new StringBuilder();
+
+            // generating insert query
+            queryBuilder.append("INSERT INTO ").append(tableName).append(" (");
+            indexesBuilder.append(" VALUES (");
+
+            // loop for generating insert query with columns name and indexes
+            for (int i = 0; i < columnCount; i++)
+            {
+                indexesBuilder.append("?");
+                queryBuilder.append(columnsArrayList.get(i));
+
+                // checking if column's count is equals to i
+                // if yes then appending brackets
+                // else appending comma
+                if (i == columnCount - 1)
                 {
-                    // column name not present in columns array list
-                    // adding to columns array list and tree set
-                    treeSet.add(item.columnName);
-                    columnsArrayList.add(item.columnName);
+                    queryBuilder.append(")");
+                    indexesBuilder.append(")");
+                }
+                else
+                {
+                    queryBuilder.append(" , ");
+                    indexesBuilder.append(" , ");
                 }
             }
+
+            // this is final query
+            String query = queryBuilder.toString() + indexesBuilder.toString();
+            Log.e(TAG, "insertDataWithTransaction: Insert query with transaction is: " + query);
+
+            // starting database transaction for inserting records
+            db.getWritableDatabase().beginTransaction();
+
+            // compiling insert query with indexes
+            SQLiteStatement statement = db.getWritableDatabase().compileStatement(query);
+
+            // this position is used for SQLite statement
+            // for binding data with columns
+            int position = 0;
+
+            // loop for inserting records with statement
+            for (int i = 0; i <= dbDataArrayList.size(); i++)
+            {
+                // checking if position is equals to column count
+                // this check will make sure that only those records get inserted
+                // for which the columns are passed
+                // irrespective of no of columns table has
+                // if yes then executing the statement
+                if (position == columnCount)
+                {
+                    position = 0;
+                    statement.execute();
+                    statement.clearBindings();
+                }
+
+                // checking if i is equals to data array list's size
+                // if yes then breaking loop so the below code is not executed
+                // this check will ensure that last records are inserted
+                // and no index out of bound exception occurs
+                if (i == dbDataArrayList.size())
+                {
+                    continue;
+                }
+
+                // increasing the position value by 1 for mapping data with column
+                position += 1;
+
+                // retrieving data from data array list
+                Object columnData = dbDataArrayList.get(i).columnData;
+
+                // checking the type of data and binding to corresponding type
+                if (columnData instanceof Integer)
+                {
+                    statement.bindLong(position, Integer.parseInt(columnData.toString()));
+                }
+                else if (columnData instanceof String )
+                {
+                    statement.bindString(position, columnData.toString());
+                }
+                else if (columnData instanceof Double || columnData instanceof Float)
+                {
+                    statement.bindDouble(position, Double.parseDouble(columnData.toString()));
+                }
+            }
+
+            db.getWritableDatabase().setTransactionSuccessful();
+            db.getWritableDatabase().endTransaction();
+
+            dbDataArrayList = new ArrayList<>();
         }
-
-        // getting columns count for generating insert query
-        // and inserting records into corresponding columns
-        int columnCount = columnsArrayList.size();
-
-        // this string builder is used to append names of columns for the query
-        // for saving records into corresponding columns
-        StringBuilder queryBuilder = new StringBuilder();
-
-        // this string builder is used to append indexes for the query
-        StringBuilder indexesBuilder = new StringBuilder();
-
-        // generating insert query
-        queryBuilder.append("INSERT INTO ").append(tableName).append(" (");
-        indexesBuilder.append(" VALUES (");
-
-        // loop for generating insert query with columns name and indexes
-        for (int i = 0; i < columnCount; i++)
+        catch (Exception e)
         {
-            indexesBuilder.append("?");
-            queryBuilder.append(columnsArrayList.get(i));
+            Log.e(TAG, "insertDataWithTransaction: exception while inserting records with transaction in table: " + tableName + ":\n");
+            e.printStackTrace();
 
-            // checking if column's count is equals to i
-            // if yes then appending brackets
-            // else appending comma
-            if (i == columnCount - 1)
+            if (db.getWritableDatabase().inTransaction())
             {
-                queryBuilder.append(")");
-                indexesBuilder.append(")");
+                db.getWritableDatabase().setTransactionSuccessful();
+                db.getWritableDatabase().endTransaction();
             }
-            else
-            {
-                queryBuilder.append(" , ");
-                indexesBuilder.append(" , ");
-            }
+
+            dbDataArrayList = new ArrayList<>();
         }
-
-        // this is final query
-        String query = queryBuilder.toString() + indexesBuilder.toString();
-        Log.e(TAG, "insertDataWithTransaction: Insert query with transaction is: " + query);
-
-        // starting database transaction for inserting records
-        db.getWritableDatabase().beginTransaction();
-
-        // compiling insert query with indexes
-        SQLiteStatement statement = db.getWritableDatabase().compileStatement(query);
-
-        // this position is used for SQLite statement
-        // for binding data with columns
-        int position = 0;
-
-        // loop for inserting records with statement
-        for (int i = 0; i <= dbDataArrayList.size(); i++)
-        {
-            // checking if position is equals to column count
-            // this check will make sure that only those records get inserted
-            // for which the columns are passed
-            // irrespective of no of columns table has
-            // if yes then executing the statement
-            if (position == columnCount)
-            {
-                position = 0;
-                statement.execute();
-                statement.clearBindings();
-            }
-
-            // checking if i is equals to data array list's size
-            // if yes then breaking loop so the below code is not executed
-            // this check will ensure that last records are inserted
-            // and no index out of bound exception occurs
-            if (i == dbDataArrayList.size())
-            {
-                continue;
-            }
-
-            // increasing the position value by 1 for mapping data with column
-            position += 1;
-
-            // retrieving data from data array list
-            Object columnData = dbDataArrayList.get(i).columnData;
-
-            // checking the type of data and binding to corresponding type
-            if (columnData instanceof Integer)
-            {
-                statement.bindLong(position, Integer.parseInt(columnData.toString()));
-            }
-            else if (columnData instanceof String )
-            {
-                statement.bindString(position, columnData.toString());
-            }
-            else if (columnData instanceof Double || columnData instanceof Float)
-            {
-                statement.bindDouble(position, Double.parseDouble(columnData.toString()));
-            }
-        }
-
-        db.getWritableDatabase().setTransactionSuccessful();
-        db.getWritableDatabase().endTransaction();
-
-        dbDataArrayList = new ArrayList<>();
     }
     
     //#region COMMENTS FOR insertDataWithJson method
@@ -1747,60 +1804,70 @@ public class DBHelper
     //#endregion COMMENTS FOR updateData method
     public DBHelper updateData(String tableName, String whereClause, String whereArgs)
     {
-        // checking if table name was provided or not
-        if (tableName == null || tableName.isEmpty())
+        try
         {
-            if (dbDataArrayList != null)
+            // checking if table name was provided or not
+            if (tableName == null || tableName.isEmpty())
             {
-                dbDataArrayList.clear();
-            }
-            
-            Log.e(TAG, "updateData: Table name was null or empty.");
-            return this;
-        }
+                if (dbDataArrayList != null)
+                {
+                    dbDataArrayList.clear();
+                }
 
-        // checking if column name was provided or not
-        if (whereClause == null || whereClause.isEmpty())
-        {
-            if (dbDataArrayList != null)
+                Log.e(TAG, "updateData: Table name was null or empty.");
+                return this;
+            }
+
+            // checking if column name was provided or not
+            if (whereClause == null || whereClause.isEmpty())
             {
-                dbDataArrayList.clear();
+                if (dbDataArrayList != null)
+                {
+                    dbDataArrayList.clear();
+                }
+
+                Log.e(TAG, "updateData: Column name was null or empty.");
+                return this;
             }
-            
-            Log.e(TAG, "updateData: Column name was null or empty.");
-            return this;
-        }
 
-        // checking if data was provided or not
-        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
-        {
-            Log.e(TAG, "updateData: Data was not provided for updating records.");
-            return this;
-        }
+            // checking if data was provided or not
+            if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+            {
+                Log.e(TAG, "updateData: Data was not provided for updating records.");
+                return this;
+            }
 
-        // content values for putting column name
-        // and data for inserting into database table
-        ContentValues contentValues = new ContentValues();
+            // content values for putting column name
+            // and data for inserting into database table
+            ContentValues contentValues = new ContentValues();
 
-        // loop for no of data provided
-        for (int i = 0; i < dbDataArrayList.size(); i++)
-        {
-            // adding column names and column data into content values
-            contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
-        }
-    
-        // checking if column data was provided or not
-        if (whereArgs != null && whereArgs.isEmpty())
-        {
-            db.getWritableDatabase().update(tableName, contentValues, whereClause, new String[]{whereArgs});
-        }
-        else
-        {
-            // you can directly pass the values to where clause
-            db.getWritableDatabase().update(tableName, contentValues, whereClause, null);
-        }
+            // loop for no of data provided
+            for (int i = 0; i < dbDataArrayList.size(); i++)
+            {
+                // adding column names and column data into content values
+                contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+            }
 
-        dbDataArrayList = new ArrayList<>();
+            // checking if column data was provided or not
+            if (whereArgs != null && whereArgs.isEmpty())
+            {
+                db.getWritableDatabase().update(tableName, contentValues, whereClause, new String[]{whereArgs});
+            }
+            else
+            {
+                // you can directly pass the values to where clause
+                db.getWritableDatabase().update(tableName, contentValues, whereClause, null);
+            }
+
+            dbDataArrayList = new ArrayList<>();
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "updateData: exception while updating records in table: " + tableName + ":\n");
+            e.printStackTrace();
+
+            dbDataArrayList = new ArrayList<>();
+        }
 
         return this;
     }
@@ -1830,64 +1897,76 @@ public class DBHelper
     //#endregion COMMENTS FOR updateData method
     public long updateDataWithReturnId(String tableName, String whereClause, String whereArgs)
     {
-        // checking if table name was provided or not
-        if (tableName == null || tableName.isEmpty())
+        try
         {
-            if (dbDataArrayList != null)
+            // checking if table name was provided or not
+            if (tableName == null || tableName.isEmpty())
             {
-                dbDataArrayList.clear();
-            }
-            
-            Log.e(TAG, "updateData: Table name was null or empty.");
-            return -1;
-        }
-        
-        // checking if column name was provided or not
-        if (whereClause == null || whereClause.isEmpty())
-        {
-            if (dbDataArrayList != null)
-            {
-                dbDataArrayList.clear();
-            }
-            
-            Log.e(TAG, "updateData: Column name was null or empty.");
-            return -1;
-        }
-        
-        // checking if data was provided or not
-        if (dbDataArrayList == null || dbDataArrayList.size() == 0)
-        {
-            Log.e(TAG, "updateData: Data was not provided for updating records.");
-            return -1;
-        }
-        
-        // content values for putting column name
-        // and data for inserting into database table
-        ContentValues contentValues = new ContentValues();
-        
-        // loop for no of data provided
-        for (int i = 0; i < dbDataArrayList.size(); i++)
-        {
-            // adding column names and column data into content values
-            contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
-        }
-        
-        long updatedId;
-        
-        // checking if column data was provided or not
-        if (whereArgs != null && whereArgs.isEmpty())
-        {
-            updatedId = db.getWritableDatabase().update(tableName, contentValues, whereClause, new String[]{whereArgs});
-        }
-        else
-        {
-            // you can directly pass the values to where clause
-            updatedId = db.getWritableDatabase().update(tableName, contentValues, whereClause, null);
-        }
+                if (dbDataArrayList != null)
+                {
+                    dbDataArrayList.clear();
+                }
 
-        dbDataArrayList = new ArrayList<>();
-        
-        return updatedId;
+                Log.e(TAG, "updateData: Table name was null or empty.");
+                return -1;
+            }
+
+            // checking if column name was provided or not
+            if (whereClause == null || whereClause.isEmpty())
+            {
+                if (dbDataArrayList != null)
+                {
+                    dbDataArrayList.clear();
+                }
+
+                Log.e(TAG, "updateData: Column name was null or empty.");
+                return -1;
+            }
+
+            // checking if data was provided or not
+            if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+            {
+                Log.e(TAG, "updateData: Data was not provided for updating records.");
+                return -1;
+            }
+
+            // content values for putting column name
+            // and data for inserting into database table
+            ContentValues contentValues = new ContentValues();
+
+            // loop for no of data provided
+            for (int i = 0; i < dbDataArrayList.size(); i++)
+            {
+                // adding column names and column data into content values
+                contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+            }
+
+            long updatedId;
+
+            // checking if column data was provided or not
+            if (whereArgs != null && whereArgs.isEmpty())
+            {
+                updatedId = db.getWritableDatabase().update(tableName, contentValues, whereClause, new String[]{whereArgs});
+            }
+            else
+            {
+                // you can directly pass the values to where clause
+                updatedId = db.getWritableDatabase().update(tableName, contentValues, whereClause, null);
+            }
+
+            dbDataArrayList = new ArrayList<>();
+
+            return updatedId;
+        }
+        catch (Exception e)
+        {
+            dbDataArrayList = new ArrayList<>();
+
+            Log.e(TAG, "updateDataWithReturnId: exception while updating records with return id for table: " + tableName + ":\n");
+            e.printStackTrace();
+
+            return -1;
+        }
     }
 
     //#region COMMENTS FOR deleteTable method
