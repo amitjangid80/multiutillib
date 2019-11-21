@@ -1792,6 +1792,84 @@ public class DBHelper
      *                         pass this parameter in the way given in example below
      *                         Ex: code = ? or ID = ? etc // this is important
      *
+     * this method will update records of the table in database
+     * this method uses database's update method for updating records
+     *
+     * parameter whereClause and whereArgs must be passed in the form given
+    **/
+    //#endregion COMMENTS FOR updateData method
+    public DBHelper updateData(String tableName, String whereClause)
+    {
+        try
+        {
+            // checking if table name was provided or not
+            if (tableName == null || tableName.isEmpty())
+            {
+                if (dbDataArrayList != null)
+                {
+                    dbDataArrayList.clear();
+                }
+
+                Log.e(TAG, "updateData: Table name was null or empty.");
+                return this;
+            }
+
+            // checking if column name was provided or not
+            if (whereClause == null || whereClause.isEmpty())
+            {
+                if (dbDataArrayList != null)
+                {
+                    dbDataArrayList.clear();
+                }
+
+                Log.e(TAG, "updateData: Column name was null or empty.");
+                return this;
+            }
+
+            // checking if data was provided or not
+            if (dbDataArrayList == null || dbDataArrayList.size() == 0)
+            {
+                Log.e(TAG, "updateData: Data was not provided for updating records.");
+                return this;
+            }
+
+            // content values for putting column name
+            // and data for inserting into database table
+            ContentValues contentValues = new ContentValues();
+
+            // loop for no of data provided
+            for (int i = 0; i < dbDataArrayList.size(); i++)
+            {
+                // adding column names and column data into content values
+                contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+            }
+
+            // you can directly pass the values to where clause
+            db.getWritableDatabase().update(tableName, contentValues, whereClause, null);
+            dbDataArrayList = new ArrayList<>();
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "updateData: exception while updating records in table: " + tableName + ":\n");
+            e.printStackTrace();
+
+            dbDataArrayList = new ArrayList<>();
+        }
+
+        return this;
+    }
+
+    //#region COMMENTS FOR updateData method
+    /**
+     * 2019 January 08 - Tuesday - 04:28 PM
+     * update data method
+     *
+     * @param tableName      - name of the table on which update query is to be performed
+     *
+     * @param whereClause    - name of the column to check whether the record is present so the data is updated
+     *                         pass this parameter in the way given in example below
+     *                         Ex: code = ? or ID = ? etc // this is important
+     *
      * @param whereArgs      - data of the column name provided to check if record is present for data update
      *                         here you need to pass the data for the corresponding where clause
      *                         Ex: 1 or 2 etc
@@ -1849,7 +1927,7 @@ public class DBHelper
             }
 
             // checking if column data was provided or not
-            if (whereArgs != null && whereArgs.isEmpty())
+            if (whereArgs != null && !whereArgs.isEmpty())
             {
                 db.getWritableDatabase().update(tableName, contentValues, whereClause, new String[]{whereArgs});
             }
