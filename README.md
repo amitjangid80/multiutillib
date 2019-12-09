@@ -22,7 +22,7 @@ allprojects{
 ```
 dependencies {
     ...
-    implementation 'com.github.amitjangid80:multiutillib:v1.7.21'
+    implementation 'com.github.amitjangid80:multiutillib:v1.7.3'
 }
 ```
 
@@ -43,7 +43,7 @@ dependencies {
 <dependency>
    <groupId>com.github.amitjangid80</groupId>
    <artifactId>multiutillib</artifactId>
-   <version>v1.7.21</version>
+   <version>v1.7.3</version>
 <dependency>
 ```
 
@@ -711,6 +711,13 @@ switchButton.setOnSwitchListener(new SwitchButton.OnSwitchListener()
 // this will check whether gps is enabled or not
 GeoLocation.isGPSEnabled(Context context); // returns true or false
 
+// if you want to capture the address and latitude and longitude
+// after getting access to locations permission
+// then use *onRequestPermissionsResult* of the activity
+// and re-call this class as follows.
+// considering *geoLocation* is declared globally
+geoLocation = new GeoLocation(YourActivity.this);
+
 // following code is for getting latitude and longitude
 double latitude = geoLocation.getLatitude();
 double longitude = geoLocation.getLongitude();
@@ -738,13 +745,6 @@ String subAdminArea = geoLocation.getSubAdminArea();
 String thoroughFare = geoLocation.getThoroughFare();
 
 String subThoroughFare = geoLocation.getSubThoroughFare();
-
-// if you want to capture the address and latitude and longitude
-// after getting access to locations permission
-// then use *onRequestPermissionsResult* of the activity
-// and re-call this class as follows.
-// considering *geoLocation* is declared globally
-geoLocation = new GeoLocation(YourActivity.this);
 
 ```
 
