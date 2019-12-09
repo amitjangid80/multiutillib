@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 
 /**
  * Created by AMIT JANGID on 20/02/2019.
@@ -107,6 +108,21 @@ class PermissionHelper
         {
             listener.onGranted(requestCode, getPermissionsGranted(activity, permissions))
             listener.onDenied(requestCode, getPermissionsNotGranted(activity, permissions))
+        }
+
+        /**
+         * has permission method
+         *
+         * this method will return true if permission is granted else will return false
+        **/
+        fun hasPermission(context: Context, permission: String): Boolean
+        {
+            if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED)
+            {
+                return true
+            }
+
+            return false
         }
     }
 }

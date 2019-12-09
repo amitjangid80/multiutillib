@@ -31,7 +31,7 @@ public class Internet
         if (connectivityManager != null)
         {
             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-            return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
         }
         else
         {
@@ -57,7 +57,7 @@ public class Internet
 
             if (manager != null)
             {
-                return manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
+                return manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnected();
             }
             else
             {
@@ -90,7 +90,7 @@ public class Internet
 
             if (manager != null)
             {
-                return manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
+                return manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnected();
             }
             else
             {
