@@ -6,9 +6,10 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.DatePicker;
+
+import androidx.annotation.NonNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,7 +21,7 @@ import java.util.Locale;
  * this class will display a date picker dialog
  * it will return selected date in the format defined
 **/
-@SuppressWarnings({"unused", "deprecation", "DeprecatedIsStillUsed"})
+@Deprecated
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener
 {
     private static final String TAG = DatePickerFragment.class.getSimpleName();

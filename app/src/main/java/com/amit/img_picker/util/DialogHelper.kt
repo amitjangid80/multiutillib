@@ -1,7 +1,8 @@
 package com.amit.img_picker.util
 
+import android.app.AlertDialog
 import android.content.Context
-import android.support.v7.app.AlertDialog
+
 import android.view.LayoutInflater
 import com.amit.R
 import com.amit.img_picker.constant.ImageProvider
@@ -11,13 +12,11 @@ import kotlinx.android.synthetic.main.dialog_choose_app.view.*
 /**
  * Created by AMIT JANGID on 18/02/2019.
 **/
-internal object DialogHelper
-{
+internal object DialogHelper {
     /**
      * Show Image Provide Picker Dialog. This will streamline the code to pick/capture image
-     **/
-    fun showChooseAppDialog(context: Context, listener: ResultListener<ImageProvider>)
-    {
+    **/
+    fun showChooseAppDialog(context: Context, listener: ResultListener<ImageProvider>) {
         val layoutInflater = LayoutInflater.from(context)
         val customView = layoutInflater.inflate(R.layout.dialog_choose_app, null)
 

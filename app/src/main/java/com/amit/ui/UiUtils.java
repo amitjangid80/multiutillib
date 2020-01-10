@@ -1,12 +1,13 @@
 package com.amit.ui;
 
-import android.support.design.widget.TextInputEditText;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 public class UiUtils
 {

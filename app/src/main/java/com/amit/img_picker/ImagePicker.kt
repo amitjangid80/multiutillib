@@ -3,7 +3,7 @@ package com.amit.img_picker
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import com.amit.img_picker.constant.ImageProvider
 import com.amit.img_picker.listener.ResultListener
 import com.amit.img_picker.util.DialogHelper

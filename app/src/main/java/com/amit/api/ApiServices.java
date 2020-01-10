@@ -3,8 +3,9 @@ package com.amit.api;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
-import android.support.v4.util.Pair;
+
+import androidx.annotation.NonNull;
+import androidx.core.util.Pair;
 import android.util.Log;
 
 import com.amit.utilities.SharedPreferenceData;

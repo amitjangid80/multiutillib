@@ -126,7 +126,8 @@ object ImageUtil
         val ratioY = actualHeight / options.outHeight.toFloat()
 
         scaleMatrix.setScale(ratioX, ratioY, middleX, middleY)
-        canvas.matrix = scaleMatrix
+        canvas.setMatrix(scaleMatrix)
+        // canvas.matrix = scaleMatrix
 
         canvas.drawBitmap(bmp!!, middleX - bmp.width / 2,
                 middleY - bmp.height / 2, Paint(Paint.FILTER_BITMAP_FLAG))

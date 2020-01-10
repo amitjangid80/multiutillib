@@ -16,6 +16,7 @@ import java.util.Locale;
 /**
  * Created by AMIT JANGID on 29-Oct-18.
 **/
+@Deprecated
 public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener
 {
     private static final String TAG = TimePickerFragment.class.getSimpleName();

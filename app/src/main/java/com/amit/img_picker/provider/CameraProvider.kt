@@ -3,13 +3,13 @@ package com.amit.img_picker.provider
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.ActivityCompat
+import androidx.core.app.ActivityCompat
 import com.amit.R
 import com.amit.img_picker.ImagePickerActivity
 import com.amit.img_picker.util.FileUtil
 import com.amit.img_picker.util.IntentUtils
-import com.amit.img_picker.util.PermissionUtil
-import com.amit.img_picker.util.PermissionUtil.isPermissionGranted
+import com.amit.permission.PermissionUtil
+import com.amit.permission.PermissionUtil.isPermissionGranted
 import java.io.File
 
 /**

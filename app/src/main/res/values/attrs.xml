@@ -90,4 +90,12 @@
         <attr name="fl_floating_label_anim_duration_in_ms" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="MaterialNavigationView">
+        <attr name="itemStyle" format="enum">
+            <enum name="defaultStyle" value="1" />
+            <enum name="roundedRightStyle" value="2" />
+            <enum name="roundedRectangleStyle" value="3" />
+        </attr>
+    </declare-styleable>
+
 </resources>

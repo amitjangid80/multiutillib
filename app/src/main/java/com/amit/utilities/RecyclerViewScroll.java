@@ -1,7 +1,7 @@
 package com.amit.utilities;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by AMIT JANGID on 20-Oct-18.

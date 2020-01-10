@@ -1,10 +1,11 @@
 package com.amit.utilities;
 
 import android.graphics.Typeface;
-import android.support.annotation.NonNull;
 import android.text.SpannableString;
 import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
+
+import androidx.annotation.NonNull;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;

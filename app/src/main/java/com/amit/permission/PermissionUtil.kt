@@ -1,8 +1,8 @@
-package com.amit.img_picker.util
+package com.amit.permission
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 
 /**
  * Created by AMIT JANGID on 18/02/2019.

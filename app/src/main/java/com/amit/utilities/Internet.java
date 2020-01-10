@@ -3,8 +3,9 @@ package com.amit.utilities;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.CheckResult;
 import android.util.Log;
+
+import androidx.annotation.CheckResult;
 
 import static android.content.Context.CONNECTIVITY_SERVICE;
 

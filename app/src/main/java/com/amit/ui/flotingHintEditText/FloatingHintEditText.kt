@@ -6,11 +6,8 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Color
 import android.graphics.PorterDuff
-import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
-import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.AppCompatEditText
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
@@ -21,6 +18,9 @@ import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
+import androidx.appcompat.widget.AppCompatEditText
 import com.amit.R
 import com.amit.ui.flotingHintEditText.extensions.beGone
 import com.amit.ui.flotingHintEditText.extensions.beVisible

@@ -1,10 +1,11 @@
 package com.amit.utilities;
 
 import android.graphics.Color;
-import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by AMIT JANGID on 26-Nov-18.

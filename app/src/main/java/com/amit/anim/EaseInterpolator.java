@@ -1,7 +1,8 @@
 package com.amit.anim;
 
 import android.animation.TimeInterpolator;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by Amit Jangid on 21,May,2018
