@@ -17,11 +17,11 @@ class FloatingEditText : AppCompatEditText
 
     private var onBackPressed: Runnable? = null
 
-    constructor(context: Context?) : super(context)
+    constructor(context: Context?) : super(context!!)
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs)
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context!!, attrs, defStyleAttr)
 
     /**
      * 2019 August 06 - Tuesday - 11:13 AM
