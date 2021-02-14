@@ -1154,8 +1154,15 @@ public class DBHelper
                 }
                 else
                 {
+                    String columnData = "";
+
+                    if (dbDataArrayList.get(i).columnData != null)
+                    {
+                        columnData = dbDataArrayList.get(i).columnData.toString();
+                    }
+
                     // adding column names and column data into content values
-                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                    contentValues.put(dbDataArrayList.get(i).columnName, columnData);
                 }
             }
 
@@ -1223,8 +1230,15 @@ public class DBHelper
                 }
                 else
                 {
+                    String columnData = "";
+
+                    if (dbDataArrayList.get(i).columnData != null)
+                    {
+                        columnData = dbDataArrayList.get(i).columnData.toString();
+                    }
+
                     // adding column names and column data into content values
-                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                    contentValues.put(dbDataArrayList.get(i).columnName, columnData);
                 }
             }
 
@@ -1856,8 +1870,15 @@ public class DBHelper
                 }
                 else
                 {
+                    String columnData = "";
+
+                    if (dbDataArrayList.get(i).columnData != null)
+                    {
+                        columnData = dbDataArrayList.get(i).columnData.toString();
+                    }
+
                     // adding column names and column data into content values
-                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                    contentValues.put(dbDataArrayList.get(i).columnName, columnData);
                 }
             }
 
@@ -1945,8 +1966,15 @@ public class DBHelper
                 }
                 else
                 {
+                    String columnData = "";
+
+                    if (dbDataArrayList.get(i).columnData != null)
+                    {
+                        columnData = dbDataArrayList.get(i).columnData.toString();
+                    }
+
                     // adding column names and column data into content values
-                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                    contentValues.put(dbDataArrayList.get(i).columnName, columnData);
                 }
             }
 
@@ -2044,8 +2072,15 @@ public class DBHelper
                 }
                 else
                 {
+                    String columnData = "";
+
+                    if (dbDataArrayList.get(i).columnData != null)
+                    {
+                        columnData = dbDataArrayList.get(i).columnData.toString();
+                    }
+
                     // adding column names and column data into content values
-                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                    contentValues.put(dbDataArrayList.get(i).columnName, columnData);
                 }
             }
 
