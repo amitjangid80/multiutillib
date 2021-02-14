@@ -1216,8 +1216,16 @@ public class DBHelper
             // loop for no of data to be inserted
             for (int i = 0; i < dbDataArrayList.size(); i++)
             {
-                // adding column names and column data into content values
-                contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                if (dbDataArrayList.get(i).imageData != null && dbDataArrayList.get(i).imageData.length > 0)
+                {
+                    // adding column names and column data into content values
+                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).imageData);
+                }
+                else
+                {
+                    // adding column names and column data into content values
+                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                }
             }
 
             // executing inserting statement for inserting records in table
@@ -1841,8 +1849,16 @@ public class DBHelper
             // loop for no of data provided
             for (int i = 0; i < dbDataArrayList.size(); i++)
             {
-                // adding column names and column data into content values
-                contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                if (dbDataArrayList.get(i).imageData != null && dbDataArrayList.get(i).imageData.length > 0)
+                {
+                    // adding column names and column data into content values
+                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).imageData);
+                }
+                else
+                {
+                    // adding column names and column data into content values
+                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                }
             }
 
             // you can directly pass the values to where clause
@@ -1922,8 +1938,16 @@ public class DBHelper
             // loop for no of data provided
             for (int i = 0; i < dbDataArrayList.size(); i++)
             {
-                // adding column names and column data into content values
-                contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                if (dbDataArrayList.get(i).imageData != null && dbDataArrayList.get(i).imageData.length > 0)
+                {
+                    // adding column names and column data into content values
+                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).imageData);
+                }
+                else
+                {
+                    // adding column names and column data into content values
+                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                }
             }
 
             // checking if column data was provided or not
@@ -2013,8 +2037,16 @@ public class DBHelper
             // loop for no of data provided
             for (int i = 0; i < dbDataArrayList.size(); i++)
             {
-                // adding column names and column data into content values
-                contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                if (dbDataArrayList.get(i).imageData != null && dbDataArrayList.get(i).imageData.length > 0)
+                {
+                    // adding column names and column data into content values
+                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).imageData);
+                }
+                else
+                {
+                    // adding column names and column data into content values
+                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                }
             }
 
             long updatedId;
