@@ -20,17 +20,16 @@ import java.util.TreeSet;
 /**
  * Created by AMIT JANGID
  * 2018 Feb 01 - Thursday - 02:55 PM
- *
+ * <p>
  * this class has method for executing db queries
  * like: creating table, inserting into table, deleting table, dropping table
 **/
-@SuppressWarnings({"unused", "WeakerAccess", "UnusedReturnValue"})
 public class DBHelper
 {
     private static final String TAG = DBHelper.class.getSimpleName();
 
     private final Database db;
-    
+
     private ArrayList<DbData> dbDataArrayList = new ArrayList<>();
     private ArrayList<DbColumn> dbColumnArrayList = new ArrayList<>();
 
@@ -39,7 +38,7 @@ public class DBHelper
      * you have to set the db name first before using this class.
      *
      * @param context - context
-    **/
+     **/
     public DBHelper(Context context)
     {
         SharedPreferenceData sharedPreferenceData = new SharedPreferenceData(context);
@@ -47,96 +46,97 @@ public class DBHelper
     }
 
     // region COMMENTS OF EXECUTE DATABASE OPERATIONS METHOD
+
     /**
      * Created By AMIT JANGID
      * 2018 Feb 01 - Thursday - 02:57 PM
      * Execute Database Operations - method name
-     *
+     * <p>
      * This method is an universal method
      * which will perform all the operations of database
      * like - create, delete, insert, update,
-     *
+     * <p>
      * parameters to be passed in this method are as follows:
      * the parameters below are numbered and has to passed in the same sequence
-     *
+     * <p>
      * parameter #1:
-     * @param tableName - This will be the name of the table on which the operations has to be performed
-     *                  - FOR EXAMPLE: tableName = "User"
      *
-     * parameter #2:
-     * @param values - This parameter is an object of LinkedHashMap
-     *               - this parameter will contain set of Key and Value
-     *                 to create table or insert data or update we will have to pass this parameter with data
-     *               - FOR EXAMPLE: - values.put("Name", "'Amit'") - this for inserting data and updating data
-     *                           - values.put("Name", "TEXT") - this for creating table
-     *
-     * parameter #3
-     * @param operations - Details as follows
-     ************************************************************************************************
-     *** the values to the parameter operations are as follows:
-     *
-     *** c - for creating new table
-     *       - while doing create operation
-     *         the user has to pass the data type also with the field of the table
-     *         FOR EXAMPLE: values.put("Name", "TEXT") - this for creating table
-     *
-     *** d - for deleting values from table
-     *       - FOR DELETING SINGLE RECORD OR ROW
-     *         - the user has to pass true for the parameter "hasConditions"
-     *           because delete operation cannot be performed without where clause or condition
-     *           so the user has to pass data to "conditionalValues" parameter
-     *           - FOR EXAMPLE: hasConditions = true then conditionalValues.put("ID", "'1'")
-     *
-     *       - FOR DELETING ALL THE RECORDS OR ROWS
-     *         - the user has to pass null of values,
-     *           false for hasConditions and null of conditionalValues
-     *           - FOR EXAMPLE: values = null, hasConditions = false, conditionalValues = null
-     *
-     *** dr - for dropping the table
-     *
-     *** i - for inserting values in the table
-     *       - while doing insert operation
-     *         - the values that the user has to pass is of LinkedHashMap object
-     *           read the comments of values parameter for how to pass the values
-     *         - the user has to pass the field name and following with the value of the field
-     *           if the field is of type string or text,
-     *           then the value should be in single quotes ('')
-     *           if the field is of type integer,
-     *           then the user can pass the value without the quotes or with quotes
-     *           - FOR EXAMPLE: values.put("firstName", "'Amit'"),
+     * @param tableName         - This will be the name of the table on which the operations has to be performed
+     *                          - FOR EXAMPLE: tableName = "User"
+     *                          <p>
+     *                          parameter #2:
+     * @param values            - This parameter is an object of LinkedHashMap
+     *                          - this parameter will contain set of Key and Value
+     *                          to create table or insert data or update we will have to pass this parameter with data
+     *                          - FOR EXAMPLE: - values.put("Name", "'Amit'") - this for inserting data and updating data
+     *                          - values.put("Name", "TEXT") - this for creating table
+     *                          <p>
+     *                          parameter #3
+     * @param operations        - Details as follows
+     *                          ***********************************************************************************************
+     *                          ** the values to the parameter operations are as follows:
+     *                          <p>
+     *                          ** c - for creating new table
+     *                          - while doing create operation
+     *                          the user has to pass the data type also with the field of the table
+     *                          FOR EXAMPLE: values.put("Name", "TEXT") - this for creating table
+     *                          <p>
+     *                          ** d - for deleting values from table
+     *                          - FOR DELETING SINGLE RECORD OR ROW
+     *                          - the user has to pass true for the parameter "hasConditions"
+     *                          because delete operation cannot be performed without where clause or condition
+     *                          so the user has to pass data to "conditionalValues" parameter
+     *                          - FOR EXAMPLE: hasConditions = true then conditionalValues.put("ID", "'1'")
+     *                          <p>
+     *                          - FOR DELETING ALL THE RECORDS OR ROWS
+     *                          - the user has to pass null of values,
+     *                          false for hasConditions and null of conditionalValues
+     *                          - FOR EXAMPLE: values = null, hasConditions = false, conditionalValues = null
+     *                          <p>
+     *                          ** dr - for dropping the table
+     *                          <p>
+     *                          ** i - for inserting values in the table
+     *                          - while doing insert operation
+     *                          - the values that the user has to pass is of LinkedHashMap object
+     *                          read the comments of values parameter for how to pass the values
+     *                          - the user has to pass the field name and following with the value of the field
+     *                          if the field is of type string or text,
+     *                          then the value should be in single quotes ('')
+     *                          if the field is of type integer,
+     *                          then the user can pass the value without the quotes or with quotes
+     *                          - FOR EXAMPLE: values.put("firstName", "'Amit'"),
      *                          values.put("active", "1") or
      *                          values.put("active", "'1'") - better option this way
-     *
-     *** u - for updating values of table
-     *       - while performing update operation
-     *         - pass values with field name of the table and following with values
-     *         - pass hasConditions value as true and also pass conditionalValues with data
-     *         - FOR EXAMPLE: hasConditions = true and conditionalValue.put("ID", "1") OR
-     *                        conditionalValues("ID", "'1'") - this option is better
-     *                        values.put("firstName", "'Amit'"),
-     *                        values.put("email", "'anythiing@gmail.com'")
-     *
-     ************************************************************************************************
-     *
-     * parameter #4
-     * @param hasConditions - This parameter is used when the user has to perform Update or Delete operations
-     *                      - pass true when doing UPDATE OR DELETE operations
-     *                        and pass false if not doing UPDATE OR DELETE operations
-     *                        for delete operation false can be passed,
-     *                        if entire data of the table is to be removed
-     *                      - when passing this parameter with true,
-     *                        then you have to pass conditionalValues parameter as well
-     *
-     * parameter #5
+     *                          <p>
+     *                          ** u - for updating values of table
+     *                          - while performing update operation
+     *                          - pass values with field name of the table and following with values
+     *                          - pass hasConditions value as true and also pass conditionalValues with data
+     *                          - FOR EXAMPLE: hasConditions = true and conditionalValue.put("ID", "1") OR
+     *                          conditionalValues("ID", "'1'") - this option is better
+     *                          values.put("firstName", "'Amit'"),
+     *                          values.put("email", "'anythiing@gmail.com'")
+     *                          <p>
+     *                          ***********************************************************************************************
+     *                          <p>
+     *                          parameter #4
+     * @param hasConditions     - This parameter is used when the user has to perform Update or Delete operations
+     *                          - pass true when doing UPDATE OR DELETE operations
+     *                          and pass false if not doing UPDATE OR DELETE operations
+     *                          for delete operation false can be passed,
+     *                          if entire data of the table is to be removed
+     *                          - when passing this parameter with true,
+     *                          then you have to pass conditionalValues parameter as well
+     *                          <p>
+     *                          parameter #5
      * @param conditionalValues - This parameter is used when the hasConditions parameter is set to true:
      *                          - If the hasConditions parameter is true
-     *                            then conditionalValues should have an Object of LinkedHashMap
+     *                          then conditionalValues should have an Object of LinkedHashMap
      *                          - FOR EXAMPLE: conditionalValues.put("ID", "'1'") - for updating data at this "ID"
      *                          - If the hasConditions parameter is false
-     *                            then conditionalValues can be null
-     *
+     *                          then conditionalValues can be null
      * @return true or false
-    **/
+     **/
     // endregion
     public boolean executeDatabaseOperations(String tableName, String operations,
                                              LinkedHashMap<String, String> values,
@@ -326,7 +326,7 @@ public class DBHelper
             // if successful then it will return true
             // return true;
             db.getWritableDatabase().execSQL(query);
-            
+
             return true;
         }
         catch (Exception e)
@@ -338,16 +338,16 @@ public class DBHelper
     }
 
     // region COMMENTS FOR executeSelectQuery method
+
     /**
      * 2018 Feb 01 - Thursday - 03:52 PM
      * Execute Select Query
-     *
+     * <p>
      * parameters for this method are
      *
      * @param query - query that you want to execute
-     *
      * @return cursor with records from the table
-    **/
+     **/
     // endregion COMMENTS FOR executeSelectQuery method
     public Cursor executeSelectQuery(String query)
     {
@@ -379,33 +379,31 @@ public class DBHelper
     }
 
     // region COMMENTS FOR executeSelectQuery method
+
     /**
      * 2018 Feb 01 - Thursday - 03:52 PM
      * Execute Select Query
-     *
+     * <p>
      * parameters for this method are
      *
-     * @param tableName - name of the table to perform select operation
-     *
-     * @param values - values to perform select query on
-     *
-     * @param hasConditions - if you want to use the where clause in select query
-     *                        then this parameter should be set to true
-     *                        else this parameter can be false
-     *
+     * @param tableName         - name of the table to perform select operation
+     * @param values            - values to perform select query on
+     * @param hasConditions     - if you want to use the where clause in select query
+     *                          then this parameter should be set to true
+     *                          else this parameter can be false
      * @param conditionalValues - if the hasConditions is set to true
-     *                            then the user has to pass conditionalValues
-     *                            else it can be null
-     *
-     * the below lines are not in use so ignore it
-     *** s - for selecting values from table
-     *     - pass * in values parameter when doing select operations
-     *       when you want to select every thing from the table
-     *       no matter condition is there or not
-     *     - pass values parameters with the name of the columns in the table
-     *       when you want to select one or multiple columns from the table
-     *       no matter condition is there or not
-    **/
+     *                          then the user has to pass conditionalValues
+     *                          else it can be null
+     *                          <p>
+     *                          the below lines are not in use so ignore it
+     *                          ** s - for selecting values from table
+     *                          - pass * in values parameter when doing select operations
+     *                          when you want to select every thing from the table
+     *                          no matter condition is there or not
+     *                          - pass values parameters with the name of the columns in the table
+     *                          when you want to select one or multiple columns from the table
+     *                          no matter condition is there or not
+     **/
     // endregion COMMENTS FOR executeSelectQuery method
     public Cursor executeSelectQuery(String tableName, String values,
                                      boolean hasConditions,
@@ -480,33 +478,28 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR executeSelectQuery method
+
     /**
      * execute Select Query method
      * this method is used for selecting data from database
-     *
+     * <p>
      * parameters for this method are
      *
-     * @param tableName - name of the table to perform select operation
-     *
-     * @param values - values to perform select query on
-     *                 Ex: "*" or "id, firstName"
-     *
-     * @param hasConditions - if you want to use the where clause in select query
-     *                        then this parameter should be set to true
-     *                        else this parameter can be false
-     *
+     * @param tableName         - name of the table to perform select operation
+     * @param values            - values to perform select query on
+     *                          Ex: "*" or "id, firstName"
+     * @param hasConditions     - if you want to use the where clause in select query
+     *                          then this parameter should be set to true
+     *                          else this parameter can be false
      * @param conditionalValues - if the hasConditions is set to true
-     *                            then the user has to pass conditionalValues
-     *                            else it can be null
-     *                            Ex: ID = 1, firstName LIKE '%Your String%'
-     *
-     * @param tClass - Pass your Model class like this
-     *                 Ex: ModelClass.class
-     *                 this is required for setting the values
-     *
+     *                          then the user has to pass conditionalValues
+     *                          else it can be null
+     *                          Ex: ID = 1, firstName LIKE '%Your String%'
+     * @param tClass            - Pass your Model class like this
+     *                          Ex: ModelClass.class
+     *                          this is required for setting the values
      * @return ArrayList of Type pass as class
-     *
-    **/
+     **/
     //#endregion COMMENTS FOR executeSelectQuery method
     public <T> ArrayList<T> executeSelectQuery(String tableName, String values,
                                                boolean hasConditions,
@@ -613,10 +606,10 @@ public class DBHelper
                                             method.invoke(instance, String.valueOf(cursor.getDouble(j)));
                                         }
                                         // checking if parameter type is byte array
-                                        /*else if (byte[].class == method.getParameterTypes()[0])
+                                        else if (byte[].class == method.getParameterTypes()[0])
                                         {
                                             method.invoke(instance, cursor.getBlob(j));
-                                        }*/
+                                        }
                                         // any other data type will be get string from database
                                         else
                                         {
@@ -665,34 +658,35 @@ public class DBHelper
     }
 
     // region COMMENTS FOR getRecordCount method
+
     /**
      * 2018 Feb 02 - Friday - 01:36 PM
      * Get Record Count
-     *
+     * <p>
      * this method gets the count of the records in the table
-     *
+     * <p>
      * parameters to be passed are as follows
      * *********************************************************************************************
-     *
-     *** @param tableName - pass the name of the table on which you have to perform the operation
-     *
-     *** @param values - pass either * or just a single name of the field of that table
-     *
-     *** @param hasConditions - if you want to get the count of a single record with some conditions
-     *                          then set this as true else it will be false.
-     *
-     *                          if this parameter is set to true then
-     *                          conditional values has to be provided else it won't work.
-     *
-     *** @param conditionalValues - pass conditional values in this liked hash map
-     *                              it can be null if hasConditions is set to false
-     *                              if hasConditions is set to true then this param
-     *                              has to be passed.
-     *
+     * <p>
+     * ** @param tableName - pass the name of the table on which you have to perform the operation
+     * <p>
+     * ** @param values - pass either * or just a single name of the field of that table
+     * <p>
+     * ** @param hasConditions - if you want to get the count of a single record with some conditions
+     * then set this as true else it will be false.
+     * <p>
+     * if this parameter is set to true then
+     * conditional values has to be provided else it won't work.
+     * <p>
+     * ** @param conditionalValues - pass conditional values in this liked hash map
+     * it can be null if hasConditions is set to false
+     * if hasConditions is set to true then this param
+     * has to be passed.
+     * <p>
      * *********************************************************************************************
-     *
-     *** @return this method will return the count of the record in the table
-    **/
+     * <p>
+     * ** @return this method will return the count of the record in the table
+     **/
     // endregion COMMENTS FOR getRecordCount method
     public int getRecordCount(String tableName, String values,
                               boolean hasConditions, StringBuilder conditionalValues)
@@ -745,19 +739,19 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR isTableExists method
+
     /**
      * 2018 September 07 - Friday - 05:39 PM
      * is table exists method
-     *
+     * <p>
      * this method will check if a table exists in database
      * if yes is will not execute create table query
      * else it will execute
      *
      * @param tableName - name of the table to check if that table exists or not
-     *
      * @return true - if table exists in database
-     *         false - if table not exists in database
-    **/
+     * false - if table not exists in database
+     **/
     //#endregion COMMENTS FOR isTableExists method
     public boolean isTableExists(String tableName)
     {
@@ -801,15 +795,13 @@ public class DBHelper
     /**
      * 2019 November 19 - Tuesday - 12:49 PM
      * check if column exists method
-     *
+     * <p>
      * this method will check if a column in a table exists or not
      *
-     * @param tableName - table name to check for column name
-     *
+     * @param tableName  - table name to check for column name
      * @param columnName - column name to check if exists or not
-     *
      * @return returns true if column exists in table or false if not
-    **/
+     **/
     public boolean checkIsColumnExists(String tableName, String columnName)
     {
         try
@@ -849,19 +841,18 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR getMaxId method
+
     /**
      * 2018 August 13 - Monday - 12:34 PM
      * get max field method
-     *
+     * <p>
      * this method will get max value of the field in the table
      *
-     * @param field - primary key of the table to get the max value or
-     *             an integer field of the table to get the max value
-     *
+     * @param field     - primary key of the table to get the max value or
+     *                  an integer field of the table to get the max value
      * @param tableName - table name from where you need to get max value
-     *
      * @return - max value of the field passed
-    **/
+     **/
     //#endregion COMMENTS FOR getMaxId method
     public int getMaxId(String field, String tableName)
     {
@@ -905,18 +896,18 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR executeQuery method
+
     /**
      * 2018 August 20 - Monday - 04:01 PM
      * execute query method
-     *
+     * <p>
      * this method is used to execute a query
      * this method will return true if the query is executed successfully
      *
      * @param query - query that you want to execute without getting any particular result.
-     *
      * @return - true if query was successful
-     *           false if query was not successful.
-    **/
+     * false if query was not successful.
+     **/
     //#endregion COMMENTS FOR executeQuery method
     public boolean executeQuery(String query)
     {
@@ -925,7 +916,7 @@ public class DBHelper
             if (query != null && !query.equalsIgnoreCase(""))
             {
                 db.getWritableDatabase().execSQL(query);
-                
+
                 return true;
             }
             else
@@ -942,15 +933,16 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR addColumnForTable method
+
     /**
      * 2019 January 08 - Tuesday - 03:32 PM
      * add column for table method
      *
      * @param dbColumn - Db Column is a model class
-     *                   used for defining column name and data types
-     *
-     * this method will help user for adding the columns to the table
-    **/
+     *                 used for defining column name and data types
+     *                 <p>
+     *                 this method will help user for adding the columns to the table
+     **/
     //#endregion COMMENTS FOR addColumnForTable method
     public DBHelper addColumnForTable(DbColumn dbColumn)
     {
@@ -967,15 +959,16 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR addDataForTable method
+
     /**
      * 2019 January 08 - Tuesday - 03:32 PM
      * add column for table method
      *
      * @param dbData - Db data is a model class
-     *                 used for defining column name and data for the columns
-     *
-     * this method will help in adding data to the table for respective column name in the table
-    **/
+     *               used for defining column name and data for the columns
+     *               <p>
+     *               this method will help in adding data to the table for respective column name in the table
+     **/
     //#endregion COMMENTS FOR addDataForTable method
     public DBHelper addDataForTable(DbData dbData)
     {
@@ -992,15 +985,16 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR createTable method
+
     /**
      * 2019 January 08 - Tuesday - 03:52 PM
      * create table method
      *
      * @param tableName - name of the table which is to be created
-     *
-     * this method is responsible for creating the table
-     * with the name and columns and data types provided
-    **/
+     *                  <p>
+     *                  this method is responsible for creating the table
+     *                  with the name and columns and data types provided
+     **/
     //#endregion COMMENTS FOR createTable method
     public DBHelper createTable(String tableName)
     {
@@ -1011,7 +1005,7 @@ public class DBHelper
             {
                 dbColumnArrayList.clear();
             }
-            
+
             Log.e(TAG, "createTable: Table name was null or empty.");
             return this;
         }
@@ -1054,16 +1048,17 @@ public class DBHelper
 
         return this;
     }
-    
+
     //#region COMMENTS FOR alterTable method
+
     /**
      * 2019 April 15 - Monday - 01:13 PM
      * alter table method
      *
      * @param tableName - name of the table where column is to be added
-     *
-     * this method will alter the table and will add new column to the table
-    **/
+     *                  <p>
+     *                  this method will alter the table and will add new column to the table
+     **/
     //#endregion COMMENTS FOR alterTable method
     public DBHelper alterTable(String tableName)
     {
@@ -1074,22 +1069,22 @@ public class DBHelper
                 Log.e(TAG, "alterTable: No Db Columns were provided.");
                 return this;
             }
-            
+
             for (int i = 0; i < dbColumnArrayList.size(); i++)
             {
                 String columnName = dbColumnArrayList.get(i).columnName;
                 String columnDataType = dbColumnArrayList.get(i).columnDataType;
-                
+
                 String query = "SELECT COUNT(*) FROM pragma_table_info('" + tableName + "') " +
                         "WHERE name = '" + columnName + "'";
-                
+
                 int count = db.getRecordCount(query);
-                
+
                 if (count == 0)
                 {
                     query = "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + columnDataType;
                     Log.e(TAG, "alterTable: query for adding new column or altering table is: " + query);
-                    
+
                     db.getWritableDatabase().execSQL(query);
                 }
                 else
@@ -1112,14 +1107,15 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR insertData method
+
     /**
      * 2019 January 08 - Tuesday - 04:03 PM
      * insert data method
      *
      * @param tableName - name of the table for inserting records
-     *
-     * this method is used for inserting records into table
-    **/
+     *                  <p>
+     *                  this method is used for inserting records into table
+     **/
     //#endregion COMMENTS FOR insertData method
     public DBHelper insertData(String tableName)
     {
@@ -1151,8 +1147,16 @@ public class DBHelper
             // loop for no of data to be inserted
             for (int i = 0; i < dbDataArrayList.size(); i++)
             {
-                // adding column names and column data into content values
-                contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                if (dbDataArrayList.get(i).imageData != null && dbDataArrayList.get(i).imageData.length > 0)
+                {
+                    // adding column names and column data into content values
+                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).imageData);
+                }
+                else
+                {
+                    // adding column names and column data into content values
+                    contentValues.put(dbDataArrayList.get(i).columnName, dbDataArrayList.get(i).columnData.toString());
+                }
             }
 
             // executing inserting statement for inserting records in table
@@ -1169,18 +1173,18 @@ public class DBHelper
 
         return this;
     }
-    
+
     //#region COMMENTS FOR insertData method
+
     /**
      * 2019 January 08 - Tuesday - 04:03 PM
      * insert data with return id method
-     *
+     * <p>
      * this method is used for inserting records into table
      *
      * @param tableName - name of the table for inserting records
-     *
      * @return inserted row id if successful or -1 if not inserted
-    **/
+     **/
     //#endregion COMMENTS FOR insertData method
     public long insertDataWithReturnId(String tableName)
     {
@@ -1232,17 +1236,18 @@ public class DBHelper
             return 0L;
         }
     }
-    
+
     //#region COMMENTS FOR insertDataWithTransaction method
+
     /**
      * 2019 January 09 - Wednesday - 06:49 PM
      * insert data with transaction method
      *
      * @param tableName - name of the table where the data is to be inserted
-     *
-     * this method will insert data into table using database transaction
-     * this method is useful for inserting bulk records into table in less time
-    **/
+     *                  <p>
+     *                  this method will insert data into table using database transaction
+     *                  this method is useful for inserting bulk records into table in less time
+     **/
     //#endregion COMMENTS FOR insertDataWithTransaction method
     @Deprecated
     public void insertDataWithTransaction(String tableName)
@@ -1364,7 +1369,7 @@ public class DBHelper
                 {
                     statement.bindLong(position, Integer.parseInt(columnData.toString()));
                 }
-                else if (columnData instanceof String )
+                else if (columnData instanceof String)
                 {
                     statement.bindString(position, columnData.toString());
                 }
@@ -1395,17 +1400,17 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR insertDataWithTransaction method
+
     /**
      * 2019 January 09 - Wednesday - 06:49 PM
      * insert data with transaction method
      *
-     * @param tableName - name of the table where the data is to be inserted
-     *
+     * @param tableName     - name of the table where the data is to be inserted
      * @param dbColumnCount - total number of columns in the table you want to insert data
-     *
-     * this method will insert data into table using database transaction
-     * this method is useful for inserting bulk records into table in less time
-    **/
+     *                      <p>
+     *                      this method will insert data into table using database transaction
+     *                      this method is useful for inserting bulk records into table in less time
+     **/
     //#endregion COMMENTS FOR insertDataWithTransaction method
     public void insertDataWithTransaction(String tableName, int dbColumnCount)
     {
@@ -1531,7 +1536,7 @@ public class DBHelper
                 {
                     statement.bindLong(position, Integer.parseInt(columnData.toString()));
                 }
-                else if (columnData instanceof String )
+                else if (columnData instanceof String)
                 {
                     statement.bindString(position, columnData.toString());
                 }
@@ -1560,48 +1565,47 @@ public class DBHelper
             dbDataArrayList = new ArrayList<>();
         }
     }
-    
+
     //#region COMMENTS FOR insertDataWithJson method
+
     /**
      * 2019 Apr 25 - Thursday - 12:25 PM
      * insert data with json method
-     *
+     * <p>
      * this method will insert data using JSON Array or JSON Object
      *
      * @param tableName - name of the table to insert data in
-     *
      * @param object    - JSON Object or JSON Array of records and columns to be inserted
-     *
      * @return True or False for success for failure in inserting records
-    **/
+     **/
     //#endregion COMMENTS FOR insertDataWithJson method
     public boolean insertDataWithJson(String tableName, Object object)
     {
         try
         {
             JSONArray jsonArray = new JSONArray();
-            
+
             if (object == null)
             {
                 Log.e(TAG, "insertData: object value cannot be null.");
                 return false;
             }
-            
+
             if (object instanceof ArrayList)
             {
                 Log.e(TAG, "insertDataWithJson: cannot parse array list, you can use json object or json array.");
                 return false;
             }
-            
+
             if (object instanceof JSONObject)
             {
                 Iterator<String> iterator = ((JSONObject) object).keys();
-                
+
                 while (iterator.hasNext())
                 {
                     String key = iterator.next();
                     jsonArray = ((JSONObject) object).getJSONArray(key);
-                    
+
                     Log.e(TAG, "insertData: json array for " + key + " is: " + jsonArray);
                 }
             }
@@ -1609,21 +1613,21 @@ public class DBHelper
             {
                 jsonArray = (JSONArray) object;
             }
-            
+
             for (int i = 0; i < jsonArray.length(); i++)
             {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 Iterator<String> iterator = jsonObject.keys();
-                
+
                 while (iterator.hasNext())
                 {
                     String columnName = iterator.next();
                     String columnData = jsonObject.getString(columnName);
-                    
+
                     this.addDataForTable(new DbData(columnName, columnData));
                 }
             }
-            
+
             this.insertData(tableName);
             return true;
         }
@@ -1631,52 +1635,51 @@ public class DBHelper
         {
             Log.e(TAG, "insertData: exception while inserting data using json:\n");
             e.printStackTrace();
-            
+
             return false;
         }
     }
-    
+
     //#region COMMENTS FOR insertDataWithJson method
+
     /**
      * 2019 Apr 25 - Thursday - 12:25 PM
      * insert data with json with return id method
-     *
+     * <p>
      * this method will insert data using JSON Array or JSON Object
      *
      * @param tableName - name of the table to insert data in
-     *
      * @param object    - JSON Object or JSON Array of records and columns to be inserted
-     *
      * @return True or False for success for failure in inserting records
-    **/
+     **/
     //#endregion COMMENTS FOR insertDataWithJson method
     public long insertDataWithJsonWithReturnId(String tableName, Object object)
     {
         try
         {
             JSONArray jsonArray = new JSONArray();
-            
+
             if (object == null)
             {
                 Log.e(TAG, "insertData: object value cannot be null.");
                 return -1;
             }
-            
+
             if (object instanceof ArrayList)
             {
                 Log.e(TAG, "insertDataWithJson: cannot parse array list, you can use json object or json array.");
                 return -1;
             }
-            
+
             if (object instanceof JSONObject)
             {
                 Iterator<String> iterator = ((JSONObject) object).keys();
-                
+
                 while (iterator.hasNext())
                 {
                     String key = iterator.next();
                     jsonArray = ((JSONObject) object).getJSONArray(key);
-                    
+
                     Log.e(TAG, "insertData: json array for " + key + " is: " + jsonArray);
                 }
             }
@@ -1684,46 +1687,44 @@ public class DBHelper
             {
                 jsonArray = (JSONArray) object;
             }
-            
+
             for (int i = 0; i < jsonArray.length(); i++)
             {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 Iterator<String> iterator = jsonObject.keys();
-                
+
                 while (iterator.hasNext())
                 {
                     String columnName = iterator.next();
                     String columnData = jsonObject.getString(columnName);
-                    
+
                     this.addDataForTable(new DbData(columnName, columnData));
                 }
             }
-            
+
             return this.insertDataWithReturnId(tableName);
         }
         catch (Exception e)
         {
             Log.e(TAG, "insertData: exception while inserting data using json:\n");
             e.printStackTrace();
-    
+
             return -1;
         }
     }
-    
+
     //#region COMMENTS FOR insertDataWithJsonAndTransaction method
+
     /**
      * 2019 Apr 25 - Thursday - 12:25 PM
      * insert data with json method
-     *
+     * <p>
      * this method will insert data using JSON Array or JSON Object
      * this method will user SQLite Database Transaction for inserting records in db
      *
-     * @param tableName         - name of the table to insert data in
-     *
-     * @param object            - JSON Object or JSON Array of records and columns to be inserted
-     *
-     * @param tableColumnCount  - Count of Number of columns for that table
-     *
+     * @param tableName        - name of the table to insert data in
+     * @param object           - JSON Object or JSON Array of records and columns to be inserted
+     * @param tableColumnCount - Count of Number of columns for that table
      * @return True or False for success for failure in inserting records
      **/
     //#endregion COMMENTS FOR insertDataWithJsonAndTransaction method
@@ -1732,22 +1733,22 @@ public class DBHelper
         try
         {
             JSONArray jsonArray = new JSONArray();
-            
+
             if (object == null)
             {
                 Log.e(TAG, "insertData: object value cannot be null.");
                 return false;
             }
-            
+
             if (object instanceof JSONObject)
             {
                 Iterator<String> iterator = ((JSONObject) object).keys();
-                
+
                 while (iterator.hasNext())
                 {
                     String key = iterator.next();
                     jsonArray = ((JSONObject) object).getJSONArray(key);
-                    
+
                     // Log.e(TAG, "insertData: json array for " + key + " is: " + jsonArray);
                 }
             }
@@ -1755,12 +1756,12 @@ public class DBHelper
             {
                 jsonArray = (JSONArray) object;
             }
-            
+
             for (int i = 0; i < jsonArray.length(); i++)
             {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 Iterator<String> iterator = jsonObject.keys();
-                
+
                 while (iterator.hasNext())
                 {
                     String columnName = iterator.next();
@@ -1768,7 +1769,7 @@ public class DBHelper
                     this.addDataForTable(new DbData(columnName, columnData));
                 }
             }
-            
+
             this.insertDataWithTransaction(tableName, tableColumnCount);
             return true;
         }
@@ -1776,27 +1777,27 @@ public class DBHelper
         {
             Log.e(TAG, "insertData: exception while inserting data using json:\n");
             e.printStackTrace();
-            
+
             return false;
         }
     }
 
     //#region COMMENTS FOR updateData method
+
     /**
      * 2019 January 08 - Tuesday - 04:28 PM
      * update data method
      *
-     * @param tableName      - name of the table on which update query is to be performed
-     *
-     * @param whereClause    - name of the column to check whether the record is present so the data is updated
-     *                         pass this parameter in the way given in example below
-     *                         Ex: code = ? or ID = ? etc // this is important
-     *
-     * this method will update records of the table in database
-     * this method uses database's update method for updating records
-     *
-     * parameter whereClause and whereArgs must be passed in the form given
-    **/
+     * @param tableName   - name of the table on which update query is to be performed
+     * @param whereClause - name of the column to check whether the record is present so the data is updated
+     *                    pass this parameter in the way given in example below
+     *                    Ex: code = ? or ID = ? etc // this is important
+     *                    <p>
+     *                    this method will update records of the table in database
+     *                    this method uses database's update method for updating records
+     *                    <p>
+     *                    parameter whereClause and whereArgs must be passed in the form given
+     **/
     //#endregion COMMENTS FOR updateData method
     public DBHelper updateData(String tableName, String whereClause)
     {
@@ -1860,25 +1861,24 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR updateData method
+
     /**
      * 2019 January 08 - Tuesday - 04:28 PM
      * update data method
      *
-     * @param tableName      - name of the table on which update query is to be performed
-     *
-     * @param whereClause    - name of the column to check whether the record is present so the data is updated
-     *                         pass this parameter in the way given in example below
-     *                         Ex: code = ? or ID = ? etc // this is important
-     *
-     * @param whereArgs      - data of the column name provided to check if record is present for data update
-     *                         here you need to pass the data for the corresponding where clause
-     *                         Ex: 1 or 2 etc
-     *
-     * this method will update records of the table in database
-     * this method uses database's update method for updating records
-     *
-     * parameter whereClause and whereArgs must be passed in the form given
-    **/
+     * @param tableName   - name of the table on which update query is to be performed
+     * @param whereClause - name of the column to check whether the record is present so the data is updated
+     *                    pass this parameter in the way given in example below
+     *                    Ex: code = ? or ID = ? etc // this is important
+     * @param whereArgs   - data of the column name provided to check if record is present for data update
+     *                    here you need to pass the data for the corresponding where clause
+     *                    Ex: 1 or 2 etc
+     *                    <p>
+     *                    this method will update records of the table in database
+     *                    this method uses database's update method for updating records
+     *                    <p>
+     *                    parameter whereClause and whereArgs must be passed in the form given
+     **/
     //#endregion COMMENTS FOR updateData method
     public DBHelper updateData(String tableName, String whereClause, String whereArgs)
     {
@@ -1949,29 +1949,27 @@ public class DBHelper
 
         return this;
     }
-    
+
     //#region COMMENTS FOR updateData method
+
     /**
      * 2019 January 08 - Tuesday - 04:28 PM
      * update data with return id method
      *
-     * @param tableName      - name of the table on which update query is to be performed
-     *
-     * @param whereClause    - name of the column to check whether the record is present so the data is updated
-     *                         pass this parameter in the way given in example below
-     *                         Ex: code = ? or ID = ? etc // this is important
-     *
-     * @param whereArgs      - data of the column name provided to check if record is present for data update
-     *                         here you need to pass the data for the corresponding where clause
-     *                         Ex: 1 or 2 etc
-     *
-     * this method will update records of the table in database
-     * this method uses database's update method for updating records
-     *
-     * parameter whereClause and whereArgs must be passed in the form given
-     *
+     * @param tableName   - name of the table on which update query is to be performed
+     * @param whereClause - name of the column to check whether the record is present so the data is updated
+     *                    pass this parameter in the way given in example below
+     *                    Ex: code = ? or ID = ? etc // this is important
+     * @param whereArgs   - data of the column name provided to check if record is present for data update
+     *                    here you need to pass the data for the corresponding where clause
+     *                    Ex: 1 or 2 etc
+     *                    <p>
+     *                    this method will update records of the table in database
+     *                    this method uses database's update method for updating records
+     *                    <p>
+     *                    parameter whereClause and whereArgs must be passed in the form given
      * @return -1 if failed to update the record
-    **/
+     **/
     //#endregion COMMENTS FOR updateData method
     public long updateDataWithReturnId(String tableName, String whereClause, String whereArgs)
     {
@@ -2048,14 +2046,15 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR deleteTable method
+
     /**
      * 2019 January 08 - Tuesday - 04:40 PM
      * delete table method
      *
      * @param tableName - name of the table to be deleted
-     *
-     * this method will delete the table from database
-    **/
+     *                  <p>
+     *                  this method will delete the table from database
+     **/
     //#endregion COMMENTS FOR deleteTable method
     public boolean deleteTable(String tableName)
     {
@@ -2069,9 +2068,9 @@ public class DBHelper
             }
 
             String query = "DELETE TABLE IF EXISTS " + tableName;
-            
+
             db.getWritableDatabase().execSQL(query);
-            
+
             return true;
         }
         catch (Exception e)
@@ -2083,27 +2082,24 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR getAllRecords method
+
     /**
      * 2019 January 08 - Tuesday - 04:44 PM
      * get all records method
      *
-     * @param tableName             - name of the table for getting the record
-     *
-     * @param isAscending           - True for ascending order and False for descending order
-     *
-     * @param orderByColumnName     - name of the column for getting records in descending order
-     *
-     * @param tClass                - Pass your Model class like this
-     *                                Ex: ModelClass.class this is required for setting the values
-     *
+     * @param tableName         - name of the table for getting the record
+     * @param isAscending       - True for ascending order and False for descending order
+     * @param orderByColumnName - name of the column for getting records in descending order
+     * @param tClass            - Pass your Model class like this
+     *                          Ex: ModelClass.class this is required for setting the values
      * @return Array list of ModelClass you provided in method
-     *
+     * <p>
      * this method will get all the records from the table
      * in ascending or descending order as provided by the user
-     *
+     * <p>
      * this method is a generic method which can be directly bounded to the array list of custom type
      * Ex: ArrayList<YourModelClass> arrayList = getAllRecords
-    **/
+     **/
     //#endregion COMMENTS FOR getAllRecords method
     public <T> ArrayList<T> getAllRecords(String tableName, boolean isAscending,
                                           String orderByColumnName, Class<T> tClass)
@@ -2121,9 +2117,9 @@ public class DBHelper
                 Log.e(TAG, "getAllRecords: Table name was null or empty.");
                 return null;
             }
-    
-            // checking if order by column name is not null and not empty for ascending order
-            if (orderByColumnName != null && !orderByColumnName.isEmpty())
+
+            // checking if order by column name is null or is empty for ascending order
+            if (orderByColumnName == null || orderByColumnName.isEmpty())
             {
                 Log.e(TAG, "getAllRecords: order by column name was null or empty.");
                 return null;
@@ -2212,10 +2208,10 @@ public class DBHelper
                                         method.invoke(instance, String.valueOf(cursor.getDouble(j)));
                                     }
                                     // checking if parameter type is byte array
-                                    /*else if (byte[].class == method.getParameterTypes()[0])
+                                    else if (byte[].class == method.getParameterTypes()[0])
                                     {
                                         method.invoke(instance, cursor.getBlob(j));
-                                    }*/
+                                    }
                                     // any other data type will be get string from database
                                     else
                                     {
@@ -2256,36 +2252,32 @@ public class DBHelper
     }
 
     //#region COMMENTS FOR getAllRecords method
+
     /**
      * 2019 January 08 - Tuesday - 04:44 PM
-     * get all records method
+     * get all records with conditions method
      *
-     * @param tableName             - name of the table for getting the record
-     *
-     * @param conditionalValues     - conditions for selecting records from table in database
-     *                                either individual conditions for multiple conditions
-     *                                Ex: ID = 1 or code = 1 or firstName = 'FirstName'
-     *                                    or ID = 1 AND firstName = 'FirstName'
-     *
-     * @param isAscending           - True for ascending order and False for descending order
-     *
-     * @param orderByColumnName     - name of the column for getting records in descending order
-     *
-     * @param tClass                - Pass your Model class like this
-     *                                Ex: ModelClass.class this is required for setting the values
-     *
+     * @param tableName         - name of the table for getting the record
+     * @param conditionalValues - conditions for selecting records from table in database
+     *                          either individual conditions for multiple conditions
+     *                          Ex: ID = 1 or code = 1 or firstName = 'FirstName'
+     *                          or ID = 1 AND firstName = 'FirstName'
+     * @param isAscending       - True for ascending order and False for descending order
+     * @param orderByColumnName - name of the column for getting records in descending order
+     * @param tClass            - Pass your Model class like this
+     *                          Ex: ModelClass.class this is required for setting the values
      * @return Array list of ModelClass you provided in method
-     *
+     * <p>
      * this method will get all the records from the table
      * in ascending or descending order as provided by the user
-     *
+     * <p>
      * this method is a generic method which can be directly bounded to the array list of custom type
      * Ex: ArrayList<YourModelClass> arrayList = getAllRecords
-    **/
-    //#endregion COMMENTS FOR getAllRecords method
-    public <T> ArrayList<T> getAllRecords(String tableName, boolean isAscending,
-                                          String conditionalValues,
-                                          String orderByColumnName, Class<T> tClass)
+     **/
+    //#endregion COMMENTS FOR getAllRecordsWithConditions method
+    public <T> ArrayList<T> getAllRecordsWithConditions(String tableName, boolean isAscending,
+                                                        String conditionalValues,
+                                                        String orderByColumnName, Class<T> tClass)
     {
         try
         {
@@ -2304,14 +2296,19 @@ public class DBHelper
             {
                 whereClause = " WHERE " + conditionalValues;
             }
-    
-            // checking if order by column name is not null and not empty for ascending order
-            if (orderByColumnName != null && !orderByColumnName.isEmpty())
+            else
+            {
+                Log.e(TAG, "getAllRecords: conditional value was null or empty");
+                return null;
+            }
+
+            // checking if order by column name is null or is empty for ascending order
+            if (orderByColumnName == null || orderByColumnName.isEmpty())
             {
                 Log.e(TAG, "getAllRecords: order by column name was null or empty.");
                 return null;
             }
-    
+
             // checking if isAscending is false
             // and order by column name is not null and not empty for descending order
             if (!isAscending)
@@ -2395,10 +2392,10 @@ public class DBHelper
                                         method.invoke(instance, String.valueOf(cursor.getDouble(j)));
                                     }
                                     // checking if parameter type is byte array
-                                    /*else if (byte[].class == method.getParameterTypes()[0])
+                                    else if (byte[].class == method.getParameterTypes()[0])
                                     {
                                         method.invoke(instance, cursor.getBlob(j));
-                                    }*/
+                                    }
                                     // any other data type will be get string from database
                                     else
                                     {

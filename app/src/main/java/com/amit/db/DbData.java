@@ -5,11 +5,11 @@ package com.amit.db;
  * <p>
  * this class is responsible for column name and data handling
 **/
-@SuppressWarnings("unused")
 public class DbData
 {
     String columnName;
     Object columnData;
+    byte[] imageData;
 
     public DbData(String columnName, int columnData)
     {
@@ -35,9 +35,9 @@ public class DbData
         this.columnData = columnData;
     }
 
-    /*public DbData(String columnName, byte[] columnData)
+    public DbData(String columnName, byte[] columnData)
     {
         this.columnName = columnName;
-        this.bytesData = columnData;
-    }*/
+        this.imageData = columnData;
+    }
 }

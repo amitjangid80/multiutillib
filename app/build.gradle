@@ -14,8 +14,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 58 // this indicates the number of releases of library
-        versionName "1.7.4" // this indicates the current version of library
+        versionCode 59 // this indicates the number of releases of library
+        versionName "1.7.41" // this indicates the current version of library
     }
 
     buildTypes {
